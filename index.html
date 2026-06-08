@@ -8,163 +8,228 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --black:#111317;
-  --dark:#1b1d22;
+  --black:#07080a;
+  --dark:#111318;
   --gold:#d99a16;
   --gold2:#f2b21b;
-  --white:#fff;
-  --gray:#f5f5f5;
+  --white:#ffffff;
+  --gray:#e8e8e8;
 }
 body{
   font-family:Arial, Helvetica, sans-serif;
   background:#f5f5f5;
   color:#111;
 }
-a{text-decoration:none}
+a{text-decoration:none;color:inherit}
 
-/* HEADER SUBȚIRE */
 header{
+  height:86px;
   background:#fff;
-  height:115px;
-  padding:12px 8%;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  border-bottom:4px solid var(--gold);
+  padding:0 7%;
+  border-bottom:3px solid var(--gold);
+  position:sticky;
+  top:0;
+  z-index:100;
 }
 .logo{
-  width:190px;
+  width:145px;
   height:auto;
   display:block;
 }
 nav a{
-  color:#111;
-  font-weight:800;
-  margin-left:24px;
   font-size:15px;
+  font-weight:900;
+  margin-left:28px;
+  color:#111;
+  text-transform:uppercase;
 }
 nav a:hover{color:var(--gold)}
 
-/* HERO */
 .hero{
-  min-height:calc(100vh - 115px);
+  min-height:calc(100vh - 86px);
   background:
-    radial-gradient(circle at 85% 50%, rgba(217,154,22,.38), transparent 32%),
-    linear-gradient(120deg,#101114 0%,#1d2026 60%,#2a2114 100%);
+    linear-gradient(110deg,rgba(0,0,0,.96) 0%,rgba(0,0,0,.92) 46%,rgba(217,154,22,.78) 100%),
+    url("https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1800&q=80");
+  background-size:cover;
+  background-position:center;
   color:white;
   display:flex;
   align-items:center;
-  padding:80px 8%;
+  padding:80px 7%;
+  position:relative;
+  overflow:hidden;
 }
-.hero-box{max-width:1050px}
-
-/* TEXT TIP LOGO */
-.brand-mark{
-  margin-bottom:26px;
+.hero:after{
+  content:"";
+  position:absolute;
+  right:-90px;
+  top:0;
+  width:48%;
+  height:100%;
+  background:rgba(217,154,22,.18);
+  transform:skewX(-18deg);
+  border-left:2px solid rgba(242,178,27,.6);
 }
-.brand-main{
-  font-size:88px;
-  line-height:.9;
-  font-weight:900;
-  letter-spacing:5px;
+.hero-content{
+  max-width:900px;
+  position:relative;
+  z-index:2;
 }
-.brand-main span{
+.brand-title{
+  font-size:78px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:7px;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.brand-title span{
   color:var(--gold2);
-}
-.brand-group{
-  margin-top:14px;
-  color:var(--gold2);
-  font-size:42px;
-  letter-spacing:26px;
-  font-weight:900;
 }
 .brand-sub{
-  margin-top:12px;
-  font-size:19px;
-  letter-spacing:5px;
-  font-weight:900;
-  color:#fff;
-}
-
-.hero h1{
-  margin-top:42px;
-  font-size:42px;
   color:var(--gold2);
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:9px;
+  text-transform:uppercase;
+  margin-bottom:42px;
 }
+.hero h1{
+  font-size:46px;
+  line-height:1.15;
+  margin-bottom:22px;
+  text-transform:uppercase;
+  font-weight:950;
+}
+.hero h1 span{color:var(--gold2)}
 .hero p{
-  margin-top:22px;
   font-size:22px;
   line-height:1.65;
-  color:#eee;
-  max-width:850px;
+  color:#f1f1f1;
+  max-width:800px;
 }
 .buttons{margin-top:36px}
 .btn{
   display:inline-block;
-  padding:16px 34px;
+  padding:17px 34px;
   border-radius:6px;
-  font-weight:900;
-  margin-right:12px;
+  font-weight:950;
+  text-transform:uppercase;
+  margin-right:14px;
 }
 .btn-gold{background:var(--gold2);color:#111}
-.btn-white{background:#fff;color:#111}
+.btn-line{border:2px solid var(--gold2);color:white}
 
-/* SECTIUNI */
-section{padding:85px 8%}
-.white{background:#fff}
-.dark{background:#111317;color:white}
-.title{
-  font-size:42px;
-  margin-bottom:22px;
+section{padding:85px 7%}
+.center{text-align:center}
+.eyebrow{
+  color:var(--gold);
+  font-weight:950;
+  letter-spacing:7px;
+  text-transform:uppercase;
+  font-size:14px;
+  margin-bottom:15px;
+}
+.section-title{
+  font-size:38px;
+  margin-bottom:18px;
+  font-weight:950;
 }
 .lead{
-  font-size:20px;
-  line-height:1.75;
+  max-width:950px;
+  margin:auto;
   color:#444;
-  max-width:1050px;
+  font-size:19px;
+  line-height:1.75;
 }
-.dark .lead{color:#ddd}
 
-.grid{
+.cards{
+  margin-top:45px;
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
   gap:24px;
-  margin-top:42px;
 }
 .card{
   background:#fff;
-  color:#111;
-  padding:34px;
-  border-radius:14px;
-  border-top:5px solid var(--gold);
-  box-shadow:0 14px 35px rgba(0,0,0,.08);
+  padding:32px;
+  border-radius:10px;
+  border:1px solid #e6e6e6;
+  box-shadow:0 12px 35px rgba(0,0,0,.07);
+  text-align:left;
+}
+.card .icon{
+  font-size:42px;
+  color:var(--gold);
+  margin-bottom:18px;
 }
 .card h3{
-  font-size:25px;
-  margin-bottom:14px;
+  font-size:23px;
+  margin-bottom:12px;
+  font-weight:950;
 }
 .card p{
   color:#444;
-  line-height:1.7;
-  font-size:17px;
+  line-height:1.65;
+  font-size:16px;
 }
 
+.dark{
+  background:var(--dark);
+  color:white;
+}
+.dark .lead{color:#ddd}
+.dark .card{
+  background:#15171d;
+  border:1px solid #2b2d34;
+}
+.dark .card p{color:#ddd}
+.dark .section-title{color:white}
+
+.split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:45px;
+  align-items:center;
+}
+.image-box{
+  min-height:420px;
+  border-radius:14px;
+  background:
+    linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.15)),
+    url("https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=80");
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 18px 45px rgba(0,0,0,.22);
+}
 .quote{
   font-size:36px;
   line-height:1.35;
   color:var(--gold2);
-  font-weight:900;
-  max-width:1050px;
+  font-weight:950;
+  max-width:1000px;
+}
+
+.contact{
+  background:
+    linear-gradient(110deg,rgba(0,0,0,.94),rgba(0,0,0,.84)),
+    url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=80");
+  background-size:cover;
+  background-position:center;
+  color:white;
 }
 .contact-box{
-  margin-top:35px;
-  background:#1b1d22;
-  padding:36px;
-  border-radius:14px;
-  max-width:720px;
+  margin-top:32px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.18);
+  padding:34px;
+  border-radius:12px;
+  max-width:700px;
 }
 .contact-box p{
-  font-size:20px;
+  font-size:21px;
   margin-bottom:14px;
 }
 .contact-box a{color:var(--gold2)}
@@ -172,34 +237,28 @@ section{padding:85px 8%}
 footer{
   background:#050505;
   color:white;
+  padding:34px 7%;
   text-align:center;
-  padding:36px 8%;
 }
-footer span{color:var(--gold2);font-weight:900}
+footer span{color:var(--gold2);font-weight:950}
 
-@media(max-width:850px){
+@media(max-width:900px){
   header{
     height:auto;
+    padding:16px 5%;
     display:block;
     text-align:center;
   }
-  .logo{width:165px;margin:auto}
+  .logo{width:130px;margin:auto}
   nav{margin-top:14px}
-  nav a{display:inline-block;margin:8px}
-  .hero{padding:65px 6%}
-  .brand-main{font-size:48px}
-  .brand-group{
-    font-size:28px;
-    letter-spacing:13px;
-  }
-  .brand-sub{
-    font-size:13px;
-    letter-spacing:3px;
-  }
-  .hero h1{font-size:30px}
+  nav a{display:inline-block;margin:8px 9px;font-size:13px}
+  .hero{padding:70px 6%}
+  .brand-title{font-size:48px;letter-spacing:4px}
+  .brand-sub{font-size:14px;letter-spacing:5px}
+  .hero h1{font-size:32px}
   .hero p{font-size:18px}
   .btn{display:block;text-align:center;margin:12px 0}
-  .title{font-size:32px}
+  .split{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -208,7 +267,7 @@ footer span{color:var(--gold2);font-weight:900}
 
 <header>
   <a href="index.html">
-    <img class="logo" src="logo.png" alt="BCB Group Logo">
+    <img class="logo" src="logo.png" alt="BCB Group">
   </a>
 
   <nav>
@@ -221,92 +280,86 @@ footer span{color:var(--gold2);font-weight:900}
 </header>
 
 <section class="hero">
-  <div class="hero-box">
+  <div class="hero-content">
+    <div class="brand-title">BCB <span>GROUP</span></div>
+    <div class="brand-sub">Bocoiu Construction Brothers</div>
 
-    <div class="brand-mark">
-      <div class="brand-main">B<span>C</span>B</div>
-      <div class="brand-group">GROUP</div>
-      <div class="brand-sub">BOCOIU CONSTRUCTION BROTHERS</div>
-    </div>
-
-    <h1>Construim de la fundație până la cheie.</h1>
+    <h1>Construim <span>de la fundație până la cheie.</span></h1>
 
     <p>
-      BCB Group dezvoltă și execută proiecte de construcții civile, case, blocuri
-      și lucrări complete, cu responsabilitate, profesionalism și atenție la fiecare detaliu.
+      Case, blocuri și proiecte civile realizate cu profesionalism,
+      responsabilitate și atenție la fiecare detaliu.
     </p>
 
     <div class="buttons">
       <a class="btn btn-gold" href="tel:0770712701">Sună acum</a>
-      <a class="btn btn-white" href="contact.html">Solicită ofertă</a>
+      <a class="btn btn-line" href="contact.html">Solicită ofertă</a>
     </div>
-
   </div>
 </section>
 
-<section class="white">
-  <h2 class="title">Construcții complete, coordonate profesionist</h2>
+<section class="center">
+  <div class="eyebrow">Despre BCB Group</div>
+  <h2 class="section-title">Construcții complete, coordonate profesionist</h2>
   <p class="lead">
     BCB Group este brandul principal sub care sunt organizate diviziile noastre de construcții,
-    instalații electrice, instalații sanitare și finisaje. Ne concentrăm pe proiecte realizate
-    complet, corect și durabil, de la prima etapă a șantierului până la predarea finală.
-  </p>
-</section>
-
-<section class="dark">
-  <h2 class="title">Diviziile BCB Group</h2>
-  <p class="lead">
-    Fiecare divizie are un rol clar în realizarea unui proiect complet, dar toate funcționează
-    sub aceeași viziune: calitate, seriozitate și execuție fără compromisuri.
+    instalații electrice, instalații sanitare și finisaje. Ne concentrăm pe proiecte realizate complet,
+    corect și durabil, de la prima etapă a șantierului până la predarea finală.
   </p>
 
-  <div class="grid">
+  <div class="cards">
     <div class="card">
+      <div class="icon">🏗️</div>
       <h3>BCB Construct</h3>
       <p>Construcții civile, case, blocuri și proiecte rezidențiale sau comerciale de la A la Z.</p>
     </div>
+
     <div class="card">
+      <div class="icon">⚡</div>
       <h3>BCB Electric</h3>
       <p>Instalații electrice pentru locuințe, spații comerciale și proiecte civile complexe.</p>
     </div>
+
     <div class="card">
+      <div class="icon">🚿</div>
       <h3>BCB Sanitare</h3>
       <p>Instalații sanitare și termice integrate corect în structura fiecărui proiect.</p>
     </div>
+
     <div class="card">
+      <div class="icon">🧱</div>
       <h3>BCB Finisaje</h3>
       <p>Finisaje interioare și exterioare realizate cu atenție la detalii și standarde ridicate.</p>
     </div>
   </div>
 </section>
 
-<section class="white">
-  <h2 class="title">O afacere de familie, construită pe responsabilitate</h2>
-  <p class="lead">
-    BCB Group este dezvoltat ca o afacere de familie, cu o viziune clară: să construim proiecte
-    solide, corecte și bine organizate. Pentru noi, fiecare lucrare reprezintă o responsabilitate
-    asumată, nu doar un contract.
-  </p>
+<section class="dark">
+  <div class="split">
+    <div>
+      <div class="eyebrow">Afacere de familie</div>
+      <h2 class="section-title">Construită pe responsabilitate</h2>
+      <p class="lead" style="margin:0">
+        BCB Group este dezvoltat ca o afacere de familie, cu o viziune clară:
+        să construim proiecte solide, corecte și bine organizate. Pentru noi,
+        fiecare lucrare reprezintă o responsabilitate asumată, nu doar un contract.
+      </p>
+    </div>
+    <div class="image-box"></div>
+  </div>
 </section>
 
-<section class="dark">
+<section class="center">
   <p class="quote">
     „Nu ne-am propus să fim cei mai mari, vrem să fim cei mai buni.”
   </p>
 </section>
 
-<section class="white">
-  <h2 class="title">Proiecte în desfășurare</h2>
-  <p class="lead">
-    În curând vom publica imagini și filmări aeriene din proiectele noastre actuale,
-    inclusiv prima casă construită sub brandul BCB Group.
-  </p>
-</section>
-
-<section class="dark">
-  <h2 class="title">Contact</h2>
-  <p class="lead">
-    Pentru proiecte de construcții, case, blocuri, renovări sau lucrări complete,
+<section class="contact">
+  <div class="eyebrow">Contact</div>
+  <h2 class="section-title">Hai să discutăm despre proiectul tău</h2>
+  <p class="lead" style="margin:0;color:#eee">
+    Pentru case, blocuri, construcții civile, renovări sau lucrări complete,
     ne poți contacta direct.
   </p>
 
