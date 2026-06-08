@@ -7,132 +7,123 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --black:#111317;
+  --dark:#1b1d22;
+  --gold:#d99a16;
+  --gold2:#f2b21b;
+  --white:#fff;
+  --gray:#f5f5f5;
+}
 body{
-  font-family:Arial, sans-serif;
-  background:#f4f4f4;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f5f5f5;
   color:#111;
 }
 a{text-decoration:none}
 
-:root{
-  --black:#111317;
-  --gold:#d99a16;
-  --gold2:#f2b21b;
-  --white:#ffffff;
-  --text:#333;
-}
-
+/* HEADER SUBȚIRE */
 header{
-  background:var(--white);
-  padding:18px 8%;
+  background:#fff;
+  height:115px;
+  padding:12px 8%;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   border-bottom:4px solid var(--gold);
-  position:sticky;
-  top:0;
-  z-index:10;
 }
-
 .logo{
-  width:210px;
-  max-width:100%;
+  width:190px;
+  height:auto;
   display:block;
 }
-
 nav a{
-  color:var(--black);
+  color:#111;
   font-weight:800;
-  margin-left:26px;
+  margin-left:24px;
   font-size:15px;
 }
-
 nav a:hover{color:var(--gold)}
 
+/* HERO */
 .hero{
-  min-height:82vh;
+  min-height:calc(100vh - 115px);
   background:
-    linear-gradient(110deg,rgba(17,19,23,.96) 0%,rgba(17,19,23,.94) 52%,rgba(217,154,22,.86) 100%);
+    radial-gradient(circle at 85% 50%, rgba(217,154,22,.38), transparent 32%),
+    linear-gradient(120deg,#101114 0%,#1d2026 60%,#2a2114 100%);
   color:white;
   display:flex;
   align-items:center;
-  padding:90px 8%;
+  padding:80px 8%;
 }
+.hero-box{max-width:1050px}
 
-.hero-content{
-  max-width:920px;
+/* TEXT TIP LOGO */
+.brand-mark{
+  margin-bottom:26px;
 }
-
-.eyebrow{
-  color:var(--gold2);
+.brand-main{
+  font-size:88px;
+  line-height:.9;
   font-weight:900;
-  letter-spacing:4px;
-  font-size:15px;
-  margin-bottom:22px;
+  letter-spacing:5px;
+}
+.brand-main span{
+  color:var(--gold2);
+}
+.brand-group{
+  margin-top:14px;
+  color:var(--gold2);
+  font-size:42px;
+  letter-spacing:26px;
+  font-weight:900;
+}
+.brand-sub{
+  margin-top:12px;
+  font-size:19px;
+  letter-spacing:5px;
+  font-weight:900;
+  color:#fff;
 }
 
 .hero h1{
-  font-size:76px;
-  line-height:1;
-  letter-spacing:3px;
-  margin-bottom:22px;
-}
-
-.hero h2{
+  margin-top:42px;
+  font-size:42px;
   color:var(--gold2);
-  font-size:40px;
-  margin-bottom:24px;
 }
-
 .hero p{
+  margin-top:22px;
   font-size:22px;
   line-height:1.65;
+  color:#eee;
   max-width:850px;
-  color:#eeeeee;
 }
-
-.buttons{
-  margin-top:38px;
-}
-
+.buttons{margin-top:36px}
 .btn{
   display:inline-block;
-  padding:17px 34px;
+  padding:16px 34px;
   border-radius:6px;
   font-weight:900;
-  margin-right:14px;
+  margin-right:12px;
 }
+.btn-gold{background:var(--gold2);color:#111}
+.btn-white{background:#fff;color:#111}
 
-.btn-gold{
-  background:var(--gold2);
-  color:#111;
-}
-
-.btn-white{
-  background:#fff;
-  color:#111;
-}
-
-section{
-  padding:85px 8%;
-}
-
-.section-title{
+/* SECTIUNI */
+section{padding:85px 8%}
+.white{background:#fff}
+.dark{background:#111317;color:white}
+.title{
   font-size:42px;
   margin-bottom:22px;
-  color:var(--black);
 }
-
 .lead{
   font-size:20px;
   line-height:1.75;
   color:#444;
-  max-width:1000px;
+  max-width:1050px;
 }
-
-.intro{
-  background:white;
-}
+.dark .lead{color:#ddd}
 
 .grid{
   display:grid;
@@ -140,48 +131,22 @@ section{
   gap:24px;
   margin-top:42px;
 }
-
 .card{
-  background:white;
+  background:#fff;
+  color:#111;
   padding:34px;
   border-radius:14px;
-  box-shadow:0 14px 35px rgba(0,0,0,.08);
   border-top:5px solid var(--gold);
+  box-shadow:0 14px 35px rgba(0,0,0,.08);
 }
-
 .card h3{
   font-size:25px;
   margin-bottom:14px;
-  color:var(--black);
 }
-
 .card p{
   color:#444;
   line-height:1.7;
   font-size:17px;
-}
-
-.dark{
-  background:var(--black);
-  color:white;
-}
-
-.dark .section-title{
-  color:white;
-}
-
-.dark .lead{
-  color:#dddddd;
-}
-
-.family{
-  background:#fff;
-}
-
-.quote-section{
-  background:#0b0b0c;
-  color:white;
-  text-align:left;
 }
 
 .quote{
@@ -190,112 +155,51 @@ section{
   color:var(--gold2);
   font-weight:900;
   max-width:1050px;
-  margin-bottom:22px;
 }
-
-.projects{
-  background:#f7f7f7;
-}
-
-.project-box{
-  margin-top:35px;
-  background:white;
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 14px 35px rgba(0,0,0,.08);
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-}
-
-.project-placeholder{
-  min-height:320px;
-  background:linear-gradient(135deg,#111,#333,#d99a16);
-}
-
-.project-text{
-  padding:38px;
-}
-
-.project-text h3{
-  font-size:28px;
-  margin-bottom:14px;
-}
-
-.project-text p{
-  font-size:18px;
-  line-height:1.7;
-  color:#444;
-}
-
 .contact-box{
   margin-top:35px;
-  background:#1b1b1b;
-  border:1px solid #333;
+  background:#1b1d22;
   padding:36px;
   border-radius:14px;
   max-width:720px;
 }
-
 .contact-box p{
   font-size:20px;
   margin-bottom:14px;
 }
-
-.contact-box a{
-  color:var(--gold2);
-}
+.contact-box a{color:var(--gold2)}
 
 footer{
   background:#050505;
   color:white;
-  padding:38px 8%;
   text-align:center;
+  padding:36px 8%;
 }
-
-footer span{
-  color:var(--gold2);
-  font-weight:900;
-}
+footer span{color:var(--gold2);font-weight:900}
 
 @media(max-width:850px){
   header{
+    height:auto;
     display:block;
     text-align:center;
   }
-  .logo{
-    width:180px;
-    margin:auto;
+  .logo{width:165px;margin:auto}
+  nav{margin-top:14px}
+  nav a{display:inline-block;margin:8px}
+  .hero{padding:65px 6%}
+  .brand-main{font-size:48px}
+  .brand-group{
+    font-size:28px;
+    letter-spacing:13px;
   }
-  nav{
-    margin-top:18px;
+  .brand-sub{
+    font-size:13px;
+    letter-spacing:3px;
   }
-  nav a{
-    display:inline-block;
-    margin:8px 10px;
-  }
-  .hero{
-    padding:70px 6%;
-  }
-  .hero h1{
-    font-size:48px;
-  }
-  .hero h2{
-    font-size:30px;
-  }
-  .hero p{
-    font-size:18px;
-  }
-  .btn{
-    display:block;
-    text-align:center;
-    margin:12px 0;
-  }
-  .section-title{
-    font-size:32px;
-  }
-  .project-box{
-    grid-template-columns:1fr;
-  }
+  .hero h1{font-size:30px}
+  .hero p{font-size:18px}
+  .btn{display:block;text-align:center;margin:12px 0}
+  .title{font-size:32px}
 }
 </style>
 </head>
@@ -304,7 +208,7 @@ footer span{
 
 <header>
   <a href="index.html">
-    <img class="logo" src="logo.png" alt="BCB Group - Bocoiu Construction Brothers">
+    <img class="logo" src="logo.png" alt="BCB Group Logo">
   </a>
 
   <nav>
@@ -317,12 +221,15 @@ footer span{
 </header>
 
 <section class="hero">
-  <div class="hero-content">
-    <div class="eyebrow">BOCOIU CONSTRUCTION BROTHERS</div>
+  <div class="hero-box">
 
-    <h1>BCB GROUP</h1>
+    <div class="brand-mark">
+      <div class="brand-main">B<span>C</span>B</div>
+      <div class="brand-group">GROUP</div>
+      <div class="brand-sub">BOCOIU CONSTRUCTION BROTHERS</div>
+    </div>
 
-    <h2>Construim de la fundație până la cheie.</h2>
+    <h1>Construim de la fundație până la cheie.</h1>
 
     <p>
       BCB Group dezvoltă și execută proiecte de construcții civile, case, blocuri
@@ -333,12 +240,12 @@ footer span{
       <a class="btn btn-gold" href="tel:0770712701">Sună acum</a>
       <a class="btn btn-white" href="contact.html">Solicită ofertă</a>
     </div>
+
   </div>
 </section>
 
-<section class="intro">
-  <h2 class="section-title">Construcții complete, coordonate profesionist</h2>
-
+<section class="white">
+  <h2 class="title">Construcții complete, coordonate profesionist</h2>
   <p class="lead">
     BCB Group este brandul principal sub care sunt organizate diviziile noastre de construcții,
     instalații electrice, instalații sanitare și finisaje. Ne concentrăm pe proiecte realizate
@@ -347,8 +254,7 @@ footer span{
 </section>
 
 <section class="dark">
-  <h2 class="section-title">Diviziile BCB Group</h2>
-
+  <h2 class="title">Diviziile BCB Group</h2>
   <p class="lead">
     Fiecare divizie are un rol clar în realizarea unui proiect complet, dar toate funcționează
     sub aceeași viziune: calitate, seriozitate și execuție fără compromisuri.
@@ -359,17 +265,14 @@ footer span{
       <h3>BCB Construct</h3>
       <p>Construcții civile, case, blocuri și proiecte rezidențiale sau comerciale de la A la Z.</p>
     </div>
-
     <div class="card">
       <h3>BCB Electric</h3>
       <p>Instalații electrice pentru locuințe, spații comerciale și proiecte civile complexe.</p>
     </div>
-
     <div class="card">
       <h3>BCB Sanitare</h3>
       <p>Instalații sanitare și termice integrate corect în structura fiecărui proiect.</p>
     </div>
-
     <div class="card">
       <h3>BCB Finisaje</h3>
       <p>Finisaje interioare și exterioare realizate cu atenție la detalii și standarde ridicate.</p>
@@ -377,9 +280,8 @@ footer span{
   </div>
 </section>
 
-<section class="family">
-  <h2 class="section-title">O afacere de familie, construită pe responsabilitate</h2>
-
+<section class="white">
+  <h2 class="title">O afacere de familie, construită pe responsabilitate</h2>
   <p class="lead">
     BCB Group este dezvoltat ca o afacere de familie, cu o viziune clară: să construim proiecte
     solide, corecte și bine organizate. Pentru noi, fiecare lucrare reprezintă o responsabilitate
@@ -387,40 +289,22 @@ footer span{
   </p>
 </section>
 
-<section class="quote-section">
+<section class="dark">
   <p class="quote">
     „Nu ne-am propus să fim cei mai mari, vrem să fim cei mai buni.”
   </p>
-
-  <p class="lead">
-    Aceasta este direcția după care vrem să construim fiecare proiect BCB Group.
-  </p>
 </section>
 
-<section class="projects">
-  <h2 class="section-title">Proiecte în desfășurare</h2>
-
+<section class="white">
+  <h2 class="title">Proiecte în desfășurare</h2>
   <p class="lead">
     În curând vom publica imagini și filmări aeriene din proiectele noastre actuale,
     inclusiv prima casă construită sub brandul BCB Group.
   </p>
-
-  <div class="project-box">
-    <div class="project-placeholder"></div>
-
-    <div class="project-text">
-      <h3>Prima casă BCB Group</h3>
-      <p>
-        Un proiect în desfășurare, construit cu atenție la structură, organizare și detalii.
-        Aici vom integra fotografii reale și cadre filmate cu drona.
-      </p>
-    </div>
-  </div>
 </section>
 
 <section class="dark">
-  <h2 class="section-title">Contact</h2>
-
+  <h2 class="title">Contact</h2>
   <p class="lead">
     Pentru proiecte de construcții, case, blocuri, renovări sau lucrări complete,
     ne poți contacta direct.
