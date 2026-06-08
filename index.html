@@ -6,162 +6,296 @@
 <title>BCB Group | Construcții de la A la Z</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f6f6f6;color:#151515}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Arial, sans-serif;
+  background:#f4f4f4;
+  color:#111;
+}
 a{text-decoration:none}
 
+:root{
+  --black:#111317;
+  --gold:#d99a16;
+  --gold2:#f2b21b;
+  --white:#ffffff;
+  --text:#333;
+}
+
 header{
-background:#111;
-padding:18px 8%;
-display:flex;
-align-items:center;
-justify-content:space-between;
-border-bottom:4px solid #d99a16;
+  background:var(--white);
+  padding:18px 8%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:4px solid var(--gold);
+  position:sticky;
+  top:0;
+  z-index:10;
 }
 
 .logo{
-height:78px;
-background:white;
-padding:8px 14px;
-border-radius:6px;
+  width:210px;
+  max-width:100%;
+  display:block;
 }
 
 nav a{
-color:white;
-margin-left:24px;
-font-weight:700;
-font-size:15px;
+  color:var(--black);
+  font-weight:800;
+  margin-left:26px;
+  font-size:15px;
 }
 
-nav a:hover{color:#d99a16}
+nav a:hover{color:var(--gold)}
 
 .hero{
-min-height:82vh;
-background:linear-gradient(120deg,rgba(0,0,0,.92),rgba(20,20,20,.9)),url('');
-color:white;
-display:flex;
-align-items:center;
-padding:90px 8%;
+  min-height:82vh;
+  background:
+    linear-gradient(110deg,rgba(17,19,23,.96) 0%,rgba(17,19,23,.94) 52%,rgba(217,154,22,.86) 100%);
+  color:white;
+  display:flex;
+  align-items:center;
+  padding:90px 8%;
 }
 
-.hero-content{max-width:950px}
+.hero-content{
+  max-width:920px;
+}
 
-.hero-small{
-color:#d99a16;
-font-weight:800;
-letter-spacing:3px;
-margin-bottom:18px;
+.eyebrow{
+  color:var(--gold2);
+  font-weight:900;
+  letter-spacing:4px;
+  font-size:15px;
+  margin-bottom:22px;
 }
 
 .hero h1{
-font-size:72px;
-line-height:1;
-margin-bottom:18px;
+  font-size:76px;
+  line-height:1;
+  letter-spacing:3px;
+  margin-bottom:22px;
 }
 
 .hero h2{
-font-size:38px;
-color:#d99a16;
-margin-bottom:24px;
+  color:var(--gold2);
+  font-size:40px;
+  margin-bottom:24px;
 }
 
 .hero p{
-font-size:22px;
-line-height:1.6;
-color:#e5e5e5;
-max-width:800px;
+  font-size:22px;
+  line-height:1.65;
+  max-width:850px;
+  color:#eeeeee;
 }
 
-.buttons{margin-top:36px}
+.buttons{
+  margin-top:38px;
+}
 
 .btn{
-display:inline-block;
-padding:16px 30px;
-border-radius:5px;
-font-weight:800;
-margin-right:12px;
+  display:inline-block;
+  padding:17px 34px;
+  border-radius:6px;
+  font-weight:900;
+  margin-right:14px;
 }
 
-.btn-gold{background:#d99a16;color:#111}
-.btn-white{background:white;color:#111}
+.btn-gold{
+  background:var(--gold2);
+  color:#111;
+}
 
-section{padding:80px 8%}
+.btn-white{
+  background:#fff;
+  color:#111;
+}
+
+section{
+  padding:85px 8%;
+}
 
 .section-title{
-font-size:40px;
-margin-bottom:20px;
+  font-size:42px;
+  margin-bottom:22px;
+  color:var(--black);
 }
 
 .lead{
-font-size:20px;
-line-height:1.7;
-color:#444;
-max-width:980px;
+  font-size:20px;
+  line-height:1.75;
+  color:#444;
+  max-width:1000px;
+}
+
+.intro{
+  background:white;
 }
 
 .grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:24px;
-margin-top:40px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:24px;
+  margin-top:42px;
 }
 
 .card{
-background:white;
-padding:32px;
-border-radius:12px;
-box-shadow:0 12px 35px rgba(0,0,0,.08);
-border-top:5px solid #d99a16;
+  background:white;
+  padding:34px;
+  border-radius:14px;
+  box-shadow:0 14px 35px rgba(0,0,0,.08);
+  border-top:5px solid var(--gold);
 }
 
-.card h3{font-size:24px;margin-bottom:14px}
-.card p{line-height:1.6;color:#444}
+.card h3{
+  font-size:25px;
+  margin-bottom:14px;
+  color:var(--black);
+}
 
-.dark{background:#111;color:white}
-.dark .lead{color:#ddd}
+.card p{
+  color:#444;
+  line-height:1.7;
+  font-size:17px;
+}
+
+.dark{
+  background:var(--black);
+  color:white;
+}
+
+.dark .section-title{
+  color:white;
+}
+
+.dark .lead{
+  color:#dddddd;
+}
+
+.family{
+  background:#fff;
+}
+
+.quote-section{
+  background:#0b0b0c;
+  color:white;
+  text-align:left;
+}
 
 .quote{
-font-size:34px;
-line-height:1.4;
-font-weight:900;
-color:#d99a16;
-max-width:1000px;
-margin-bottom:22px;
+  font-size:36px;
+  line-height:1.35;
+  color:var(--gold2);
+  font-weight:900;
+  max-width:1050px;
+  margin-bottom:22px;
+}
+
+.projects{
+  background:#f7f7f7;
+}
+
+.project-box{
+  margin-top:35px;
+  background:white;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 14px 35px rgba(0,0,0,.08);
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+}
+
+.project-placeholder{
+  min-height:320px;
+  background:linear-gradient(135deg,#111,#333,#d99a16);
+}
+
+.project-text{
+  padding:38px;
+}
+
+.project-text h3{
+  font-size:28px;
+  margin-bottom:14px;
+}
+
+.project-text p{
+  font-size:18px;
+  line-height:1.7;
+  color:#444;
 }
 
 .contact-box{
-background:#1b1b1b;
-padding:35px;
-border-radius:12px;
-margin-top:30px;
-max-width:700px;
+  margin-top:35px;
+  background:#1b1b1b;
+  border:1px solid #333;
+  padding:36px;
+  border-radius:14px;
+  max-width:720px;
 }
 
 .contact-box p{
-font-size:20px;
-margin-bottom:12px;
+  font-size:20px;
+  margin-bottom:14px;
+}
+
+.contact-box a{
+  color:var(--gold2);
 }
 
 footer{
-background:#050505;
-color:white;
-text-align:center;
-padding:35px 8%;
+  background:#050505;
+  color:white;
+  padding:38px 8%;
+  text-align:center;
 }
 
-footer span{color:#d99a16}
+footer span{
+  color:var(--gold2);
+  font-weight:900;
+}
 
-@media(max-width:800px){
-header{display:block;text-align:center}
-.logo{height:65px}
-nav{margin-top:18px}
-nav a{display:inline-block;margin:8px}
-.hero{padding:70px 6%}
-.hero h1{font-size:46px}
-.hero h2{font-size:28px}
-.hero p{font-size:18px}
-.btn{display:block;margin:12px 0;text-align:center}
-.section-title{font-size:32px}
+@media(max-width:850px){
+  header{
+    display:block;
+    text-align:center;
+  }
+  .logo{
+    width:180px;
+    margin:auto;
+  }
+  nav{
+    margin-top:18px;
+  }
+  nav a{
+    display:inline-block;
+    margin:8px 10px;
+  }
+  .hero{
+    padding:70px 6%;
+  }
+  .hero h1{
+    font-size:48px;
+  }
+  .hero h2{
+    font-size:30px;
+  }
+  .hero p{
+    font-size:18px;
+  }
+  .btn{
+    display:block;
+    text-align:center;
+    margin:12px 0;
+  }
+  .section-title{
+    font-size:32px;
+  }
+  .project-box{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -169,113 +303,137 @@ nav a{display:inline-block;margin:8px}
 <body>
 
 <header>
-<img class="logo" src="logo.svg" alt="BCB Group Logo">
+  <a href="index.html">
+    <img class="logo" src="logo.png" alt="BCB Group - Bocoiu Construction Brothers">
+  </a>
 
-<nav>
-<a href="index.html">Acasă</a>
-<a href="despre.html">Despre noi</a>
-<a href="servicii.html">Servicii</a>
-<a href="proiecte.html">Proiecte</a>
-<a href="contact.html">Contact</a>
-</nav>
+  <nav>
+    <a href="index.html">Acasă</a>
+    <a href="despre.html">Despre noi</a>
+    <a href="servicii.html">Servicii</a>
+    <a href="proiecte.html">Proiecte</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 </header>
 
 <section class="hero">
-<div class="hero-content">
-<div class="hero-small">BOCOIU CONSTRUCTION BROTHERS</div>
-<h1>BCB GROUP</h1>
-<h2>Construim de la fundație până la cheie.</h2>
-<p>
-BCB Group dezvoltă și execută proiecte de construcții civile, case, blocuri și lucrări complete,
-cu responsabilitate, profesionalism și atenție la fiecare detaliu.
-</p>
+  <div class="hero-content">
+    <div class="eyebrow">BOCOIU CONSTRUCTION BROTHERS</div>
 
-<div class="buttons">
-<a class="btn btn-gold" href="tel:0770712701">Sună acum</a>
-<a class="btn btn-white" href="contact.html">Solicită ofertă</a>
-</div>
-</div>
+    <h1>BCB GROUP</h1>
+
+    <h2>Construim de la fundație până la cheie.</h2>
+
+    <p>
+      BCB Group dezvoltă și execută proiecte de construcții civile, case, blocuri
+      și lucrări complete, cu responsabilitate, profesionalism și atenție la fiecare detaliu.
+    </p>
+
+    <div class="buttons">
+      <a class="btn btn-gold" href="tel:0770712701">Sună acum</a>
+      <a class="btn btn-white" href="contact.html">Solicită ofertă</a>
+    </div>
+  </div>
 </section>
 
-<section>
-<h2 class="section-title">Construcții complete, coordonate profesionist</h2>
-<p class="lead">
-BCB Group este compania principală sub care sunt organizate diviziile noastre de construcții,
-instalații electrice, instalații sanitare și finisaje. Ne concentrăm pe proiecte realizate complet,
-corect și durabil, de la prima etapă a șantierului până la predarea finală.
-</p>
-</section>
+<section class="intro">
+  <h2 class="section-title">Construcții complete, coordonate profesionist</h2>
 
-<section class="dark">
-<h2 class="section-title">Diviziile BCB Group</h2>
-<p class="lead">
-Fiecare divizie are un rol clar în construcția unui proiect complet, dar toate funcționează sub aceeași viziune:
-calitate, seriozitate și execuție fără compromisuri.
-</p>
-
-<div class="grid">
-<div class="card">
-<h3>BCB Construct</h3>
-<p>Construcții civile, case, blocuri și proiecte rezidențiale sau comerciale de la A la Z.</p>
-</div>
-
-<div class="card">
-<h3>BCB Electric</h3>
-<p>Instalații electrice pentru locuințe, spații comerciale și proiecte civile complexe.</p>
-</div>
-
-<div class="card">
-<h3>BCB Sanitare</h3>
-<p>Instalații sanitare și termice integrate corect în structura fiecărui proiect.</p>
-</div>
-
-<div class="card">
-<h3>BCB Finisaje</h3>
-<p>Finisaje interioare și exterioare realizate cu atenție la detalii și standarde ridicate.</p>
-</div>
-</div>
-</section>
-
-<section>
-<h2 class="section-title">O afacere de familie, construită pe responsabilitate</h2>
-<p class="lead">
-BCB Group este dezvoltat ca o afacere de familie, cu o viziune clară: să construim proiecte solide,
-corecte și bine organizate. Pentru noi, fiecare lucrare reprezintă o responsabilitate asumată,
-nu doar un contract.
-</p>
+  <p class="lead">
+    BCB Group este brandul principal sub care sunt organizate diviziile noastre de construcții,
+    instalații electrice, instalații sanitare și finisaje. Ne concentrăm pe proiecte realizate
+    complet, corect și durabil, de la prima etapă a șantierului până la predarea finală.
+  </p>
 </section>
 
 <section class="dark">
-<p class="quote">
-„Nu ne-am propus să fim cei mai mari, vrem să fim cei mai buni.”
-</p>
-<p class="lead">
-Aceasta este direcția după care vrem să construim fiecare proiect BCB Group.
-</p>
+  <h2 class="section-title">Diviziile BCB Group</h2>
+
+  <p class="lead">
+    Fiecare divizie are un rol clar în realizarea unui proiect complet, dar toate funcționează
+    sub aceeași viziune: calitate, seriozitate și execuție fără compromisuri.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>BCB Construct</h3>
+      <p>Construcții civile, case, blocuri și proiecte rezidențiale sau comerciale de la A la Z.</p>
+    </div>
+
+    <div class="card">
+      <h3>BCB Electric</h3>
+      <p>Instalații electrice pentru locuințe, spații comerciale și proiecte civile complexe.</p>
+    </div>
+
+    <div class="card">
+      <h3>BCB Sanitare</h3>
+      <p>Instalații sanitare și termice integrate corect în structura fiecărui proiect.</p>
+    </div>
+
+    <div class="card">
+      <h3>BCB Finisaje</h3>
+      <p>Finisaje interioare și exterioare realizate cu atenție la detalii și standarde ridicate.</p>
+    </div>
+  </div>
 </section>
 
-<section>
-<h2 class="section-title">Proiecte în desfășurare</h2>
-<p class="lead">
-În curând vom publica imagini și filmări aeriene din proiectele noastre actuale, inclusiv prima casă
-construită sub brandul BCB Group.
-</p>
+<section class="family">
+  <h2 class="section-title">O afacere de familie, construită pe responsabilitate</h2>
+
+  <p class="lead">
+    BCB Group este dezvoltat ca o afacere de familie, cu o viziune clară: să construim proiecte
+    solide, corecte și bine organizate. Pentru noi, fiecare lucrare reprezintă o responsabilitate
+    asumată, nu doar un contract.
+  </p>
 </section>
 
-<section id="contact" class="dark">
-<h2 class="section-title">Contact</h2>
-<p class="lead">
-Pentru proiecte de construcții, case, blocuri, renovări sau lucrări complete, ne poți contacta direct.
-</p>
+<section class="quote-section">
+  <p class="quote">
+    „Nu ne-am propus să fim cei mai mari, vrem să fim cei mai buni.”
+  </p>
 
-<div class="contact-box">
-<p><strong>Telefon:</strong> 0770 712 701</p>
-<p><strong>Email:</strong> office@bcbgroup.ro</p>
-</div>
+  <p class="lead">
+    Aceasta este direcția după care vrem să construim fiecare proiect BCB Group.
+  </p>
+</section>
+
+<section class="projects">
+  <h2 class="section-title">Proiecte în desfășurare</h2>
+
+  <p class="lead">
+    În curând vom publica imagini și filmări aeriene din proiectele noastre actuale,
+    inclusiv prima casă construită sub brandul BCB Group.
+  </p>
+
+  <div class="project-box">
+    <div class="project-placeholder"></div>
+
+    <div class="project-text">
+      <h3>Prima casă BCB Group</h3>
+      <p>
+        Un proiect în desfășurare, construit cu atenție la structură, organizare și detalii.
+        Aici vom integra fotografii reale și cadre filmate cu drona.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="dark">
+  <h2 class="section-title">Contact</h2>
+
+  <p class="lead">
+    Pentru proiecte de construcții, case, blocuri, renovări sau lucrări complete,
+    ne poți contacta direct.
+  </p>
+
+  <div class="contact-box">
+    <p><strong>Telefon:</strong> <a href="tel:0770712701">0770 712 701</a></p>
+    <p><strong>Email:</strong> <a href="mailto:office@bcbgroup.ro">office@bcbgroup.ro</a></p>
+  </div>
 </section>
 
 <footer>
-<p>© 2026 <span>BCB Group</span> — Bocoiu Construction Brothers</p>
+  <p>© 2026 <span>BCB Group</span> — Bocoiu Construction Brothers</p>
 </footer>
 
 </body>
