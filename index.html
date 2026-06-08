@@ -1,212 +1,281 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BCB Group | Construcții de la A la Z</title>
-  <style>
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Arial, sans-serif;
-      color:#151515;
-      background:#f7f7f7;
-    }
-    header{
-      background:#fff;
-      padding:22px 8%;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      border-bottom:1px solid #e5e5e5;
-    }
-    .logo{height:70px}
-    nav a{
-      margin-left:25px;
-      text-decoration:none;
-      color:#151515;
-      font-weight:700;
-    }
-    .hero{
-      min-height:80vh;
-      padding:90px 8%;
-      background:linear-gradient(120deg,#111 0%,#242424 60%,#d99a16 100%);
-      color:white;
-      display:flex;
-      align-items:center;
-    }
-    .hero-content{max-width:850px}
-    .hero h1{
-      font-size:64px;
-      margin:0 0 20px;
-      letter-spacing:2px;
-    }
-    .hero h2{
-      font-size:38px;
-      margin:0 0 20px;
-      color:#f2b21b;
-    }
-    .hero p{
-      font-size:22px;
-      line-height:1.6;
-      color:#eee;
-    }
-    .buttons{margin-top:35px}
-    .btn{
-      display:inline-block;
-      padding:16px 28px;
-      margin-right:12px;
-      border-radius:6px;
-      text-decoration:none;
-      font-weight:800;
-    }
-    .btn-gold{background:#f2b21b;color:#111}
-    .btn-dark{background:white;color:#111}
-    section{
-      padding:80px 8%;
-    }
-    .section-title{
-      font-size:38px;
-      margin-bottom:20px;
-    }
-    .lead{
-      max-width:900px;
-      font-size:20px;
-      line-height:1.7;
-      color:#444;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:24px;
-      margin-top:40px;
-    }
-    .card{
-      background:white;
-      padding:30px;
-      border-radius:14px;
-      box-shadow:0 10px 30px rgba(0,0,0,.08);
-      border-top:5px solid #f2b21b;
-    }
-    .card h3{margin-top:0;font-size:24px}
-    .dark{
-      background:#111;
-      color:white;
-    }
-    .dark .lead{color:#ddd}
-    .quote{
-      font-size:34px;
-      line-height:1.4;
-      color:#f2b21b;
-      max-width:1000px;
-      font-weight:800;
-    }
-    footer{
-      background:#050505;
-      color:white;
-      padding:45px 8%;
-      text-align:center;
-    }
-    footer a{color:#f2b21b;text-decoration:none}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BCB Group | Construcții de la A la Z</title>
 
-    @media(max-width:700px){
-      header{display:block;text-align:center}
-      nav{margin-top:18px}
-      nav a{display:inline-block;margin:8px}
-      .hero h1{font-size:42px}
-      .hero h2{font-size:28px}
-      .hero p{font-size:18px}
-      .btn{display:block;margin:12px 0;text-align:center}
-      .logo{height:55px}
-    }
-  </style>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f6f6f6;color:#151515}
+a{text-decoration:none}
+
+header{
+background:#111;
+padding:18px 8%;
+display:flex;
+align-items:center;
+justify-content:space-between;
+border-bottom:4px solid #d99a16;
+}
+
+.logo{
+height:78px;
+background:white;
+padding:8px 14px;
+border-radius:6px;
+}
+
+nav a{
+color:white;
+margin-left:24px;
+font-weight:700;
+font-size:15px;
+}
+
+nav a:hover{color:#d99a16}
+
+.hero{
+min-height:82vh;
+background:linear-gradient(120deg,rgba(0,0,0,.92),rgba(20,20,20,.9)),url('');
+color:white;
+display:flex;
+align-items:center;
+padding:90px 8%;
+}
+
+.hero-content{max-width:950px}
+
+.hero-small{
+color:#d99a16;
+font-weight:800;
+letter-spacing:3px;
+margin-bottom:18px;
+}
+
+.hero h1{
+font-size:72px;
+line-height:1;
+margin-bottom:18px;
+}
+
+.hero h2{
+font-size:38px;
+color:#d99a16;
+margin-bottom:24px;
+}
+
+.hero p{
+font-size:22px;
+line-height:1.6;
+color:#e5e5e5;
+max-width:800px;
+}
+
+.buttons{margin-top:36px}
+
+.btn{
+display:inline-block;
+padding:16px 30px;
+border-radius:5px;
+font-weight:800;
+margin-right:12px;
+}
+
+.btn-gold{background:#d99a16;color:#111}
+.btn-white{background:white;color:#111}
+
+section{padding:80px 8%}
+
+.section-title{
+font-size:40px;
+margin-bottom:20px;
+}
+
+.lead{
+font-size:20px;
+line-height:1.7;
+color:#444;
+max-width:980px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:24px;
+margin-top:40px;
+}
+
+.card{
+background:white;
+padding:32px;
+border-radius:12px;
+box-shadow:0 12px 35px rgba(0,0,0,.08);
+border-top:5px solid #d99a16;
+}
+
+.card h3{font-size:24px;margin-bottom:14px}
+.card p{line-height:1.6;color:#444}
+
+.dark{background:#111;color:white}
+.dark .lead{color:#ddd}
+
+.quote{
+font-size:34px;
+line-height:1.4;
+font-weight:900;
+color:#d99a16;
+max-width:1000px;
+margin-bottom:22px;
+}
+
+.contact-box{
+background:#1b1b1b;
+padding:35px;
+border-radius:12px;
+margin-top:30px;
+max-width:700px;
+}
+
+.contact-box p{
+font-size:20px;
+margin-bottom:12px;
+}
+
+footer{
+background:#050505;
+color:white;
+text-align:center;
+padding:35px 8%;
+}
+
+footer span{color:#d99a16}
+
+@media(max-width:800px){
+header{display:block;text-align:center}
+.logo{height:65px}
+nav{margin-top:18px}
+nav a{display:inline-block;margin:8px}
+.hero{padding:70px 6%}
+.hero h1{font-size:46px}
+.hero h2{font-size:28px}
+.hero p{font-size:18px}
+.btn{display:block;margin:12px 0;text-align:center}
+.section-title{font-size:32px}
+}
+</style>
 </head>
+
 <body>
 
 <header>
-  <img class="logo" src="logo.svg" alt="BCB Group Logo">
-  <nav>
-    <a href="#despre">Despre noi</a>
-    <a href="#servicii">Servicii</a>
-    <a href="#contact">Contact</a>
-  </nav>
+<img class="logo" src="logo.svg" alt="BCB Group Logo">
+
+<nav>
+<a href="index.html">Acasă</a>
+<a href="despre.html">Despre noi</a>
+<a href="servicii.html">Servicii</a>
+<a href="proiecte.html">Proiecte</a>
+<a href="contact.html">Contact</a>
+</nav>
 </header>
 
 <section class="hero">
-  <div class="hero-content">
-    <h1>BCB GROUP</h1>
-    <h2>Construim de la fundație până la cheie.</h2>
-    <p>
-      Case, blocuri și proiecte civile realizate cu profesionalism,
-      responsabilitate și atenție la fiecare detaliu.
-    </p>
-    <div class="buttons">
-      <a class="btn btn-gold" href="tel:0770712701">Sună acum</a>
-      <a class="btn btn-dark" href="mailto:office@bcbgroup.ro">Solicită ofertă</a>
-    </div>
-  </div>
-</section>
+<div class="hero-content">
+<div class="hero-small">BOCOIU CONSTRUCTION BROTHERS</div>
+<h1>BCB GROUP</h1>
+<h2>Construim de la fundație până la cheie.</h2>
+<p>
+BCB Group dezvoltă și execută proiecte de construcții civile, case, blocuri și lucrări complete,
+cu responsabilitate, profesionalism și atenție la fiecare detaliu.
+</p>
 
-<section id="despre">
-  <h2 class="section-title">Despre BCB Group</h2>
-  <p class="lead">
-    BCB Group este o companie de construcții dezvoltată ca afacere de familie,
-    construită pe încredere, seriozitate și responsabilitate. Prin diviziile
-    noastre specializate, oferim soluții complete pentru proiecte rezidențiale,
-    comerciale și civile, de la etapa de execuție structurală până la finisajele finale.
-  </p>
-</section>
-
-<section id="servicii" class="dark">
-  <h2 class="section-title">Ce construim</h2>
-  <p class="lead">
-    BCB Group coordonează proiecte complete, iar diviziile noastre lucrează împreună
-    pentru a livra lucrări curate, corecte și durabile.
-  </p>
-
-  <div class="grid">
-    <div class="card">
-      <h3>BCB Construct</h3>
-      <p>Construcții civile, case, blocuri și proiecte rezidențiale de la A la Z.</p>
-    </div>
-    <div class="card">
-      <h3>BCB Electric</h3>
-      <p>Instalații electrice pentru locuințe, spații comerciale și proiecte civile.</p>
-    </div>
-    <div class="card">
-      <h3>BCB Sanitare</h3>
-      <p>Instalații sanitare, termice și soluții tehnice integrate în proiect.</p>
-    </div>
-    <div class="card">
-      <h3>BCB Finisaje</h3>
-      <p>Finisaje interioare și exterioare executate cu atenție la detalii.</p>
-    </div>
-  </div>
+<div class="buttons">
+<a class="btn btn-gold" href="tel:0770712701">Sună acum</a>
+<a class="btn btn-white" href="contact.html">Solicită ofertă</a>
+</div>
+</div>
 </section>
 
 <section>
-  <h2 class="section-title">Valorile noastre</h2>
-  <p class="quote">
-    „Nu ne-am propus să fim cei mai mari, vrem să fim cei mai buni.”
-  </p>
-  <p class="lead">
-    Punem accent pe calitate, comunicare transparentă, respectarea termenelor
-    și lucrări executate corect, fără compromisuri.
-  </p>
+<h2 class="section-title">Construcții complete, coordonate profesionist</h2>
+<p class="lead">
+BCB Group este compania principală sub care sunt organizate diviziile noastre de construcții,
+instalații electrice, instalații sanitare și finisaje. Ne concentrăm pe proiecte realizate complet,
+corect și durabil, de la prima etapă a șantierului până la predarea finală.
+</p>
+</section>
+
+<section class="dark">
+<h2 class="section-title">Diviziile BCB Group</h2>
+<p class="lead">
+Fiecare divizie are un rol clar în construcția unui proiect complet, dar toate funcționează sub aceeași viziune:
+calitate, seriozitate și execuție fără compromisuri.
+</p>
+
+<div class="grid">
+<div class="card">
+<h3>BCB Construct</h3>
+<p>Construcții civile, case, blocuri și proiecte rezidențiale sau comerciale de la A la Z.</p>
+</div>
+
+<div class="card">
+<h3>BCB Electric</h3>
+<p>Instalații electrice pentru locuințe, spații comerciale și proiecte civile complexe.</p>
+</div>
+
+<div class="card">
+<h3>BCB Sanitare</h3>
+<p>Instalații sanitare și termice integrate corect în structura fiecărui proiect.</p>
+</div>
+
+<div class="card">
+<h3>BCB Finisaje</h3>
+<p>Finisaje interioare și exterioare realizate cu atenție la detalii și standarde ridicate.</p>
+</div>
+</div>
+</section>
+
+<section>
+<h2 class="section-title">O afacere de familie, construită pe responsabilitate</h2>
+<p class="lead">
+BCB Group este dezvoltat ca o afacere de familie, cu o viziune clară: să construim proiecte solide,
+corecte și bine organizate. Pentru noi, fiecare lucrare reprezintă o responsabilitate asumată,
+nu doar un contract.
+</p>
+</section>
+
+<section class="dark">
+<p class="quote">
+„Nu ne-am propus să fim cei mai mari, vrem să fim cei mai buni.”
+</p>
+<p class="lead">
+Aceasta este direcția după care vrem să construim fiecare proiect BCB Group.
+</p>
+</section>
+
+<section>
+<h2 class="section-title">Proiecte în desfășurare</h2>
+<p class="lead">
+În curând vom publica imagini și filmări aeriene din proiectele noastre actuale, inclusiv prima casă
+construită sub brandul BCB Group.
+</p>
 </section>
 
 <section id="contact" class="dark">
-  <h2 class="section-title">Contact</h2>
-  <p class="lead">
-    Pentru proiecte de construcții, renovări sau lucrări complete, ne poți contacta direct.
-  </p>
-  <p><strong>Telefon:</strong> 0770 712 701</p>
-  <p><strong>Email:</strong> office@bcbgroup.ro</p>
+<h2 class="section-title">Contact</h2>
+<p class="lead">
+Pentru proiecte de construcții, case, blocuri, renovări sau lucrări complete, ne poți contacta direct.
+</p>
+
+<div class="contact-box">
+<p><strong>Telefon:</strong> 0770 712 701</p>
+<p><strong>Email:</strong> office@bcbgroup.ro</p>
+</div>
 </section>
 
 <footer>
-  <p>© 2026 BCB Group - Bocoiu Construction Brothers</p>
-  <p><a href="mailto:office@bcbgroup.ro">office@bcbgroup.ro</a></p>
+<p>© 2026 <span>BCB Group</span> — Bocoiu Construction Brothers</p>
 </footer>
 
 </body>
