@@ -608,12 +608,13 @@ a{
 }
 
 .footer img{
-  width:145px;
+  width:150px;
   height:auto;
   display:block;
-  filter:
-    drop-shadow(0 0 10px rgba(247,178,27,.35))
-    drop-shadow(0 8px 18px rgba(0,0,0,.45));
+  background:#ffffff;
+  padding:10px 16px;
+  border-radius:6px;
+  box-shadow:0 12px 28px rgba(0,0,0,.45);
 }
 
 .footer p{
