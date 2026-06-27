@@ -117,7 +117,7 @@ a{
   position:absolute;
   inset:0;
   background:
-    linear-gradient(90deg,rgba(0,0,0,.50) 0%,rgba(0,0,0,.78) 42%,rgba(0,0,0,.12) 100%);
+    linear-gradient(90deg,rgba(0,0,0,.12) 0%,rgba(0,0,0,.78) 42%,rgba(0,0,0,.12) 100%);
 }
 
 .hero-gold-shape{
