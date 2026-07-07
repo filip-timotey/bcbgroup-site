@@ -68,3 +68,31 @@ document.addEventListener("DOMContentLoaded", () => {
     counterObserver.observe(counterSection);
   }
 });
+
+const contactForm = document.getElementById("oferta");
+
+if (contactForm) {
+  contactForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(contactForm);
+
+    try {
+      const response = await fetch("https://formspree.io/f/xkolagbg", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json"
+        }
+      });
+
+      if (response.ok) {
+        window.location.href = "multumim.html";
+      } else {
+        alert("A apărut o problemă. Te rugăm să încerci din nou sau să ne contactezi telefonic.");
+      }
+    } catch (error) {
+      alert("Eroare de conexiune. Te rugăm să încerci din nou.");
+    }
+  });
+}
