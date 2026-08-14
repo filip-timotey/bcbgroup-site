@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/admin-2026.css">
+  <link rel="stylesheet" href="../css/admin-nav.css">
   <link rel="stylesheet" href="../css/admin-projects.css">
 </head>
 <body class="bcb-admin-body">
@@ -38,9 +39,7 @@
           <div><span class="bcb-admin-section-kicker">Administrare proiect</span><h1 id="bcb-project-heading">Creează un proiect nou.</h1><p>Datele publicate aici apar automat în pagina Proiecte a site-ului.</p></div>
           <div class="bcb-project-sync-badge"><span></span> Sincronizat cu site-ul</div>
         </section>
-
         <div id="bcb-project-message" class="bcb-project-message" hidden></div>
-
         <form id="bcb-project-form" class="bcb-project-form">
           <section class="bcb-project-panel">
             <div class="bcb-project-panel-title"><div><span>01</span><div><strong>Informații proiect</strong><small>Datele principale afișate pe site.</small></div></div></div>
@@ -54,11 +53,7 @@
               <label class="is-wide"><span>Descriere completă</span><textarea id="project-description" name="description" rows="6" placeholder="Detalii despre lucrare, obiective, etape și particularități."></textarea></label>
             </div>
           </section>
-
-          <div class="bcb-project-form-actions">
-            <a href="dashboard.html" class="bcb-project-cancel">Renunță</a>
-            <button id="bcb-project-save" class="bcb-admin-primary-action" type="submit"><i class="fa-solid fa-floppy-disk"></i> Salvează proiectul</button>
-          </div>
+          <div class="bcb-project-form-actions"><a href="dashboard.html" class="bcb-project-cancel">Renunță</a><button id="bcb-project-save" class="bcb-admin-primary-action" type="submit"><i class="fa-solid fa-floppy-disk"></i> Salvează proiectul</button></div>
         </form>
 
         <section id="bcb-media-panel" class="bcb-project-panel bcb-media-panel" hidden>
@@ -74,6 +69,7 @@
       </div>
     </main>
   </div>
+  <script type="module" src="../js/admin-nav.js"></script>
   <script type="module" src="../js/admin-project.js"></script>
 </body>
 </html>
