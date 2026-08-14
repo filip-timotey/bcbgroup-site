@@ -1,1 +1,37 @@
+/* ANIMATIONS */
 
+.reveal{
+  opacity:0;
+  transform:translateY(34px) rotateX(8deg);
+  animation:revealIn .9s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+.delay-1{animation-delay:.12s}
+.delay-2{animation-delay:.24s}
+.delay-3{animation-delay:.36s}
+.delay-4{animation-delay:.48s}
+.delay-5{animation-delay:.60s}
+.delay-6{animation-delay:.72s}
+
+@keyframes revealIn{
+  to{
+    opacity:1;
+    transform:translateY(0) rotateX(0);
+  }
+}
+
+@keyframes goldShape{
+  from{
+    opacity:0;
+    transform:translateX(100px) skewX(-22deg);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0) skewX(-22deg);
+  }
+}
+
+@keyframes bgZoom{
+  from{transform:scale(1.08)}
+  to{transform:scale(1.03)}
+}
