@@ -8,6 +8,7 @@ const completedCount = document.querySelector("#bcb-admin-completed-count");
 const mediaCount = document.querySelector("#bcb-admin-media-count");
 const projectsList = document.querySelector("#bcb-admin-projects-list");
 const logoutButton = document.querySelector("#bcb-admin-logout");
+const newProjectButton = document.querySelector(".bcb-admin-primary-action");
 
 function escapeHtml(value = "") {
   return String(value)
@@ -61,6 +62,13 @@ async function loadDashboard() {
   if (userName) userName.textContent = profile.full_name || "BCB User";
   if (userRole) userRole.textContent = profile.role === "admin" ? "Administrator" : "Editor";
 
+  if (newProjectButton) {
+    newProjectButton.disabled = false;
+    newProjectButton.addEventListener("click", () => {
+      window.location.href = "project.html";
+    });
+  }
+
   const [{ data: projects, error: projectsError }, { count: mediaTotal }] = await Promise.all([
     supabase
       .from("projects")
@@ -72,9 +80,7 @@ async function loadDashboard() {
   ]);
 
   if (projectsError) {
-    if (projectsList) {
-      projectsList.innerHTML = `<div class="bcb-admin-empty">Nu am putut încărca proiectele.</div>`;
-    }
+    if (projectsList) projectsList.innerHTML = '<div class="bcb-admin-empty">Nu am putut încărca proiectele.</div>';
     return;
   }
 
@@ -94,14 +100,13 @@ async function loadDashboard() {
       <div class="bcb-admin-empty">
         <div class="bcb-admin-empty-icon"><i class="fa-regular fa-folder-open"></i></div>
         <strong>Nu există încă proiecte.</strong>
-        <span>Primul proiect îl vom crea din butonul „Proiect nou”.</span>
-      </div>
-    `;
+        <span>Apasă „Proiect nou” pentru a crea primul proiect.</span>
+      </div>`;
     return;
   }
 
   projectsList.innerHTML = allProjects.map((project) => `
-    <article class="bcb-admin-project-row">
+    <article class="bcb-admin-project-row" data-project-id="${escapeHtml(project.id)}">
       <div class="bcb-admin-project-main">
         <div class="bcb-admin-project-mark"></div>
         <div>
@@ -129,18 +134,22 @@ async function loadDashboard() {
         ${escapeHtml(statusLabel(project.status))}
       </div>
 
-      <button class="bcb-admin-row-action" type="button" disabled aria-label="Editare disponibilă în etapa următoare">
+      <button class="bcb-admin-row-action" type="button" data-action="edit" aria-label="Editează proiectul">
         <i class="fa-solid fa-arrow-right"></i>
       </button>
-    </article>
-  `).join("");
+    </article>`).join("");
 }
 
-if (logoutButton) {
-  logoutButton.addEventListener("click", async () => {
-    await supabase.auth.signOut();
-    window.location.replace("index.html");
-  });
-}
+projectsList?.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-action='edit']");
+  const row = event.target.closest("[data-project-id]");
+  if (!button || !row) return;
+  window.location.href = `project.html?id=${encodeURIComponent(row.dataset.projectId)}`;
+});
+
+logoutButton?.addEventListener("click", async () => {
+  await supabase.auth.signOut();
+  window.location.replace("index.html");
+});
 
 loadDashboard();
