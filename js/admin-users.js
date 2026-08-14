@@ -8,6 +8,12 @@ const activeBox = document.querySelector("#users-active");
 const adminsBox = document.querySelector("#users-admins");
 const editorsBox = document.querySelector("#users-editors");
 const logoutButton = document.querySelector("#bcb-admin-logout");
+const inviteForm = document.querySelector("#bcb-users-invite-form");
+const inviteName = document.querySelector("#invite-full-name");
+const inviteEmail = document.querySelector("#invite-email");
+const inviteRole = document.querySelector("#invite-role");
+const inviteButton = document.querySelector("#bcb-users-invite-button");
+const inviteMessage = document.querySelector("#bcb-users-invite-message");
 
 let currentProfile = null;
 let profiles = [];
@@ -31,6 +37,13 @@ function showMessage(text, type = "success") {
   messageBox.hidden = false;
   messageBox.className = `bcb-users-message is-${type}`;
   messageBox.textContent = text;
+}
+
+function showInviteMessage(text, type = "success") {
+  if (!inviteMessage) return;
+  inviteMessage.hidden = false;
+  inviteMessage.className = `bcb-users-invite-message is-${type}`;
+  inviteMessage.textContent = text;
 }
 
 async function requireAdminSession() {
@@ -88,7 +101,7 @@ function renderUsers() {
   usersList.innerHTML = profiles.map((profile) => {
     const isCurrent = profile.id === currentProfile?.id;
     const isLastActiveAdmin = profile.role === "admin" && profile.is_active && activeAdmins === 1;
-    const identifier = profile.full_name || "Utilizator BCB";
+    const identifier = profile.full_name || profile.email || "Utilizator BCB";
 
     return `
       <article class="bcb-user-row" data-user-id="${escapeHtml(profile.id)}">
@@ -96,7 +109,7 @@ function renderUsers() {
           <div class="bcb-user-avatar">${escapeHtml(initials(identifier))}</div>
           <div>
             <h3>${escapeHtml(identifier)}</h3>
-            <p>ID · ${escapeHtml(profile.id.slice(0, 8))}…</p>
+            <p>${escapeHtml(profile.email || `ID · ${profile.id.slice(0, 8)}…`)}</p>
             ${isCurrent ? '<span class="bcb-user-badge"><i class="fa-solid fa-crown"></i> Contul tău</span>' : ""}
           </div>
         </div>
@@ -132,12 +145,12 @@ function renderUsers() {
 async function loadUsers() {
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, full_name, role, is_active, created_at, updated_at")
+    .select("id, full_name, email, role, is_active, created_at, updated_at")
     .order("created_at", { ascending: true });
 
   if (error) {
     console.error(error);
-    usersList.innerHTML = '<div class="bcb-admin-empty">Nu am putut încărca utilizatorii.</div>';
+    if (usersList) usersList.innerHTML = '<div class="bcb-admin-empty">Nu am putut încărca utilizatorii.</div>';
     return;
   }
 
@@ -188,6 +201,54 @@ usersList?.addEventListener("click", async (event) => {
     showMessage("Drepturile utilizatorului au fost actualizate.");
     await loadUsers();
   }
+});
+
+inviteForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const fullName = inviteName?.value.trim() || "";
+  const email = inviteEmail?.value.trim().toLowerCase() || "";
+  const role = inviteRole?.value === "admin" ? "admin" : "editor";
+
+  if (!fullName || !email) {
+    showInviteMessage("Completează numele și adresa de email.", "error");
+    return;
+  }
+
+  inviteButton.disabled = true;
+  inviteButton.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Se trimite…';
+  showInviteMessage("Se pregătește invitația…", "loading");
+
+  const { data, error } = await supabase.functions.invoke("invite-bcb-user", {
+    body: {
+      email,
+      full_name: fullName,
+      role
+    }
+  });
+
+  inviteButton.disabled = false;
+  inviteButton.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Trimite invitația';
+
+  if (error || !data?.success) {
+    console.error(error, data);
+    let message = data?.error || "Invitația nu a putut fi trimisă.";
+
+    if (error?.context) {
+      try {
+        const details = await error.context.json();
+        if (details?.error) message = details.error;
+      } catch (_) {}
+    }
+
+    showInviteMessage(message, "error");
+    return;
+  }
+
+  inviteForm.reset();
+  if (inviteRole) inviteRole.value = "editor";
+  showInviteMessage(`Invitația a fost trimisă către ${email}.`, "success");
+  await loadUsers();
 });
 
 logoutButton?.addEventListener("click", async () => {
