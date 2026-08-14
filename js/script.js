@@ -28,6 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
     revealElements.forEach(element => element.classList.add("show"));
   }
 
+  if (document.getElementById("oferta")) {
+    import("./contact-request.js").catch(error => {
+      console.error("BCB contact module error:", error);
+    });
+  }
+
   if (document.querySelector(".projects26-page")) {
     import("./projects-public.js").catch(error => {
       console.error("BCB projects module error:", error);
