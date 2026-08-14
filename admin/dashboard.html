@@ -4,157 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex,nofollow">
-
   <link rel="icon" type="image/png" href="../assets/images/logo.png">
-
   <title>BCB Project Manager | Dashboard</title>
-
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-  >
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/admin-2026.css">
 </head>
-
 <body class="bcb-admin-body">
-
   <div class="bcb-admin-app">
-
     <aside class="bcb-admin-sidebar">
-
-      <a href="dashboard.html" class="bcb-admin-sidebar-logo">
-        <img src="../assets/images/logo.png" alt="BCB Group">
-      </a>
-
-      <div class="bcb-admin-sidebar-title">
-        <span>BCB</span>
-        <strong>Project Manager</strong>
-      </div>
-
-      <nav class="bcb-admin-nav" aria-label="Administrare proiecte">
-        <a class="active" href="dashboard.html">
-          <i class="fa-solid fa-grid-2"></i>
-          Dashboard
-        </a>
-        <a href="#projects">
-          <i class="fa-solid fa-building"></i>
-          Proiecte
-        </a>
-        <button type="button" disabled>
-          <i class="fa-regular fa-images"></i>
-          Media
-          <span>curând</span>
-        </button>
+      <a href="dashboard.html" class="bcb-admin-sidebar-logo"><img src="../assets/images/logo.png" alt="BCB Group"></a>
+      <div class="bcb-admin-sidebar-title"><span>BCB</span><strong>Project Manager</strong></div>
+      <nav class="bcb-admin-nav" aria-label="Administrare BCB">
+        <a class="active" href="dashboard.html"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
+        <a href="dashboard.html#projects"><i class="fa-solid fa-building"></i> Proiecte</a>
+        <a id="bcb-admin-users-link" href="users.html" hidden><i class="fa-solid fa-user-shield"></i> Utilizatori</a>
       </nav>
-
       <div class="bcb-admin-sidebar-bottom">
-        <a href="../index.html" target="_blank" rel="noopener noreferrer">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          Vezi site-ul
-        </a>
-
-        <button id="bcb-admin-logout" type="button">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          Deconectare
-        </button>
+        <a href="../index.html" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Vezi site-ul</a>
+        <button id="bcb-admin-logout" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i> Deconectare</button>
       </div>
-
     </aside>
 
     <main class="bcb-admin-main">
-
       <header class="bcb-admin-topbar">
-        <div>
-          <span class="bcb-admin-eyebrow">BCB Group · Internal Workspace</span>
-          <h1>Project Manager</h1>
-        </div>
-
-        <div class="bcb-admin-user-card">
-          <div class="bcb-admin-avatar">
-            <i class="fa-solid fa-user"></i>
-          </div>
-          <div>
-            <strong id="bcb-admin-user-name">Se încarcă…</strong>
-            <span id="bcb-admin-user-role">—</span>
-          </div>
-        </div>
+        <div><span class="bcb-admin-eyebrow">BCB Group · Internal Workspace</span><h1>Project Manager</h1></div>
+        <div class="bcb-admin-user-card"><div class="bcb-admin-avatar"><i class="fa-solid fa-user"></i></div><div><strong id="bcb-admin-user-name">Se încarcă…</strong><span id="bcb-admin-user-role">—</span></div></div>
       </header>
 
       <section class="bcb-admin-welcome">
-        <div>
-          <span class="bcb-admin-section-kicker">Panou operațional</span>
-          <h2>Proiectele BCB, într-un singur loc.</h2>
-          <p>
-            Urmărește progresul, organizează etapele și pregătește materialele care vor apărea automat pe site.
-          </p>
-        </div>
-
-        <button class="bcb-admin-primary-action" type="button" disabled>
-          <i class="fa-solid fa-plus"></i>
-          Proiect nou
-        </button>
+        <div><span class="bcb-admin-section-kicker">Panou operațional</span><h2>Proiectele BCB, într-un singur loc.</h2><p>Urmărește progresul, organizează etapele și pregătește materialele care apar automat pe site.</p></div>
+        <button class="bcb-admin-primary-action" type="button" disabled><i class="fa-solid fa-plus"></i> Proiect nou</button>
       </section>
 
       <section class="bcb-admin-stats" aria-label="Statistici proiecte">
-        <article>
-          <div class="bcb-admin-stat-icon"><i class="fa-solid fa-layer-group"></i></div>
-          <div>
-            <span>Total proiecte</span>
-            <strong id="bcb-admin-projects-count">0</strong>
-          </div>
-        </article>
-
-        <article>
-          <div class="bcb-admin-stat-icon"><i class="fa-solid fa-person-digging"></i></div>
-          <div>
-            <span>În desfășurare</span>
-            <strong id="bcb-admin-active-count">0</strong>
-          </div>
-        </article>
-
-        <article>
-          <div class="bcb-admin-stat-icon"><i class="fa-solid fa-circle-check"></i></div>
-          <div>
-            <span>Finalizate</span>
-            <strong id="bcb-admin-completed-count">0</strong>
-          </div>
-        </article>
-
-        <article>
-          <div class="bcb-admin-stat-icon"><i class="fa-regular fa-images"></i></div>
-          <div>
-            <span>Fișiere media</span>
-            <strong id="bcb-admin-media-count">0</strong>
-          </div>
-        </article>
+        <article><div class="bcb-admin-stat-icon"><i class="fa-solid fa-layer-group"></i></div><div><span>Total proiecte</span><strong id="bcb-admin-projects-count">0</strong></div></article>
+        <article><div class="bcb-admin-stat-icon"><i class="fa-solid fa-person-digging"></i></div><div><span>În desfășurare</span><strong id="bcb-admin-active-count">0</strong></div></article>
+        <article><div class="bcb-admin-stat-icon"><i class="fa-solid fa-circle-check"></i></div><div><span>Finalizate</span><strong id="bcb-admin-completed-count">0</strong></div></article>
+        <article><div class="bcb-admin-stat-icon"><i class="fa-regular fa-images"></i></div><div><span>Fișiere media</span><strong id="bcb-admin-media-count">0</strong></div></article>
       </section>
 
       <section id="projects" class="bcb-admin-projects-section">
-
-        <div class="bcb-admin-section-heading">
-          <div>
-            <span class="bcb-admin-section-kicker">Proiecte</span>
-            <h2>Activitate recentă</h2>
-          </div>
-
-          <div class="bcb-admin-section-badge">
-            <span></span>
-            Sincronizat cu site-ul
-          </div>
-        </div>
-
-        <div id="bcb-admin-projects-list" class="bcb-admin-projects-list">
-          <div class="bcb-admin-empty">Se încarcă proiectele…</div>
-        </div>
-
+        <div class="bcb-admin-section-heading"><div><span class="bcb-admin-section-kicker">Proiecte</span><h2>Activitate recentă</h2></div><div class="bcb-admin-section-badge"><span></span> Sincronizat cu site-ul</div></div>
+        <div id="bcb-admin-projects-list" class="bcb-admin-projects-list"><div class="bcb-admin-empty">Se încarcă proiectele…</div></div>
       </section>
-
     </main>
-
   </div>
-
   <script type="module" src="../js/admin-dashboard.js"></script>
 </body>
 </html>
