@@ -110,3 +110,31 @@
     width:185px;
   }
 }
+
+@media(max-width:950px){
+  .why-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:900px){
+  .values-home{
+    grid-template-columns:1fr;
+  }
+
+  .values-left h2{
+    font-size:32px;
+  }
+}
+
+@media(max-width:700px){
+  .why-grid{
+    grid-template-columns:1fr;
+  }
+
+  .why-bcb h2{
+    font-size:32px;
+  }
+}
+
+
