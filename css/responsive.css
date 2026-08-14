@@ -1,1 +1,95 @@
+/* RESPONSIVE */
 
+@media(max-width:1050px){
+  .header-call{
+    display:none;
+  }
+
+  .division-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .hero-content{
+    width:65%;
+  }
+}
+
+@media(max-width:850px){
+  .header{
+    position:relative;
+    height:auto;
+    display:block;
+    text-align:center;
+    padding:14px 5%;
+  }
+
+  .logo-wrap img{
+    width:100px;
+    margin:auto;
+  }
+
+  .nav{
+    margin-top:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+
+  .hero{
+    min-height:auto;
+    padding:55px 6% 35px;
+    display:block;
+  }
+
+  .hero-gold-shape{
+    display:none;
+  }
+
+  .hero-content{
+    width:100%;
+  }
+
+  .hero-logo{
+    width:330px;
+  }
+
+  .hero h1{
+    font-size:31px;
+  }
+
+  .hero-text{
+    font-size:16px;
+  }
+
+  .hero-actions{
+    flex-direction:column;
+  }
+
+  .hero-values{
+    position:relative;
+    left:auto;
+    right:auto;
+    bottom:auto;
+    margin-top:35px;
+    grid-template-columns:1fr;
+  }
+
+  .division-grid{
+    grid-template-columns:1fr;
+  }
+
+  .family,
+  .projects-preview,
+  .contact-strip{
+    grid-template-columns:1fr;
+  }
+
+  .family-image{
+    min-height:250px;
+  }
+
+  .footer{
+    flex-direction:column;
+    text-align:center;
+  }
+}
