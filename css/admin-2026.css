@@ -1,0 +1,837 @@
+/* =========================================================
+   BCB PROJECT MANAGER 2026
+   Premium internal workspace
+========================================================= */
+
+:root{
+  --admin-ivory:#f4f0e7;
+  --admin-ivory-soft:#fbf9f4;
+  --admin-white:#ffffff;
+  --admin-graphite:#171b20;
+  --admin-graphite-2:#242a30;
+  --admin-text:#1d2227;
+  --admin-muted:#72787e;
+  --admin-gold:#d29a1f;
+  --admin-gold-light:#efc765;
+  --admin-border:rgba(29,34,39,.10);
+  --admin-shadow:0 22px 60px rgba(22,26,31,.10);
+}
+
+.bcb-admin-body{
+  margin:0;
+  min-height:100vh;
+  background:var(--admin-ivory);
+  color:var(--admin-text);
+}
+
+/* LOGIN */
+
+.bcb-admin-login-page{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:minmax(0,1.12fr) minmax(420px,.88fr);
+}
+
+.bcb-admin-login-visual{
+  position:relative;
+  overflow:hidden;
+  min-height:100vh;
+  padding:70px 8%;
+  display:flex;
+  align-items:center;
+  background:
+    radial-gradient(circle at 24% 20%,rgba(221,168,49,.18),transparent 22%),
+    radial-gradient(circle at 78% 18%,rgba(255,255,255,.07),transparent 20%),
+    linear-gradient(145deg,#2a3036 0%,#1c2126 48%,#101317 100%);
+  color:white;
+}
+
+.bcb-admin-grid{
+  position:absolute;
+  inset:0;
+  opacity:.22;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:54px 54px;
+}
+
+.bcb-admin-orbit{
+  position:absolute;
+  border:1px solid rgba(220,165,45,.18);
+  border-radius:50%;
+}
+
+.bcb-admin-orbit-one{
+  width:520px;
+  height:520px;
+  right:-160px;
+  top:-150px;
+  box-shadow:
+    0 0 0 48px rgba(220,165,45,.025),
+    0 0 0 96px rgba(220,165,45,.016);
+}
+
+.bcb-admin-orbit-two{
+  width:260px;
+  height:260px;
+  left:-100px;
+  bottom:-90px;
+}
+
+.bcb-admin-login-brand{
+  position:relative;
+  z-index:2;
+  max-width:720px;
+}
+
+.bcb-admin-brand-card{
+  width:180px;
+  padding:14px 16px;
+  margin-bottom:38px;
+  border:1px solid rgba(221,165,43,.6);
+  border-radius:18px;
+  background:linear-gradient(145deg,#fff,#f1ecdf);
+  box-shadow:0 20px 45px rgba(0,0,0,.24);
+}
+
+.bcb-admin-brand-card img{
+  display:block;
+  width:100%;
+}
+
+.bcb-admin-kicker,
+.bcb-admin-eyebrow,
+.bcb-admin-section-kicker{
+  color:var(--admin-gold);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:2.1px;
+  text-transform:uppercase;
+}
+
+.bcb-admin-login-brand h1{
+  margin:14px 0 20px;
+  font-size:clamp(54px,6vw,88px);
+  line-height:.95;
+  letter-spacing:-4px;
+}
+
+.bcb-admin-login-brand h1 span{
+  display:block;
+  color:var(--admin-gold-light);
+}
+
+.bcb-admin-login-brand > p{
+  max-width:570px;
+  color:#cdd1d3;
+  font-size:16px;
+  line-height:1.75;
+}
+
+.bcb-admin-visual-meta{
+  margin-top:38px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+}
+
+.bcb-admin-visual-meta div{
+  padding:12px 15px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+  color:#d8dadb;
+  font-size:12px;
+  backdrop-filter:blur(8px);
+}
+
+.bcb-admin-visual-meta i{
+  color:var(--admin-gold-light);
+}
+
+.bcb-admin-login-panel{
+  min-height:100vh;
+  padding:42px 9%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 90% 5%,rgba(211,154,31,.08),transparent 24%),
+    var(--admin-ivory-soft);
+}
+
+.bcb-admin-back{
+  position:absolute;
+  top:32px;
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  color:#6d7378;
+  font-size:12px;
+  font-weight:700;
+}
+
+.bcb-admin-login-card{
+  width:min(100%,480px);
+  margin:auto;
+  padding:42px;
+  border:1px solid rgba(255,255,255,.9);
+  border-radius:28px;
+  background:rgba(255,255,255,.88);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    var(--admin-shadow);
+  backdrop-filter:blur(18px);
+}
+
+.bcb-admin-login-heading h2{
+  margin:10px 0 9px;
+  font-size:38px;
+  line-height:1.08;
+  letter-spacing:-1.5px;
+}
+
+.bcb-admin-login-heading p{
+  color:var(--admin-muted);
+  font-size:13px;
+  line-height:1.65;
+}
+
+.bcb-admin-login-form{
+  margin-top:30px;
+}
+
+.bcb-admin-login-form label{
+  display:block;
+  margin:17px 0 8px;
+  color:#4d5358;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.4px;
+}
+
+.bcb-admin-input-wrap{
+  height:54px;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:1px solid rgba(27,32,37,.10);
+  border-radius:14px;
+  background:#faf9f6;
+  transition:.25s ease;
+}
+
+.bcb-admin-input-wrap:focus-within{
+  border-color:rgba(210,154,31,.72);
+  box-shadow:0 0 0 4px rgba(210,154,31,.08);
+  background:#fff;
+}
+
+.bcb-admin-input-wrap i{
+  color:#b28120;
+  font-size:13px;
+}
+
+.bcb-admin-input-wrap input{
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#1c2126;
+  font-size:13px;
+}
+
+.bcb-admin-message{
+  min-height:24px;
+  padding-top:11px;
+  font-size:11px;
+}
+
+.bcb-admin-message[data-type="error"]{ color:#b84242; }
+.bcb-admin-message[data-type="loading"]{ color:#8a671e; }
+
+.bcb-admin-login-button,
+.bcb-admin-primary-action{
+  border:0;
+  cursor:pointer;
+  background:linear-gradient(135deg,#efc65e,#c48413);
+  color:#1f1708;
+  font-weight:950;
+  box-shadow:0 16px 34px rgba(190,126,13,.22);
+  transition:.25s ease;
+}
+
+.bcb-admin-login-button{
+  width:100%;
+  min-height:55px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-radius:14px;
+  font-size:12px;
+}
+
+.bcb-admin-login-button:hover,
+.bcb-admin-primary-action:hover:not(:disabled){
+  transform:translateY(-2px);
+  box-shadow:0 20px 40px rgba(190,126,13,.28);
+}
+
+.bcb-admin-login-button:disabled{
+  opacity:.65;
+  cursor:wait;
+}
+
+.bcb-admin-security-note{
+  margin-top:22px;
+  padding-top:18px;
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  border-top:1px solid rgba(30,35,40,.08);
+  color:#8a8f93;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.bcb-admin-security-note i{
+  margin-top:2px;
+  color:#b8861e;
+}
+
+.bcb-admin-login-footer{
+  margin:24px auto 0;
+  color:#9a9e9f;
+  font-size:9px;
+}
+
+/* APP */
+
+.bcb-admin-app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:250px minmax(0,1fr);
+}
+
+.bcb-admin-sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  padding:26px 20px;
+  display:flex;
+  flex-direction:column;
+  background:
+    radial-gradient(circle at 20% 8%,rgba(214,157,38,.10),transparent 24%),
+    linear-gradient(180deg,#22282e,#15191d 65%,#101317);
+  color:white;
+  border-right:1px solid rgba(255,255,255,.04);
+}
+
+.bcb-admin-sidebar-logo{
+  width:132px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:linear-gradient(145deg,#fff,#eee8db);
+  box-shadow:0 13px 28px rgba(0,0,0,.22);
+}
+
+.bcb-admin-sidebar-logo img{
+  display:block;
+  width:100%;
+}
+
+.bcb-admin-sidebar-title{
+  margin:22px 4px 28px;
+}
+
+.bcb-admin-sidebar-title span{
+  display:block;
+  color:#c99428;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:1.8px;
+}
+
+.bcb-admin-sidebar-title strong{
+  display:block;
+  margin-top:3px;
+  color:#e7e9e8;
+  font-size:13px;
+}
+
+.bcb-admin-nav{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.bcb-admin-nav a,
+.bcb-admin-nav button,
+.bcb-admin-sidebar-bottom a,
+.bcb-admin-sidebar-bottom button{
+  width:100%;
+  min-height:44px;
+  padding:0 13px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:0;
+  border-radius:11px;
+  background:transparent;
+  color:#bfc3c5;
+  font-size:11px;
+  font-weight:800;
+  text-align:left;
+}
+
+.bcb-admin-nav a.active{
+  color:#f5d071;
+  background:linear-gradient(90deg,rgba(210,154,31,.16),rgba(255,255,255,.035));
+  box-shadow:inset 3px 0 0 #d59c25;
+}
+
+.bcb-admin-nav i,
+.bcb-admin-sidebar-bottom i{
+  width:16px;
+  color:#d3a23b;
+  text-align:center;
+}
+
+.bcb-admin-nav button span{
+  margin-left:auto;
+  color:#737a7f;
+  font-size:8px;
+  text-transform:uppercase;
+}
+
+.bcb-admin-nav button:disabled{
+  cursor:not-allowed;
+  opacity:.62;
+}
+
+.bcb-admin-sidebar-bottom{
+  margin-top:auto;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+
+.bcb-admin-sidebar-bottom button{
+  cursor:pointer;
+}
+
+.bcb-admin-main{
+  min-width:0;
+  padding:34px clamp(28px,4vw,60px) 55px;
+  background:
+    radial-gradient(circle at 92% 4%,rgba(211,154,31,.08),transparent 18%),
+    linear-gradient(180deg,#f7f4ed,#f1ede4);
+}
+
+.bcb-admin-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:30px;
+}
+
+.bcb-admin-topbar h1{
+  margin-top:5px;
+  font-size:28px;
+  letter-spacing:-1px;
+}
+
+.bcb-admin-user-card{
+  padding:8px 12px 8px 8px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border:1px solid rgba(26,31,36,.08);
+  border-radius:14px;
+  background:rgba(255,255,255,.76);
+  box-shadow:0 10px 28px rgba(24,29,34,.05);
+}
+
+.bcb-admin-avatar{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  color:#251b08;
+  background:linear-gradient(145deg,#efca70,#bd7b12);
+}
+
+.bcb-admin-user-card strong,
+.bcb-admin-user-card span{
+  display:block;
+}
+
+.bcb-admin-user-card strong{
+  font-size:10.5px;
+}
+
+.bcb-admin-user-card span{
+  margin-top:2px;
+  color:#8a8f93;
+  font-size:9px;
+}
+
+.bcb-admin-welcome{
+  margin-top:36px;
+  padding:34px 36px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:35px;
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:26px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.90),rgba(248,245,238,.78));
+  box-shadow:0 18px 50px rgba(26,31,36,.07);
+}
+
+.bcb-admin-welcome h2{
+  margin:8px 0 9px;
+  font-size:clamp(28px,3vw,42px);
+  letter-spacing:-1.8px;
+}
+
+.bcb-admin-welcome p{
+  max-width:680px;
+  color:#6d7378;
+  font-size:12px;
+  line-height:1.65;
+}
+
+.bcb-admin-primary-action{
+  min-width:142px;
+  min-height:48px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  border-radius:13px;
+  font-size:11px;
+}
+
+.bcb-admin-primary-action:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.bcb-admin-stats{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;
+}
+
+.bcb-admin-stats article{
+  min-height:105px;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  border:1px solid rgba(255,255,255,.96);
+  border-radius:20px;
+  background:rgba(255,255,255,.75);
+  box-shadow:0 13px 34px rgba(24,29,34,.05);
+}
+
+.bcb-admin-stat-icon{
+  width:44px;
+  height:44px;
+  flex:0 0 44px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  color:#5f430c;
+  background:linear-gradient(145deg,#f7e7bd,#e0b34e);
+}
+
+.bcb-admin-stats span,
+.bcb-admin-stats strong{
+  display:block;
+}
+
+.bcb-admin-stats span{
+  color:#858a8d;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.bcb-admin-stats strong{
+  margin-top:4px;
+  font-size:27px;
+  line-height:1;
+}
+
+.bcb-admin-projects-section{
+  margin-top:34px;
+}
+
+.bcb-admin-section-heading{
+  margin-bottom:15px;
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:25px;
+}
+
+.bcb-admin-section-heading h2{
+  margin-top:5px;
+  font-size:24px;
+  letter-spacing:-.8px;
+}
+
+.bcb-admin-section-badge{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#777d81;
+  font-size:9px;
+  font-weight:800;
+}
+
+.bcb-admin-section-badge span{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#55a96a;
+  box-shadow:0 0 0 4px rgba(85,169,106,.10);
+}
+
+.bcb-admin-projects-list{
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.96);
+  border-radius:22px;
+  background:rgba(255,255,255,.72);
+  box-shadow:0 18px 48px rgba(24,29,34,.06);
+}
+
+.bcb-admin-empty{
+  min-height:220px;
+  padding:35px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#8b9093;
+  font-size:11px;
+}
+
+.bcb-admin-empty-icon{
+  width:52px;
+  height:52px;
+  margin-bottom:13px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  color:#9b6c11;
+  background:#f1e3bd;
+}
+
+.bcb-admin-empty strong{
+  color:#343a3f;
+  font-size:13px;
+}
+
+.bcb-admin-empty span{
+  margin-top:5px;
+}
+
+.bcb-admin-project-row{
+  min-height:88px;
+  padding:14px 16px;
+  display:grid;
+  grid-template-columns:minmax(220px,1.5fr) minmax(130px,.75fr) minmax(180px,1fr) auto 38px;
+  gap:18px;
+  align-items:center;
+  border-bottom:1px solid rgba(30,35,40,.07);
+}
+
+.bcb-admin-project-row:last-child{
+  border-bottom:0;
+}
+
+.bcb-admin-project-main{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.bcb-admin-project-mark{
+  width:4px;
+  height:38px;
+  border-radius:50px;
+  background:linear-gradient(#efc75d,#b9760b);
+}
+
+.bcb-admin-project-main h3{
+  font-size:12px;
+}
+
+.bcb-admin-project-main p,
+.bcb-admin-project-stage span,
+.bcb-admin-progress-meta span{
+  margin-top:3px;
+  color:#8c9194;
+  font-size:9px;
+}
+
+.bcb-admin-project-stage strong{
+  display:block;
+  margin-top:2px;
+  font-size:10px;
+}
+
+.bcb-admin-progress-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.bcb-admin-progress-meta strong{
+  font-size:9px;
+}
+
+.bcb-admin-progress-track{
+  height:5px;
+  margin-top:8px;
+  overflow:hidden;
+  border-radius:50px;
+  background:#e8e4da;
+}
+
+.bcb-admin-progress-track span{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#c48612,#efc965);
+}
+
+.bcb-admin-project-status{
+  padding:7px 9px;
+  border-radius:9px;
+  font-size:8px;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.bcb-admin-project-status.is-draft{ background:#ece8df; color:#77736b; }
+.bcb-admin-project-status.is-in_progress{ background:#f6e8bd; color:#8a6418; }
+.bcb-admin-project-status.is-completed{ background:#dff0e2; color:#42734c; }
+.bcb-admin-project-status.is-archived{ background:#e6e7e8; color:#656a6e; }
+
+.bcb-admin-row-action{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border:0;
+  border-radius:10px;
+  background:#ece7dc;
+  color:#8d9295;
+}
+
+@media(max-width:1050px){
+  .bcb-admin-login-page{
+    grid-template-columns:1fr;
+  }
+
+  .bcb-admin-login-visual{
+    display:none;
+  }
+
+  .bcb-admin-login-panel{
+    min-height:100vh;
+  }
+
+  .bcb-admin-stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .bcb-admin-project-row{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .bcb-admin-project-status,
+  .bcb-admin-row-action{
+    justify-self:start;
+  }
+}
+
+@media(max-width:760px){
+  .bcb-admin-app{
+    display:block;
+  }
+
+  .bcb-admin-sidebar{
+    position:relative;
+    height:auto;
+    padding:18px;
+  }
+
+  .bcb-admin-nav{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+  }
+
+  .bcb-admin-sidebar-bottom{
+    display:flex;
+    gap:8px;
+  }
+
+  .bcb-admin-main{
+    padding:24px 18px 40px;
+  }
+
+  .bcb-admin-topbar,
+  .bcb-admin-welcome,
+  .bcb-admin-section-heading{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .bcb-admin-stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .bcb-admin-project-row{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:520px){
+  .bcb-admin-login-panel{
+    padding:78px 18px 30px;
+  }
+
+  .bcb-admin-login-card{
+    padding:28px 22px;
+    border-radius:22px;
+  }
+
+  .bcb-admin-login-heading h2{
+    font-size:32px;
+  }
+
+  .bcb-admin-stats{
+    grid-template-columns:1fr;
+  }
+
+  .bcb-admin-nav{
+    grid-template-columns:1fr;
+  }
+}
