@@ -9,6 +9,7 @@ const mediaCount = document.querySelector("#bcb-admin-media-count");
 const projectsList = document.querySelector("#bcb-admin-projects-list");
 const logoutButton = document.querySelector("#bcb-admin-logout");
 const newProjectButton = document.querySelector(".bcb-admin-primary-action");
+const usersLink = document.querySelector("#bcb-admin-users-link");
 
 function escapeHtml(value = "") {
   return String(value)
@@ -61,6 +62,7 @@ async function loadDashboard() {
 
   if (userName) userName.textContent = profile.full_name || "BCB User";
   if (userRole) userRole.textContent = profile.role === "admin" ? "Administrator" : "Editor";
+  if (usersLink && profile.role === "admin") usersLink.hidden = false;
 
   if (newProjectButton) {
     newProjectButton.disabled = false;
@@ -114,29 +116,13 @@ async function loadDashboard() {
           <p>${escapeHtml(project.location || "Locație nespecificată")}</p>
         </div>
       </div>
-
-      <div class="bcb-admin-project-stage">
-        <span>Etapă</span>
-        <strong>${escapeHtml(project.current_stage || "—")}</strong>
-      </div>
-
+      <div class="bcb-admin-project-stage"><span>Etapă</span><strong>${escapeHtml(project.current_stage || "—")}</strong></div>
       <div class="bcb-admin-project-progress">
-        <div class="bcb-admin-progress-meta">
-          <span>Progres</span>
-          <strong>${project.progress}%</strong>
-        </div>
-        <div class="bcb-admin-progress-track">
-          <span style="width:${Math.max(0, Math.min(100, project.progress))}%"></span>
-        </div>
+        <div class="bcb-admin-progress-meta"><span>Progres</span><strong>${project.progress}%</strong></div>
+        <div class="bcb-admin-progress-track"><span style="width:${Math.max(0, Math.min(100, project.progress))}%"></span></div>
       </div>
-
-      <div class="bcb-admin-project-status is-${escapeHtml(project.status)}">
-        ${escapeHtml(statusLabel(project.status))}
-      </div>
-
-      <button class="bcb-admin-row-action" type="button" data-action="edit" aria-label="Editează proiectul">
-        <i class="fa-solid fa-arrow-right"></i>
-      </button>
+      <div class="bcb-admin-project-status is-${escapeHtml(project.status)}">${escapeHtml(statusLabel(project.status))}</div>
+      <button class="bcb-admin-row-action" type="button" data-action="edit" aria-label="Editează proiectul"><i class="fa-solid fa-arrow-right"></i></button>
     </article>`).join("");
 }
 
