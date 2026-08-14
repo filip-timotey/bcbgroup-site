@@ -9,18 +9,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/admin-2026.css">
+  <link rel="stylesheet" href="../css/admin-nav.css">
   <link rel="stylesheet" href="../css/admin-users.css">
 </head>
 <body class="bcb-admin-body">
   <div class="bcb-admin-app">
     <aside class="bcb-admin-sidebar">
-      <a href="dashboard.html" class="bcb-admin-sidebar-logo">
-        <img src="../assets/images/logo.png" alt="BCB Group">
-      </a>
-      <div class="bcb-admin-sidebar-title">
-        <span>BCB</span>
-        <strong>Project Manager</strong>
-      </div>
+      <a href="dashboard.html" class="bcb-admin-sidebar-logo"><img src="../assets/images/logo.png" alt="BCB Group"></a>
+      <div class="bcb-admin-sidebar-title"><span>BCB</span><strong>Project Manager</strong></div>
       <nav class="bcb-admin-nav" aria-label="Administrare BCB">
         <a href="dashboard.html"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
         <a href="dashboard.html#projects"><i class="fa-solid fa-building"></i> Proiecte</a>
@@ -34,26 +30,13 @@
 
     <main class="bcb-admin-main">
       <header class="bcb-admin-topbar">
-        <div>
-          <span class="bcb-admin-eyebrow">BCB Group · Security & Access</span>
-          <h1>Utilizatori & Acces</h1>
-        </div>
-        <div class="bcb-admin-user-card">
-          <div class="bcb-admin-avatar"><i class="fa-solid fa-user-shield"></i></div>
-          <div><strong id="bcb-admin-user-name">Se încarcă…</strong><span>Administrator</span></div>
-        </div>
+        <div><span class="bcb-admin-eyebrow">BCB Group · Security & Access</span><h1>Utilizatori & Acces</h1></div>
+        <div class="bcb-admin-user-card"><div class="bcb-admin-avatar"><i class="fa-solid fa-user-shield"></i></div><div><strong id="bcb-admin-user-name">Se încarcă…</strong><span>Administrator</span></div></div>
       </header>
 
       <section class="bcb-users-hero">
-        <div>
-          <span class="bcb-admin-section-kicker">Control acces</span>
-          <h2>Acces controlat pentru echipa BCB.</h2>
-          <p>Gestionează cine poate intra în Project Manager, ce rol are și dacă accesul este activ.</p>
-        </div>
-        <div class="bcb-users-security-card">
-          <i class="fa-solid fa-shield-halved"></i>
-          <div><strong>Acces protejat</strong><span>Rolurile sunt verificate și în Supabase, nu doar în interfață.</span></div>
-        </div>
+        <div><span class="bcb-admin-section-kicker">Control acces</span><h2>Acces controlat pentru echipa BCB.</h2><p>Gestionează cine poate intra în Project Manager, ce rol are și dacă accesul este activ.</p></div>
+        <div class="bcb-users-security-card"><i class="fa-solid fa-shield-halved"></i><div><strong>Acces protejat</strong><span>Rolurile sunt verificate și în Supabase, nu doar în interfață.</span></div></div>
       </section>
 
       <section class="bcb-users-stats" aria-label="Statistici utilizatori">
@@ -64,30 +47,18 @@
       </section>
 
       <section class="bcb-users-panel">
-        <div class="bcb-users-panel-heading">
-          <div><span class="bcb-admin-section-kicker">Echipă</span><h2>Conturi cu acces</h2></div>
-          <div class="bcb-users-sync"><span></span> Sincronizat cu Supabase</div>
-        </div>
+        <div class="bcb-users-panel-heading"><div><span class="bcb-admin-section-kicker">Echipă</span><h2>Conturi cu acces</h2></div><div class="bcb-users-sync"><span></span> Sincronizat cu Supabase</div></div>
         <div id="bcb-users-message" class="bcb-users-message" hidden></div>
-        <div id="bcb-users-list" class="bcb-users-list">
-          <div class="bcb-admin-empty">Se încarcă utilizatorii…</div>
-        </div>
+        <div id="bcb-users-list" class="bcb-users-list"><div class="bcb-admin-empty">Se încarcă utilizatorii…</div></div>
       </section>
 
       <section class="bcb-users-invite-panel">
         <div class="bcb-users-invite-icon"><i class="fa-solid fa-user-plus"></i></div>
-        <div>
-          <span class="bcb-admin-section-kicker">Invitații</span>
-          <h2>Adaugă un membru nou al echipei</h2>
-          <p>Invitațiile vor fi trimise printr-o funcție server-side securizată. Nu vom expune chei administrative în browser.</p>
-        </div>
-        <button type="button" class="bcb-users-invite-button" disabled title="Conectarea invitațiilor server-side este în curs">
-          <i class="fa-solid fa-lock"></i> Invitație securizată
-        </button>
+        <div><span class="bcb-admin-section-kicker">Invitații</span><h2>Adaugă un membru nou al echipei</h2><p>Invitațiile vor fi trimise printr-o funcție server-side securizată. Nu vom expune chei administrative în browser.</p></div>
+        <button type="button" class="bcb-users-invite-button" disabled title="Conectarea invitațiilor server-side este în curs"><i class="fa-solid fa-lock"></i> Invitație securizată</button>
       </section>
     </main>
   </div>
-
   <script type="module" src="../js/admin-users.js"></script>
 </body>
 </html>
