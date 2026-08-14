@@ -1,0 +1,358 @@
+/* ================================
+   PAGINA SERVICII — BCB GROUP
+================================ */
+
+.services-hero{
+  min-height:520px;
+  padding:145px 7% 80px;
+  background:url("../../assets/images/hero-bg.jpg") center/cover no-repeat;
+  position:relative;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  color:white;
+}
+
+.services-hero-overlay{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.94),rgba(0,0,0,.68),rgba(0,0,0,.18));
+}
+
+.services-hero::after{
+  content:"";
+  position:absolute;
+  right:32%;
+  top:-20%;
+  width:100px;
+  height:140%;
+  transform:skewX(-22deg);
+  background:linear-gradient(180deg,rgba(247,178,27,.55),rgba(217,154,22,.08));
+  border-left:2px solid rgba(247,178,27,.75);
+  box-shadow:0 0 80px rgba(217,154,22,.28);
+}
+
+.services-hero-content{
+  position:relative;
+  z-index:2;
+  max-width:900px;
+}
+
+.services-hero-content h1{
+  font-size:52px;
+  line-height:1.12;
+  font-weight:950;
+  margin-bottom:20px;
+}
+
+.services-hero-content p:last-child{
+  font-size:20px;
+  line-height:1.7;
+  color:#eee;
+  max-width:780px;
+}
+
+.services-intro{
+  padding:85px 7%;
+  background:white;
+  text-align:center;
+}
+
+.services-intro h2{
+  font-size:38px;
+  margin-bottom:18px;
+  font-weight:950;
+}
+
+.services-intro p{
+  max-width:900px;
+  margin:auto;
+  color:#444;
+  font-size:18px;
+  line-height:1.75;
+}
+
+.premium-services{
+  padding:35px 7% 90px;
+  background:#f6f6f6;
+  display:grid;
+  gap:42px;
+}
+
+.premium-service{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:white;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.12);
+  border:1px solid rgba(0,0,0,.06);
+}
+
+.premium-service.reverse .service-image{
+  order:2;
+}
+
+.premium-service.reverse .service-content{
+  order:1;
+}
+
+.service-image{
+  min-height:430px;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+}
+
+.service-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,rgba(0,0,0,.12),rgba(217,154,22,.14));
+}
+
+.construct-img{
+  background-image:url("../../assets/images/hero-bg.jpg");
+}
+
+.electric-img{
+  background-image:url("https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1400&q=80");
+}
+
+.sanitare-img{
+  background-image:url("https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=1400&q=80");
+}
+
+.finisaje-img{
+  background-image:url("https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1400&q=80");
+}
+
+.service-content{
+  padding:55px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.service-icon-3d{
+  width:82px;
+  height:82px;
+  border-radius:20px;
+  background:linear-gradient(145deg,#ffc84a,#d99a16);
+  color:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+  margin-bottom:24px;
+  box-shadow:
+    0 20px 38px rgba(217,154,22,.35),
+    inset 0 2px 0 rgba(255,255,255,.45);
+  transform:rotate(-3deg);
+}
+
+.service-kicker{
+  color:var(--gold);
+  text-transform:uppercase;
+  font-weight:950;
+  letter-spacing:3px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+.service-content h2{
+  font-size:36px;
+  font-weight:950;
+  margin-bottom:18px;
+}
+
+.service-content p{
+  color:#444;
+  font-size:18px;
+  line-height:1.7;
+  margin-bottom:22px;
+}
+
+.service-content ul{
+  list-style:none;
+  display:grid;
+  gap:10px;
+}
+
+.service-content li{
+  color:#222;
+  font-size:16px;
+}
+
+.service-content li::before{
+  content:"✓";
+  color:var(--gold);
+  font-weight:950;
+  margin-right:10px;
+}
+
+.counter-section{
+  padding:70px 7%;
+  background:#101116;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:22px;
+  color:white;
+}
+
+.counter-box{
+  padding:34px 24px;
+  text-align:center;
+  border:1px solid rgba(217,154,22,.55);
+  border-radius:16px;
+  background:rgba(255,255,255,.04);
+  box-shadow:0 25px 60px rgba(0,0,0,.35);
+}
+
+.counter-box h3{
+  font-size:48px;
+  color:var(--gold2);
+  margin-bottom:8px;
+}
+
+.counter-box p{
+  color:#ddd;
+  font-weight:700;
+}
+
+.testimonials-section{
+  padding:85px 7%;
+  background:white;
+  text-align:center;
+}
+
+.testimonials-section h2{
+  font-size:38px;
+  font-weight:950;
+  margin-bottom:38px;
+}
+
+.testimonial-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+
+.testimonial-card{
+  background:#f6f6f6;
+  padding:36px 30px;
+  border-radius:18px;
+  border-left:5px solid var(--gold);
+  text-align:left;
+  box-shadow:0 18px 45px rgba(0,0,0,.08);
+}
+
+.testimonial-card i{
+  color:var(--gold);
+  font-size:30px;
+  margin-bottom:20px;
+}
+
+.testimonial-card p{
+  color:#333;
+  line-height:1.7;
+  font-size:17px;
+  margin-bottom:20px;
+}
+
+.testimonial-card strong{
+  color:#111;
+}
+
+.services-cta{
+  padding:95px 7%;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.95),rgba(0,0,0,.68)),
+    url("../../assets/images/hero-bg.jpg") center/cover no-repeat;
+  color:white;
+  text-align:center;
+}
+
+.services-cta h2{
+  font-size:44px;
+  font-weight:950;
+  margin-bottom:18px;
+}
+
+.services-cta p{
+  max-width:720px;
+  margin:0 auto 32px;
+  font-size:18px;
+  color:#eee;
+  line-height:1.7;
+}
+
+.services-cta-buttons{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+.whatsapp-float{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  background:#25D366;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+  z-index:9999;
+  box-shadow:0 18px 40px rgba(37,211,102,.35);
+  transition:.3s;
+}
+
+.whatsapp-float:hover{
+  transform:translateY(-5px) scale(1.05);
+}
+
+.reveal{
+  opacity:0;
+  transform:translateY(38px);
+  transition:1s ease;
+}
+
+.reveal.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@media(max-width:950px){
+  .premium-service,
+  .premium-service.reverse{
+    grid-template-columns:1fr;
+  }
+
+  .premium-service.reverse .service-image,
+  .premium-service.reverse .service-content{
+    order:initial;
+  }
+
+  .counter-section,
+  .testimonial-grid{
+    grid-template-columns:1fr;
+  }
+
+  .service-content{
+    padding:36px;
+  }
+
+  .services-hero-content h1{
+    font-size:36px;
+  }
+
+  .service-image{
+    min-height:280px;
+  }
+}
