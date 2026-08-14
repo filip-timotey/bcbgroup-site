@@ -1,43 +1,83 @@
 <!DOCTYPE html>
 <html lang="ro">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="icon" type="image/png" href="assets/images/logo.png">
-  <link rel="stylesheet" href="css/style.css" />
+
+  <title>Proiecte | BCB Group</title>
+
+  <meta
+    name="description"
+    content="Descoperă proiectele BCB Group și urmărește evoluția lucrărilor realizate cu profesionalism, transparență și atenție la detalii."
+  >
+
+  <meta
+    name="keywords"
+    content="proiecte BCB Group, constructor Oradea, construcții Bihor, case la cheie, proiecte construcții, BCB Group"
+  >
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BCB Group">
+  <meta property="og:title" content="Proiecte | BCB Group">
+
+  <meta
+    property="og:description"
+    content="Proiectele BCB Group prezentate transparent, de la pregătirea terenului până la finalizare."
+  >
+
+  <meta property="og:url" content="https://bcbgroup.ro/proiecte.html">
+  <meta property="og:image" content="https://bcbgroup.ro/assets/images/logo.png">
+  <meta property="og:locale" content="ro_RO">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
+
+  <!-- CSS general -->
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/cards.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/pages/proiecte.css">
-  <title>Proiecte | BCB Group</title>
-  <meta name="description" content="Descoperă proiectele BCB Group și urmărește evoluția lucrărilor realizate cu profesionalism și atenție la detalii.">
-  <meta name="keywords" content="constructor Oradea, construcții Bihor, case la cheie, instalații electrice Oradea, instalații sanitare, finisaje, BCB Group">
-  <meta property="og:type" content="website">
-<meta property="og:site_name" content="BCB Group">
 
-<meta property="og:title" content="Proiecte | BCB Group">
+  <!-- BCB 2026 -->
+  <link rel="stylesheet" href="css/bcb-2026.css">
 
-<meta property="og:description" content="Proiectele BCB Group prezentate transparent, de la fundație până la finalizare.">
+  <!-- Proiecte 2026 -->
+  <link rel="stylesheet" href="css/pages/proiecte-2026.css">
 
-<meta property="og:url" content="https://bcbgroup.ro/proiecte.html">
-
-<meta property="og:image" content="https://bcbgroup.ro/assets/images/logo.png">
-
-<meta property="og:locale" content="ro_RO">
-  <link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Footer standard -->
+  <link rel="stylesheet" href="css/footer-final.css">
 </head>
 
 <body>
 
-<header class="header">
-  <a href="index.html" class="logo-wrap">
-    <img src="assets/images/logo.png" alt="BCB Group">
+<!-- =========================================================
+     HEADER — BCB GROUP 2026
+========================================================= -->
+
+<header class="bcb26-header">
+
+  <a
+    href="index.html"
+    class="bcb26-logo"
+    aria-label="BCB Group - Acasă"
+  >
+    <img
+      src="assets/images/logo.png"
+      alt="BCB Group - Bocoiu Construction Brothers"
+    >
   </a>
 
-  <nav class="nav">
+  <nav
+    class="bcb26-nav"
+    aria-label="Navigație principală"
+  >
     <a href="index.html">Acasă</a>
     <a href="despre.html">Despre noi</a>
     <a href="servicii.html">Servicii</a>
@@ -45,263 +85,604 @@
     <a href="contact.html">Contact</a>
   </nav>
 
-  <a class="header-call" href="tel:0770712701">
-    <i class="fa-solid fa-phone"></i> 0770 712 701
-  </a>
+  <div class="bcb26-header-actions">
+
+    <a
+      class="bcb26-phone"
+      href="tel:0770712701"
+    >
+      <i class="fa-solid fa-phone"></i>
+      <span>0770 712 701</span>
+    </a>
+
+    <a
+      class="bcb26-header-cta"
+      href="contact.html#oferta"
+    >
+      <i class="fa-solid fa-file-signature"></i>
+      <span>Solicită ofertă</span>
+    </a>
+
+    <button
+      class="bcb26-menu-toggle"
+      type="button"
+      aria-label="Deschide meniul"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+
 </header>
 
-<main>
 
-<section class="projects-hero">
-  <div class="projects-hero-overlay"></div>
+<!-- =========================================================
+     MOBILE MENU
+========================================================= -->
 
-  <div class="projects-hero-content reveal">
-    <p class="section-label">Proiecte BCB Group</p>
+<div class="bcb26-mobile-overlay"></div>
 
-    <h1>Lucrări reale, construite cu responsabilitate.</h1>
+<div class="bcb26-mobile-menu">
 
-    <p>
-      Aici vom prezenta proiectele realizate și lucrările aflate în desfășurare,
-      de la construcții civile până la detalii finale.
-    </p>
-  </div>
-</section>
+  <nav>
+    <a href="index.html">Acasă</a>
+    <a href="despre.html">Despre noi</a>
+    <a href="servicii.html">Servicii</a>
+    <a class="active" href="proiecte.html">Proiecte</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 
-<section class="project-featured">
-  <div class="featured-text reveal">
-    <p class="section-label">Proiect în desfășurare</p>
+  <div class="bcb26-mobile-actions">
 
-    <h2>Prima casă BCB Group</h2>
+    <a href="tel:0770712701">
+      <i class="fa-solid fa-phone"></i>
+      Sună acum
+    </a>
 
-    <p>
-      Primul proiect prezentat sub brandul BCB Group va arăta parcursul unei case
-      construite cu atenție la structură, organizare, detalii și execuție.
-    </p>
+    <a href="contact.html#oferta">
+      <i class="fa-solid fa-file-signature"></i>
+      Solicită ofertă
+    </a>
 
-    <p>
-      În această pagină vom adăuga imagini reale din șantier și cadre filmate cu drona,
-      pentru a prezenta transparent modul în care lucrăm.
-    </p>
-
-    <div class="project-status">
-      <span><i class="fa-solid fa-circle-check"></i> Construcție în desfășurare</span>
-      <span><i class="fa-solid fa-camera"></i> Galerie foto pregătită</span>
-      <span><i class="fa-solid fa-video"></i> Cadre dronă disponibile în curând</span>
-    </div>
   </div>
 
-  <div class="featured-image reveal">
-    <img src="assets/images/proiecte/casa-1.jpg"
-         alt="Prima casă BCB Group">
 </div>
-</section>
 
-<section class="gallery-section">
-  <p class="section-label">Galerie proiect</p>
-  <h2>Etapele proiectului, surprinse în imagini</h2>
 
-  <p class="gallery-intro">
-    Urmărește evoluția lucrării, de la pregătirea terenului și primele etape
-    de execuție până la finalizarea proiectului.
-  </p>
+<main class="projects26-page">
 
-  <div class="project-gallery">
+<!-- =========================================================
+     HERO
+========================================================= -->
 
-    <div class="gallery-placeholder reveal">
-      <img src="assets/images/proiecte/casa-1.jpg"
-          alt="Prima casă BCB Group">
+<section class="projects26-hero">
+
+  <div class="projects26-hero-grid"></div>
+  <div class="projects26-hero-glow"></div>
+
+  <div class="projects26-hero-inner">
+
+    <div class="projects26-hero-copy">
+
+      <div class="projects26-eyebrow reveal">
+        <span></span>
+        Proiecte BCB Group
+      </div>
+
+      <h1 class="reveal delay-1">
+        Lucrări reale.
+        <strong>Progres real.</strong>
+      </h1>
+
+      <p class="projects26-hero-text reveal delay-2">
+        Prezentăm transparent proiectele aflate în desfășurare și etapele
+        prin care fiecare lucrare evoluează de la teren până la forma finală.
+      </p>
+
+      <div class="projects26-hero-actions reveal delay-3">
+
+        <a
+          href="#proiect-principal"
+          class="bcb26-primary-btn"
+        >
+          Vezi proiectul
+          <i class="fa-solid fa-arrow-down"></i>
+        </a>
+
+        <a
+          href="contact.html#oferta"
+          class="bcb26-secondary-btn"
+        >
+          Solicită ofertă
+        </a>
+
+      </div>
+
+      <div class="projects26-hero-proof reveal delay-4">
+
+        <div>
+          <strong>01</strong>
+          <span>proiect prezentat</span>
+        </div>
+
+        <div>
+          <strong>LIVE</strong>
+          <span>evoluție documentată</span>
+        </div>
+
+        <div>
+          <strong>A–Z</strong>
+          <span>urmărire etapizată</span>
+        </div>
+
+      </div>
+
     </div>
 
-    <div class="gallery-placeholder reveal">
-      <i class="fa-regular fa-image"></i>
-      <span>casa-2.jpg</span>
-    </div>
 
-    <div class="gallery-placeholder reveal">
-      <i class="fa-regular fa-image"></i>
-      <span>casa-3.jpg</span>
-    </div>
+    <div class="projects26-hero-visual reveal delay-2">
 
-    <div class="gallery-placeholder reveal">
-      <i class="fa-regular fa-image"></i>
-      <span>casa-4.jpg</span>
-    </div>
+      <div class="projects26-hero-photo">
 
-    <div class="gallery-placeholder reveal">
-      <i class="fa-regular fa-image"></i>
-      <span>casa-5.jpg</span>
-    </div>
+        <img
+          src="assets/images/proiecte/casa-1.jpg"
+          alt="Prima casă BCB Group"
+        >
 
-    <div class="gallery-placeholder reveal">
-      <i class="fa-regular fa-image"></i>
-      <span>casa-6.jpg</span>
+        <div class="projects26-photo-overlay"></div>
+
+        <div class="projects26-project-chip">
+          <span class="projects26-status-dot"></span>
+          Proiect în desfășurare
+        </div>
+
+        <div class="projects26-project-title">
+          <small>PROIECT 01</small>
+          <strong>Prima casă BCB Group</strong>
+        </div>
+
+      </div>
+
     </div>
 
   </div>
+
 </section>
 
-<section class="drone-section">
-  <div class="drone-overlay"></div>
 
-  <div class="drone-content reveal">
-    <p class="section-label">Filmări aeriene</p>
+<!-- =========================================================
+     FEATURED PROJECT
+========================================================= -->
 
-    <h2>Proiectele BCB Group văzute de sus</h2>
+<section
+  class="projects26-featured"
+  id="proiect-principal"
+>
 
-    <p>
-      Filmările cu drona vor adăuga o imagine clară asupra șantierului,
-      organizării lucrării și evoluției proiectului.
+  <div class="projects26-featured-media reveal">
+
+    <div class="projects26-featured-frame">
+
+      <img
+        src="assets/images/proiecte/casa-1.jpg"
+        alt="Șantier - Prima casă BCB Group"
+      >
+
+      <div class="projects26-featured-badge">
+        <i class="fa-solid fa-location-dot"></i>
+        Bihor
+      </div>
+
+      <div class="projects26-featured-index">
+        01
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="projects26-featured-copy reveal">
+
+    <p class="projects26-label">
+      Proiect în desfășurare
     </p>
 
-    <div class="drone-box">
-      <i class="fa-solid fa-play"></i>
-      <span>Video proiect — în curând</span>
+    <h2>
+      Prima casă
+      <span>BCB Group.</span>
+    </h2>
+
+    <p class="projects26-featured-lead">
+      Primul proiect prezentat sub brandul BCB Group urmărește parcursul
+      unei case construite cu atenție la structură, organizare, detalii
+      și execuție.
+    </p>
+
+    <p>
+      Vom documenta evoluția proiectului prin imagini reale și cadre
+      aeriene, astfel încât fiecare etapă să poată fi urmărită clar.
+    </p>
+
+    <div class="projects26-status-list">
+
+      <div>
+        <i class="fa-solid fa-circle-check"></i>
+        <span>
+          <strong>Construcție în desfășurare</strong>
+          Proiectul evoluează etapizat.
+        </span>
+      </div>
+
+      <div>
+        <i class="fa-solid fa-camera"></i>
+        <span>
+          <strong>Galerie foto</strong>
+          Imaginile vor fi actualizate pe parcurs.
+        </span>
+      </div>
+
+      <div>
+        <i class="fa-solid fa-video"></i>
+        <span>
+          <strong>Filmări aeriene</strong>
+          Cadrele cu drona vor fi adăugate în curând.
+        </span>
+      </div>
+
     </div>
+
   </div>
+
 </section>
 
-<section class="project-values">
-  <p class="section-label">Cum lucrăm</p>
-  <h2>Fiecare proiect este o responsabilitate</h2>
 
-  <div class="project-values-grid">
-    <div class="reveal">
+<!-- =========================================================
+     TIMELINE
+========================================================= -->
+
+<section class="projects26-timeline">
+
+  <div class="projects26-section-heading reveal">
+
+    <div>
+      <p class="projects26-label">Evoluția proiectului</p>
+
+      <h2>
+        De la teren
+        <span>la construcția finală.</span>
+      </h2>
+    </div>
+
+    <p>
+      Fiecare etapă va fi documentată pe măsură ce proiectul avansează.
+    </p>
+
+  </div>
+
+
+  <div class="projects26-timeline-grid">
+
+    <div class="projects26-timeline-step is-active reveal">
+      <span>01</span>
+      <i class="fa-solid fa-map"></i>
+      <h3>Pregătire teren</h3>
+      <p>Trasare, organizare și pregătirea zonei de lucru.</p>
+    </div>
+
+    <div class="projects26-timeline-step reveal">
+      <span>02</span>
+      <i class="fa-solid fa-cubes-stacked"></i>
+      <h3>Structură</h3>
+      <p>Fundații, beton, zidărie și elemente structurale.</p>
+    </div>
+
+    <div class="projects26-timeline-step reveal">
+      <span>03</span>
+      <i class="fa-solid fa-bolt"></i>
+      <h3>Instalații</h3>
+      <p>Electric, sanitare și soluții tehnice integrate.</p>
+    </div>
+
+    <div class="projects26-timeline-step reveal">
+      <span>04</span>
+      <i class="fa-solid fa-trowel-bricks"></i>
+      <h3>Finisaje</h3>
+      <p>Detalii interioare și exterioare până la finalizare.</p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     GALLERY
+========================================================= -->
+
+<section class="projects26-gallery">
+
+  <div class="projects26-section-heading reveal">
+
+    <div>
+      <p class="projects26-label">Galerie proiect</p>
+
+      <h2>
+        Etapele lucrării,
+        <span>surprinse în imagini.</span>
+      </h2>
+    </div>
+
+    <p>
+      Galeria se va completa pe măsură ce apar noi etape ale proiectului.
+    </p>
+
+  </div>
+
+
+  <div class="projects26-gallery-grid">
+
+    <figure class="projects26-gallery-main reveal">
+
+      <img
+        src="assets/images/proiecte/casa-1.jpg"
+        alt="Prima casă BCB Group - etapa 1"
+      >
+
+      <figcaption>
+        <span>01</span>
+        Prima etapă documentată
+      </figcaption>
+
+    </figure>
+
+
+    <div class="projects26-gallery-placeholder reveal">
+      <i class="fa-regular fa-image"></i>
+      <strong>Etapa 02</strong>
+      <span>Imagine disponibilă în curând</span>
+    </div>
+
+    <div class="projects26-gallery-placeholder reveal">
+      <i class="fa-regular fa-image"></i>
+      <strong>Etapa 03</strong>
+      <span>Imagine disponibilă în curând</span>
+    </div>
+
+    <div class="projects26-gallery-placeholder reveal">
+      <i class="fa-regular fa-image"></i>
+      <strong>Etapa 04</strong>
+      <span>Imagine disponibilă în curând</span>
+    </div>
+
+    <div class="projects26-gallery-placeholder reveal">
+      <i class="fa-regular fa-image"></i>
+      <strong>Etapa 05</strong>
+      <span>Imagine disponibilă în curând</span>
+    </div>
+
+    <div class="projects26-gallery-placeholder reveal">
+      <i class="fa-regular fa-image"></i>
+      <strong>Etapa 06</strong>
+      <span>Imagine disponibilă în curând</span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     DRONE / DARK
+========================================================= -->
+
+<section class="projects26-drone">
+
+  <div class="projects26-drone-grid"></div>
+
+  <div class="projects26-drone-copy reveal">
+
+    <p class="projects26-label projects26-label-light">
+      Filmări aeriene
+    </p>
+
+    <h2>
+      Proiectele BCB Group
+      <span>văzute de sus.</span>
+    </h2>
+
+    <p>
+      Filmările cu drona vor oferi o imagine clară asupra șantierului,
+      organizării lucrării și progresului proiectului.
+    </p>
+
+    <div class="projects26-drone-box">
+      <div class="projects26-play">
+        <i class="fa-solid fa-play"></i>
+      </div>
+
+      <div>
+        <span>VIDEO PROIECT</span>
+        <strong>Disponibil în curând</strong>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="projects26-drone-visual reveal">
+
+    <div class="projects26-drone-screen">
+
+      <img
+        src="assets/images/proiecte/casa-1.jpg"
+        alt="Cadru aerian - Prima casă BCB Group"
+      >
+
+      <div class="projects26-drone-ui">
+        <span>BCB / DRONE VIEW</span>
+        <strong>REC</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     VALUES
+========================================================= -->
+
+<section class="projects26-values">
+
+  <div class="projects26-section-heading reveal">
+
+    <div>
+      <p class="projects26-label">Cum lucrăm</p>
+
+      <h2>
+        Fiecare proiect este
+        <span>o responsabilitate.</span>
+      </h2>
+    </div>
+
+    <p>
+      Modul în care lucrăm este la fel de important ca rezultatul final.
+    </p>
+
+  </div>
+
+
+  <div class="projects26-values-grid">
+
+    <div class="projects26-value reveal">
+      <span>01</span>
       <i class="fa-solid fa-ruler-combined"></i>
       <h3>Planificare</h3>
-      <p>Lucrările sunt organizate cu atenție înainte de execuție.</p>
+      <p>Lucrările sunt organizate atent înainte de execuție.</p>
     </div>
 
-    <div class="reveal">
+    <div class="projects26-value reveal">
+      <span>02</span>
       <i class="fa-solid fa-helmet-safety"></i>
       <h3>Execuție</h3>
       <p>Fiecare etapă este tratată cu seriozitate și responsabilitate.</p>
     </div>
 
-    <div class="reveal">
+    <div class="projects26-value reveal">
+      <span>03</span>
       <i class="fa-solid fa-cross"></i>
       <h3>Principii</h3>
       <p>Lucrăm cu integritate, respect și dorința de a face lucrurile bine.</p>
     </div>
 
-    <div class="reveal">
+    <div class="projects26-value reveal">
+      <span>04</span>
       <i class="fa-solid fa-medal"></i>
       <h3>Calitate</h3>
       <p>Ne dorim lucrări durabile, curate și bine executate.</p>
     </div>
+
   </div>
+
 </section>
 
-<section class="projects-cta">
-  <div class="reveal">
-    <p class="section-label">Ai un proiect?</p>
 
-    <h2>Hai să discutăm despre construcția ta.</h2>
+<!-- =========================================================
+     FINAL CTA
+========================================================= -->
+
+<section class="projects26-cta">
+
+  <div class="projects26-cta-grid"></div>
+
+  <div class="projects26-cta-copy reveal">
+
+    <p class="projects26-label">
+      Ai un proiect?
+    </p>
+
+    <h2>
+      Hai să discutăm despre
+      <span>construcția ta.</span>
+    </h2>
 
     <p>
-      Fie că este vorba despre o casă, un bloc sau un proiect civil complet,
+      Fie că este vorba despre o casă sau despre un proiect civil complet,
       putem discuta împreună următorii pași.
     </p>
 
-    <div class="services-cta-buttons">
-      <a class="btn btn-gold" href="tel:0770712701">
-        <i class="fa-solid fa-phone"></i> Sună acum
+    <div class="projects26-cta-actions">
+
+      <a
+        href="contact.html#oferta"
+        class="bcb26-primary-btn"
+      >
+        <i class="fa-solid fa-file-signature"></i>
+        Solicită ofertă
       </a>
 
-      <a class="btn btn-outline" href="contact.html">
-        <i class="fa-regular fa-file-lines"></i> Cere ofertă
-      </a>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<a class="whatsapp-float" href="https://wa.me/40770712701" target="_blank" aria-label="WhatsApp">
-  <i class="fa-brands fa-whatsapp"></i>
-</a>
-
-<footer class="footer-v2">
-
-  <div class="footer-main">
-
-    <div class="footer-brand-v2">
-      <img src="assets/images/logo.png" alt="BCB Group">
-
-      <p class="footer-slogan">
-        Construim nu doar clădiri, ci relații bazate pe încredere,
-        seriozitate și respect.
-      </p>
-
-      <p class="footer-legal-note">
-        BCB Group este brandul comercial al BCB Construct Pro S.R.L.
-      </p>
-    </div>
-
-    <div class="footer-links-v2">
-      <h3>Navigare</h3>
-      <a href="index.html">Acasă</a>
-      <a href="despre.html">Despre noi</a>
-      <a href="servicii.html">Servicii</a>
-      <a href="proiecte.html">Proiecte</a>
-      <a href="contact.html">Contact</a>
-      <a href="contact.html#oferta">Solicită ofertă</a>
-    </div>
-
-    <div class="footer-links-v2">
-      <h3>Diviziile BCB</h3>
-      <a href="servicii.html">🏗️ BCB Construct</a>
-      <a href="servicii.html#electric">⚡ BCB Electric</a>
-      <a href="servicii.html#sanitare">🚿 BCB Sanitare</a>
-      <a href="servicii.html#finisaje">🎨 BCB Finisaje</a>
-    </div>
-
-    <div class="footer-contact-v2">
-      <h3>Contact</h3>
-
-      <a href="tel:0770712701">
+      <a
+        href="tel:0770712701"
+        class="projects26-phone-btn"
+      >
         <i class="fa-solid fa-phone"></i>
         0770 712 701
       </a>
 
-      <a href="mailto:office@bcbgroup.ro">
-        <i class="fa-regular fa-envelope"></i>
-        office@bcbgroup.ro
-      </a>
-
-      <a href="https://wa.me/40770712701" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i>
-        WhatsApp
-      </a>
-
-      <p>
-        <i class="fa-regular fa-clock"></i>
-        Luni – Vineri: 08:00 – 18:00
-      </p>
-    </div>
-
-    <div class="footer-company-v2">
-      <h3>Date companie</h3>
-
-      <p><strong>Firmă:</strong> BCB CONSTRUCT PRO S.R.L.</p>
-      <p><strong>CUI:</strong> 54634520</p>
-      <p><strong>Reg. Com.:</strong> J2026030027006</p>
-      <p><strong>Sediu:</strong> Sat Roșia, Comuna Roșia, Jud. Bihor</p>
-      <p><strong>CAEN:</strong> 4100 – Lucrări de construcții ale clădirilor rezidențiale și nerezidențiale</p>
     </div>
 
   </div>
 
-  <div class="footer-verse-v2">
-    „Tot ce faceți, să faceți din toată inima, ca pentru Domnul.”
-    <span>Coloseni 3:23</span>
+
+  <div class="projects26-cta-logo reveal">
+
+    <img
+      src="assets/images/logo.png"
+      alt="BCB Group"
+    >
+
   </div>
 
-  <div class="footer-bottom-v2">
-    <p>© 2026 BCB Group — Bocoiu Construction Brothers. Toate drepturile rezervate.</p>
-  </div>
+</section>
 
-</footer>
+</main>
+
+
+<!-- =========================================================
+     FOOTER COMUN
+========================================================= -->
+
+<div id="bcb-footer"></div>
+
+
+<!-- =========================================================
+     WHATSAPP
+========================================================= -->
+
+<a
+  class="projects26-whatsapp"
+  href="https://wa.me/40770712701"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="WhatsApp BCB Group"
+>
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
 
 <script src="js/script.js"></script>
+<script src="js/bcb-2026.js"></script>
+<script src="js/components.js"></script>
+
 </body>
 </html>

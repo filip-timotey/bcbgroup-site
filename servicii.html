@@ -1,43 +1,83 @@
 <!DOCTYPE html>
 <html lang="ro">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="icon" type="image/png" href="assets/images/logo.png">
-  <link rel="stylesheet" href="css/style.css" />
+
+  <title>Servicii | BCB Group</title>
+
+  <meta
+    name="description"
+    content="Servicii complete BCB Group: construcții civile, instalații electrice, instalații sanitare și finisaje profesionale în Oradea și Bihor."
+  >
+
+  <meta
+    name="keywords"
+    content="constructor Oradea, construcții Bihor, case la cheie, instalații electrice Oradea, instalații sanitare, finisaje, BCB Group"
+  >
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BCB Group">
+  <meta property="og:title" content="Servicii | BCB Group">
+
+  <meta
+    property="og:description"
+    content="Construcții civile, instalații electrice, instalații sanitare și finisaje coordonate sub BCB Group."
+  >
+
+  <meta property="og:url" content="https://bcbgroup.ro/servicii.html">
+  <meta property="og:image" content="https://bcbgroup.ro/assets/images/logo.png">
+  <meta property="og:locale" content="ro_RO">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
+
+  <!-- CSS general -->
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/cards.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/pages/servicii.css">
-  <title>Servicii | BCB Group</title>
-  <meta name="description" content="Servicii complete BCB Group: construcții civile, instalații electrice, instalații sanitare și finisaje profesionale.">
-  <meta name="keywords" content="constructor Oradea, construcții Bihor, case la cheie, instalații electrice Oradea, instalații sanitare, finisaje, BCB Group">
-  <meta property="og:type" content="website">
-<meta property="og:site_name" content="BCB Group">
 
-<meta property="og:title" content="Servicii | BCB Group">
+  <!-- BCB 2026 -->
+  <link rel="stylesheet" href="css/bcb-2026.css">
 
-<meta property="og:description" content="Servicii complete de construcții civile, instalații electrice, instalații sanitare și finisaje profesionale.">
+  <!-- Servicii 2026 -->
+  <link rel="stylesheet" href="css/pages/servicii-2026.css">
 
-<meta property="og:url" content="https://bcbgroup.ro/servicii.html">
-
-<meta property="og:image" content="https://bcbgroup.ro/assets/images/logo.png">
-
-<meta property="og:locale" content="ro_RO">
-  <link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Footer standard -->
+  <link rel="stylesheet" href="css/footer-final.css">
 </head>
 
 <body>
 
-<header class="header">
-  <a href="index.html" class="logo-wrap">
-    <img src="assets/images/logo.png" alt="BCB Group">
+<!-- =========================================================
+     HEADER — BCB GROUP 2026
+========================================================= -->
+
+<header class="bcb26-header">
+
+  <a
+    href="index.html"
+    class="bcb26-logo"
+    aria-label="BCB Group - Acasă"
+  >
+    <img
+      src="assets/images/logo.png"
+      alt="BCB Group - Bocoiu Construction Brothers"
+    >
   </a>
 
-  <nav class="nav">
+  <nav
+    class="bcb26-nav"
+    aria-label="Navigație principală"
+  >
     <a href="index.html">Acasă</a>
     <a href="despre.html">Despre noi</a>
     <a class="active" href="servicii.html">Servicii</a>
@@ -45,317 +85,754 @@
     <a href="contact.html">Contact</a>
   </nav>
 
-  <a class="header-call" href="tel:0770712701">
-    <i class="fa-solid fa-phone"></i> 0770 712 701
-  </a>
+  <div class="bcb26-header-actions">
+
+    <a
+      class="bcb26-phone"
+      href="tel:0770712701"
+    >
+      <i class="fa-solid fa-phone"></i>
+      <span>0770 712 701</span>
+    </a>
+
+    <a
+      class="bcb26-header-cta"
+      href="contact.html#oferta"
+    >
+      <i class="fa-solid fa-file-signature"></i>
+      <span>Solicită ofertă</span>
+    </a>
+
+    <button
+      class="bcb26-menu-toggle"
+      type="button"
+      aria-label="Deschide meniul"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+
 </header>
 
-<main>
 
-<section class="services-hero">
-  <div class="services-hero-overlay"></div>
+<!-- =========================================================
+     MOBILE MENU
+========================================================= -->
 
-  <div class="services-hero-content reveal">
-    <p class="section-label">Servicii BCB Group</p>
+<div class="bcb26-mobile-overlay"></div>
 
-    <h1>
-      Soluții complete pentru construcții,
-      instalații și finisaje.
-    </h1>
+<div class="bcb26-mobile-menu">
 
-    <p>
-      Coordonăm proiecte de la A la Z: construcții civile, instalații electrice,
-      instalații sanitare și finisaje realizate profesionist.
-    </p>
+  <nav>
+    <a href="index.html">Acasă</a>
+    <a href="despre.html">Despre noi</a>
+    <a class="active" href="servicii.html">Servicii</a>
+    <a href="proiecte.html">Proiecte</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <div class="bcb26-mobile-actions">
+
+    <a href="tel:0770712701">
+      <i class="fa-solid fa-phone"></i>
+      Sună acum
+    </a>
+
+    <a href="contact.html#oferta">
+      <i class="fa-solid fa-file-signature"></i>
+      Solicită ofertă
+    </a>
+
   </div>
-</section>
 
-<section class="services-intro">
-  <p class="section-label">Ce oferim</p>
+</div>
 
-  <h2>Tot ce ai nevoie pentru un proiect complet</h2>
 
-  <p>
-    BCB Group funcționează ca un brand principal, sub care diviziile specializate
-    lucrează împreună pentru a livra proiecte solide, curate și bine organizate.
-    Construim cu responsabilitate, seriozitate și principii sănătoase.
-  </p>
-</section>
+<main class="services26-page">
 
-<section class="premium-services">
+<!-- =========================================================
+     HERO
+========================================================= -->
 
-  <article class="premium-service reveal">
-    <div class="service-image construct-img"></div>
+<section class="services26-hero">
 
-    <div class="service-content">
-      <div class="service-icon-3d">
-        <i class="fa-solid fa-building"></i>
+  <div class="services26-hero-grid"></div>
+  <div class="services26-hero-glow"></div>
+
+  <div class="services26-hero-inner">
+
+    <div class="services26-hero-copy">
+
+      <div class="services26-eyebrow reveal">
+        <span></span>
+        Servicii BCB Group
       </div>
 
-      <p class="service-kicker">Construcții civile</p>
-      <h2>BCB Construct</h2>
+      <h1 class="reveal delay-1">
+        Patru divizii.
+        <strong>Un singur proiect.</strong>
+      </h1>
 
-      <p>
-        Divizia dedicată construcțiilor civile, caselor, blocurilor și proiectelor
+      <p class="services26-hero-text reveal delay-2">
+        Construcții civile, instalații electrice, instalații sanitare
+        și finisaje coordonate printr-o singură structură.
+      </p>
+
+      <div class="services26-hero-actions reveal delay-3">
+
+        <a
+          href="#divizii"
+          class="bcb26-primary-btn"
+        >
+          Descoperă diviziile
+          <i class="fa-solid fa-arrow-down"></i>
+        </a>
+
+        <a
+          href="contact.html#oferta"
+          class="bcb26-secondary-btn"
+        >
+          Solicită ofertă
+        </a>
+
+      </div>
+
+      <div class="services26-hero-proof reveal delay-4">
+
+        <div>
+          <strong>04</strong>
+          <span>divizii specializate</span>
+        </div>
+
+        <div>
+          <strong>A–Z</strong>
+          <span>coordonare completă</span>
+        </div>
+
+        <div>
+          <strong>01</strong>
+          <span>echipă · un proiect</span>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="services26-hero-visual reveal delay-2">
+
+      <div class="services26-tech-panel">
+
+        <div class="services26-tech-circle"></div>
+
+        <div class="services26-tech-logo">
+          <img
+            src="assets/images/logo.png"
+            alt="BCB Group"
+          >
+        </div>
+
+        <a href="#construct" class="services26-orbit services26-orbit-construct">
+          <i class="fa-solid fa-building"></i>
+          <span>Construct</span>
+        </a>
+
+        <a href="#electric" class="services26-orbit services26-orbit-electric">
+          <i class="fa-solid fa-bolt"></i>
+          <span>Electric</span>
+        </a>
+
+        <a href="#sanitare" class="services26-orbit services26-orbit-sanitary">
+          <i class="fa-solid fa-faucet-drip"></i>
+          <span>Sanitare</span>
+        </a>
+
+        <a href="#finisaje" class="services26-orbit services26-orbit-finish">
+          <i class="fa-solid fa-trowel-bricks"></i>
+          <span>Finisaje</span>
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     INTRO
+========================================================= -->
+
+<section class="services26-intro">
+
+  <div class="services26-intro-heading reveal">
+
+    <p class="services26-label">BCB Group</p>
+
+    <h2>
+      Tot ce ai nevoie pentru
+      <span>un proiect complet.</span>
+    </h2>
+
+  </div>
+
+  <div class="services26-intro-copy reveal">
+
+    <p>
+      BCB Group funcționează ca un brand principal sub care
+      diviziile specializate lucrează împreună pentru proiecte
+      bine organizate și coordonate.
+    </p>
+
+    <p>
+      Fiecare divizie are propria expertiză, dar aceeași direcție:
+      seriozitate, comunicare clară și responsabilitate în fiecare etapă.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     DIVIZII
+========================================================= -->
+
+<section
+  class="services26-divisions"
+  id="divizii"
+>
+
+  <!-- CONSTRUCT -->
+  <article
+    class="services26-service services26-service-construct"
+    id="construct"
+  >
+
+    <div class="services26-service-visual reveal">
+
+      <div class="services26-service-number">01</div>
+
+      <div class="services26-service-art">
+
+        <div class="services26-art-grid"></div>
+
+        <div class="services26-art-icon">
+          <i class="fa-solid fa-building"></i>
+        </div>
+
+        <span class="services26-art-tag">
+          BCB CONSTRUCT
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="services26-service-copy reveal">
+
+      <p class="services26-kicker">Construcții civile</p>
+
+      <h2>
+        BCB
+        <span>Construct</span>
+      </h2>
+
+      <p class="services26-service-lead">
+        Divizia dedicată construcțiilor civile, caselor și proiectelor
         complete de la fundație până la predarea finală.
       </p>
 
-      <ul>
-        <li>Case la cheie</li>
-        <li>Proiecte rezidențiale</li>
-        <li>Structuri, zidărie și beton</li>
-        <li>Renovări și extinderi</li>
-        <li>Coordonare șantier</li>
-      </ul>
-    </div>
-  </article>
+      <div class="services26-service-list">
 
-  <article id="electric" class="premium-service reverse reveal">
-    <div class="service-image electric-img"></div>
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Case la cheie
+        </div>
 
-    <div class="service-content">
-      <div class="service-icon-3d">
-        <i class="fa-solid fa-bolt"></i>
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Proiecte rezidențiale
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Structuri, zidărie și beton
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Renovări și extinderi
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Coordonare șantier
+        </div>
+
       </div>
 
-      <p class="service-kicker">Instalații electrice</p>
-      <h2>BCB Electric</h2>
+      <a href="contact.html#oferta" class="services26-service-link">
+        Discută despre proiect
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
 
-      <p>
-        Soluții electrice pentru locuințe, spații comerciale și proiecte civile,
-        executate curat, sigur și organizat.
-      </p>
-
-      <ul>
-        <li>Instalații electrice interioare</li>
-        <li>Tablouri electrice</li>
-        <li>Iluminat interior și exterior</li>
-        <li>Trasee electrice pentru case și clădiri</li>
-        <li>Soluții electrice integrate</li>
-      </ul>
     </div>
+
   </article>
 
-  <article id="sanitare" class="premium-service reveal">
-    <div class="service-image sanitare-img"></div>
 
-    <div class="service-content">
-      <div class="service-icon-3d">
-        <i class="fa-solid fa-faucet-drip"></i>
+  <!-- ELECTRIC -->
+  <article
+    class="services26-service services26-service-reverse services26-service-electric"
+    id="electric"
+  >
+
+    <div class="services26-service-visual reveal">
+
+      <div class="services26-service-number">02</div>
+
+      <div class="services26-service-art">
+
+        <div class="services26-art-grid"></div>
+
+        <div class="services26-art-icon">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+
+        <span class="services26-art-tag">
+          BCB ELECTRIC
+        </span>
+
       </div>
 
-      <p class="service-kicker">Instalații sanitare și termice</p>
-      <h2>BCB Sanitare</h2>
+    </div>
 
-      <p>
-        Instalații sanitare și termice integrate corect în proiect, cu atenție la
-        funcționalitate, durabilitate și execuție curată.
+
+    <div class="services26-service-copy reveal">
+
+      <p class="services26-kicker">Instalații electrice</p>
+
+      <h2>
+        BCB
+        <span>Electric</span>
+      </h2>
+
+      <p class="services26-service-lead">
+        Soluții electrice pentru locuințe, spații comerciale și proiecte
+        civile, executate curat, sigur și organizat.
       </p>
 
-      <ul>
-        <li>Instalații apă-canal</li>
-        <li>Instalații termice</li>
-        <li>Încălzire în pardoseală</li>
-        <li>Montaj obiecte sanitare</li>
-        <li>Soluții tehnice pentru locuințe</li>
-      </ul>
+      <div class="services26-service-list">
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Instalații electrice interioare
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Tablouri electrice
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Iluminat interior și exterior
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Trasee electrice pentru clădiri
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Soluții electrice integrate
+        </div>
+
+      </div>
+
+      <a href="contact.html#oferta" class="services26-service-link">
+        Discută despre proiect
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+
     </div>
+
   </article>
 
-  <article id="finisaje" class="premium-service reverse reveal">
-    <div class="service-image finisaje-img"></div>
 
-    <div class="service-content">
-      <div class="service-icon-3d">
-        <i class="fa-solid fa-trowel-bricks"></i>
+  <!-- SANITARE -->
+  <article
+    class="services26-service services26-service-sanitary"
+    id="sanitare"
+  >
+
+    <div class="services26-service-visual reveal">
+
+      <div class="services26-service-number">03</div>
+
+      <div class="services26-service-art">
+
+        <div class="services26-art-grid"></div>
+
+        <div class="services26-art-icon">
+          <i class="fa-solid fa-faucet-drip"></i>
+        </div>
+
+        <span class="services26-art-tag">
+          BCB SANITARE
+        </span>
+
       </div>
 
-      <p class="service-kicker">Finisaje interioare și exterioare</p>
-      <h2>BCB Finisaje</h2>
+    </div>
 
-      <p>
-        Finisaje realizate cu grijă la detalii, pentru proiecte curate, elegante
-        și pregătite pentru utilizare.
+
+    <div class="services26-service-copy reveal">
+
+      <p class="services26-kicker">Instalații sanitare și termice</p>
+
+      <h2>
+        BCB
+        <span>Sanitare</span>
+      </h2>
+
+      <p class="services26-service-lead">
+        Instalații sanitare și termice integrate corect în proiect,
+        cu atenție la funcționalitate, durabilitate și execuție curată.
       </p>
 
-      <ul>
-        <li>Glet și zugrăveli</li>
-        <li>Gips-carton</li>
-        <li>Gresie și faianță</li>
-        <li>Finisaje interioare complete</li>
-        <li>Detalii finale curate</li>
-      </ul>
+      <div class="services26-service-list">
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Instalații apă-canal
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Instalații termice
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Încălzire în pardoseală
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Montaj obiecte sanitare
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Soluții tehnice pentru locuințe
+        </div>
+
+      </div>
+
+      <a href="contact.html#oferta" class="services26-service-link">
+        Discută despre proiect
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+
     </div>
+
+  </article>
+
+
+  <!-- FINISAJE -->
+  <article
+    class="services26-service services26-service-reverse services26-service-finish"
+    id="finisaje"
+  >
+
+    <div class="services26-service-visual reveal">
+
+      <div class="services26-service-number">04</div>
+
+      <div class="services26-service-art">
+
+        <div class="services26-art-grid"></div>
+
+        <div class="services26-art-icon">
+          <i class="fa-solid fa-trowel-bricks"></i>
+        </div>
+
+        <span class="services26-art-tag">
+          BCB FINISAJE
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="services26-service-copy reveal">
+
+      <p class="services26-kicker">Finisaje interioare și exterioare</p>
+
+      <h2>
+        BCB
+        <span>Finisaje</span>
+      </h2>
+
+      <p class="services26-service-lead">
+        Finisaje realizate cu grijă la detalii, pentru proiecte curate,
+        elegante și pregătite pentru utilizare.
+      </p>
+
+      <div class="services26-service-list">
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Glet și zugrăveli
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Gips-carton
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Gresie și faianță
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Finisaje interioare complete
+        </div>
+
+        <div>
+          <i class="fa-solid fa-check"></i>
+          Detalii finale curate
+        </div>
+
+      </div>
+
+      <a href="contact.html#oferta" class="services26-service-link">
+        Discută despre proiect
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+
+    </div>
+
   </article>
 
 </section>
 
-<section class="counter-section">
-  <div class="counter-box reveal">
-    <h3 data-count="4">0</h3>
-    <p>Divizii specializate</p>
-  </div>
 
-  <div class="counter-box reveal">
-    <h3 data-count="100">0</h3>
-    <p>Implicare în proiect</p>
-  </div>
+<!-- =========================================================
+     ONE SYSTEM
+========================================================= -->
 
-  <div class="counter-box reveal">
-    <h3>A-Z</h3>
-    <p>Construcții complete</p>
-  </div>
+<section class="services26-system">
 
-  <div class="counter-box reveal">
-    <h3>1</h3>
-    <p>Echipă unită</p>
-  </div>
-</section>
+  <div class="services26-system-copy reveal">
 
-<section class="testimonials-section">
-  <p class="section-label">Încredere și seriozitate</p>
-  <h2>Ce vrem să simtă fiecare client</h2>
-
-  <div class="testimonial-grid">
-    <div class="testimonial-card reveal">
-      <i class="fa-solid fa-quote-left"></i>
-      <p>
-        Un proiect bun începe cu încredere, comunicare clară și oameni care își
-        respectă cuvântul.
-      </p>
-      <strong>BCB Group</strong>
-    </div>
-
-    <div class="testimonial-card reveal">
-      <i class="fa-solid fa-quote-left"></i>
-      <p>
-        Pentru noi, fiecare lucrare este o responsabilitate, nu doar o execuție.
-      </p>
-      <strong>Bocoiu Construction Brothers</strong>
-    </div>
-
-    <div class="testimonial-card reveal">
-      <i class="fa-solid fa-quote-left"></i>
-      <p>
-        Construim cu principii sănătoase, atenție la detalii și dorința de a face
-        lucrurile bine.
-      </p>
-      <strong>Coloseni 3:23</strong>
-    </div>
-  </div>
-</section>
-
-<section class="services-cta">
-  <div class="services-cta-content reveal">
-    <p class="section-label">Solicită ofertă</p>
-
-    <h2>Ai un proiect în plan?</h2>
-
-    <p>
-      Spune-ne ce vrei să construiești, iar noi discutăm împreună cea mai bună
-      soluție pentru proiectul tău.
+    <p class="services26-label services26-label-light">
+      Un singur sistem
     </p>
 
-    <div class="services-cta-buttons">
-      <a class="btn btn-gold" href="tel:0770712701">
-        <i class="fa-solid fa-phone"></i> Sună acum
-      </a>
+    <h2>
+      Patru specializări.
+      <span>O singură responsabilitate.</span>
+    </h2>
 
-      <a class="btn btn-outline" href="contact.html">
-        <i class="fa-regular fa-file-lines"></i> Cere ofertă
-      </a>
-    </div>
+    <p>
+      Avantajul unei structuri integrate este simplu:
+      mai puțină fragmentare între etape și o imagine mai clară
+      asupra întregului proiect.
+    </p>
+
   </div>
+
+
+  <div class="services26-system-grid">
+
+    <div class="services26-system-item reveal">
+      <span>01</span>
+      <i class="fa-regular fa-comments"></i>
+      <strong>Comunicare</strong>
+      <p>Un punct clar de discuție pentru proiect.</p>
+    </div>
+
+    <div class="services26-system-item reveal">
+      <span>02</span>
+      <i class="fa-solid fa-layer-group"></i>
+      <strong>Coordonare</strong>
+      <p>Etape care pot fi organizate într-o structură comună.</p>
+    </div>
+
+    <div class="services26-system-item reveal">
+      <span>03</span>
+      <i class="fa-solid fa-shield-halved"></i>
+      <strong>Responsabilitate</strong>
+      <p>Fiecare lucrare tratată cu seriozitate.</p>
+    </div>
+
+    <div class="services26-system-item reveal">
+      <span>04</span>
+      <i class="fa-solid fa-key"></i>
+      <strong>Finalizare</strong>
+      <p>Urmărim proiectul până la ultimele detalii.</p>
+    </div>
+
+  </div>
+
 </section>
 
-</main>
 
-<a class="whatsapp-float" href="https://wa.me/40770712701" target="_blank" aria-label="WhatsApp">
-  <i class="fa-brands fa-whatsapp"></i>
-</a>
+<!-- =========================================================
+     PROCESS
+========================================================= -->
 
-<footer class="footer-v2">
+<section class="services26-process">
 
-  <div class="footer-main">
+  <div class="services26-process-heading reveal">
 
-    <div class="footer-brand-v2">
-      <img src="assets/images/logo.png" alt="BCB Group">
+    <p class="services26-label">Cum lucrăm</p>
 
-      <p class="footer-slogan">
-        Construim nu doar clădiri, ci relații bazate pe încredere,
-        seriozitate și respect.
-      </p>
+    <h2>
+      Clar de la început.
+      <span>Organizat până la final.</span>
+    </h2>
 
-      <p class="footer-legal-note">
-        BCB Group este brandul comercial al BCB Construct Pro S.R.L.
-      </p>
+  </div>
+
+
+  <div class="services26-process-grid">
+
+    <div class="services26-process-step reveal">
+      <strong>01</strong>
+      <i class="fa-regular fa-comments"></i>
+      <h3>Discuție</h3>
+      <p>Înțelegem proiectul și obiectivele.</p>
     </div>
 
-    <div class="footer-links-v2">
-      <h3>Navigare</h3>
-      <a href="index.html">Acasă</a>
-      <a href="despre.html">Despre noi</a>
-      <a href="servicii.html">Servicii</a>
-      <a href="proiecte.html">Proiecte</a>
-      <a href="contact.html">Contact</a>
-      <a href="contact.html#oferta">Solicită ofertă</a>
+    <div class="services26-process-step reveal">
+      <strong>02</strong>
+      <i class="fa-solid fa-ruler-combined"></i>
+      <h3>Analiză</h3>
+      <p>Stabilim soluțiile și etapele potrivite.</p>
     </div>
 
-    <div class="footer-links-v2">
-      <h3>Diviziile BCB</h3>
-      <a href="servicii.html">🏗️ BCB Construct</a>
-      <a href="servicii.html#electric">⚡ BCB Electric</a>
-      <a href="servicii.html#sanitare">🚿 BCB Sanitare</a>
-      <a href="servicii.html#finisaje">🎨 BCB Finisaje</a>
+    <div class="services26-process-step reveal">
+      <strong>03</strong>
+      <i class="fa-solid fa-helmet-safety"></i>
+      <h3>Execuție</h3>
+      <p>Executăm organizat și responsabil.</p>
     </div>
 
-    <div class="footer-contact-v2">
-      <h3>Contact</h3>
+    <div class="services26-process-step reveal">
+      <strong>04</strong>
+      <i class="fa-solid fa-key"></i>
+      <h3>Predare</h3>
+      <p>Închidem proiectul cu atenție la detalii.</p>
+    </div>
 
-      <a href="tel:0770712701">
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     FINAL CTA
+========================================================= -->
+
+<section class="services26-cta">
+
+  <div class="services26-cta-grid"></div>
+
+  <div class="services26-cta-copy reveal">
+
+    <p class="services26-label">
+      Următorul proiect
+    </p>
+
+    <h2>
+      Spune-ne ce ai în plan.
+      <span>Noi începem cu o discuție.</span>
+    </h2>
+
+    <p>
+      Prezintă-ne proiectul și analizăm împreună ce divizii
+      și ce soluții sunt potrivite pentru lucrarea ta.
+    </p>
+
+    <div class="services26-cta-actions">
+
+      <a
+        href="contact.html#oferta"
+        class="bcb26-primary-btn"
+      >
+        <i class="fa-solid fa-file-signature"></i>
+        Solicită ofertă
+      </a>
+
+      <a
+        href="tel:0770712701"
+        class="services26-phone-btn"
+      >
         <i class="fa-solid fa-phone"></i>
         0770 712 701
       </a>
 
-      <a href="mailto:office@bcbgroup.ro">
-        <i class="fa-regular fa-envelope"></i>
-        office@bcbgroup.ro
-      </a>
-
-      <a href="https://wa.me/40770712701" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i>
-        WhatsApp
-      </a>
-
-      <p>
-        <i class="fa-regular fa-clock"></i>
-        Luni – Vineri: 08:00 – 18:00
-      </p>
-    </div>
-
-    <div class="footer-company-v2">
-      <h3>Date companie</h3>
-
-      <p><strong>Firmă:</strong> BCB CONSTRUCT PRO S.R.L.</p>
-      <p><strong>CUI:</strong> 54634520</p>
-      <p><strong>Reg. Com.:</strong> J2026030027006</p>
-      <p><strong>Sediu:</strong> Sat Roșia, Comuna Roșia, Jud. Bihor</p>
-      <p><strong>CAEN:</strong> 4100 – Lucrări de construcții ale clădirilor rezidențiale și nerezidențiale</p>
     </div>
 
   </div>
 
-  <div class="footer-verse-v2">
-    „Tot ce faceți, să faceți din toată inima, ca pentru Domnul.”
-    <span>Coloseni 3:23</span>
+
+  <div class="services26-cta-logo reveal">
+    <img
+      src="assets/images/logo.png"
+      alt="BCB Group"
+    >
   </div>
 
-  <div class="footer-bottom-v2">
-    <p>© 2026 BCB Group — Bocoiu Construction Brothers. Toate drepturile rezervate.</p>
-  </div>
+</section>
 
-</footer>
+</main>
+
+
+<!-- =========================================================
+     FOOTER COMUN
+========================================================= -->
+
+<div id="bcb-footer"></div>
+
+
+<!-- =========================================================
+     WHATSAPP
+========================================================= -->
+
+<a
+  class="services26-whatsapp"
+  href="https://wa.me/40770712701"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="WhatsApp BCB Group"
+>
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
 
 <script src="js/script.js"></script>
+<script src="js/bcb-2026.js"></script>
+<script src="js/components.js"></script>
+
 </body>
 </html>

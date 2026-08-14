@@ -1,43 +1,83 @@
 <!DOCTYPE html>
 <html lang="ro">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="icon" type="image/png" href="assets/images/logo.png">
-  <link rel="stylesheet" href="css/style.css" />
+
+  <title>Contact | BCB Group</title>
+
+  <meta
+    name="description"
+    content="Contactează BCB Group pentru construcții, instalații și finisaje. Solicită o ofertă personalizată pentru proiectul tău."
+  >
+
+  <meta
+    name="keywords"
+    content="constructor Oradea, construcții Bihor, case la cheie, instalații electrice Oradea, instalații sanitare, finisaje, BCB Group"
+  >
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BCB Group">
+  <meta property="og:title" content="Contact | BCB Group">
+
+  <meta
+    property="og:description"
+    content="Contactează BCB Group pentru construcții, instalații electrice, sanitare și finisaje."
+  >
+
+  <meta property="og:url" content="https://bcbgroup.ro/contact.html">
+  <meta property="og:image" content="https://bcbgroup.ro/assets/images/logo.png">
+  <meta property="og:locale" content="ro_RO">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
+
+  <!-- CSS general -->
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/cards.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/pages/contact.css">
-  <title>Contact | BCB Group</title>
-  <meta name="description" content="Contactează BCB Group pentru construcții, instalații și finisaje. Solicită o ofertă personalizată pentru proiectul tău.">
-  <meta name="keywords" content="constructor Oradea, construcții Bihor, case la cheie, instalații electrice Oradea, instalații sanitare, finisaje, BCB Group">
-  <meta property="og:type" content="website">
-<meta property="og:site_name" content="BCB Group">
 
-<meta property="og:title" content="Contact | BCB Group">
+  <!-- BCB 2026 -->
+  <link rel="stylesheet" href="css/bcb-2026.css">
 
-<meta property="og:description" content="Contactează BCB Group pentru construcții, instalații electrice, sanitare și finisaje.">
+  <!-- Contact 2026 -->
+  <link rel="stylesheet" href="css/pages/contact-2026.css">
 
-<meta property="og:url" content="https://bcbgroup.ro/contact.html">
-
-<meta property="og:image" content="https://bcbgroup.ro/assets/images/logo.png">
-
-<meta property="og:locale" content="ro_RO">
-  <link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Footer standard -->
+  <link rel="stylesheet" href="css/footer-final.css">
 </head>
 
 <body>
 
-<header class="header">
-  <a href="index.html" class="logo-wrap">
-    <img src="assets/images/logo.png" alt="BCB Group">
+<!-- =========================================================
+     HEADER — BCB GROUP 2026
+========================================================= -->
+
+<header class="bcb26-header">
+
+  <a
+    href="index.html"
+    class="bcb26-logo"
+    aria-label="BCB Group - Acasă"
+  >
+    <img
+      src="assets/images/logo.png"
+      alt="BCB Group - Bocoiu Construction Brothers"
+    >
   </a>
 
-  <nav class="nav">
+  <nav
+    class="bcb26-nav"
+    aria-label="Navigație principală"
+  >
     <a href="index.html">Acasă</a>
     <a href="despre.html">Despre noi</a>
     <a href="servicii.html">Servicii</a>
@@ -45,375 +85,869 @@
     <a class="active" href="contact.html">Contact</a>
   </nav>
 
-  <a class="header-call" href="tel:0770712701">
-    <i class="fa-solid fa-phone"></i> 0770 712 701
-  </a>
+  <div class="bcb26-header-actions">
+
+    <a
+      class="bcb26-phone"
+      href="tel:0770712701"
+    >
+      <i class="fa-solid fa-phone"></i>
+      <span>0770 712 701</span>
+    </a>
+
+    <a
+      class="bcb26-header-cta"
+      href="#oferta"
+    >
+      <i class="fa-solid fa-file-signature"></i>
+      <span>Solicită ofertă</span>
+    </a>
+
+    <button
+      class="bcb26-menu-toggle"
+      type="button"
+      aria-label="Deschide meniul"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+
 </header>
 
-<main>
 
-<section class="contact-hero-new">
-  <div class="contact-hero-layer"></div>
-  <div class="contact-gold-shape"></div>
+<!-- =========================================================
+     MOBILE MENU
+========================================================= -->
 
-  <div class="contact-hero-inner reveal">
-    <p class="section-label">Contact BCB Group</p>
+<div class="bcb26-mobile-overlay"></div>
 
-    <h1>Hai să discutăm serios despre proiectul tău.</h1>
+<div class="bcb26-mobile-menu">
 
-    <p>
-      Fie că vrei să construiești o casă, să renovezi sau să coordonezi
-      un proiect complet, suntem pregătiți să analizăm lucrarea și să venim cu o soluție clară.
-    </p>
+  <nav>
+    <a href="index.html">Acasă</a>
+    <a href="despre.html">Despre noi</a>
+    <a href="servicii.html">Servicii</a>
+    <a href="proiecte.html">Proiecte</a>
+    <a class="active" href="contact.html">Contact</a>
+  </nav>
 
-    <div class="contact-hero-buttons">
-      <a class="btn btn-gold" href="tel:0770712701">
-        <i class="fa-solid fa-phone"></i> Sună acum
-      </a>
+  <div class="bcb26-mobile-actions">
 
-      <a class="btn btn-outline" href="https://wa.me/40770712701" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i> WhatsApp
-      </a>
-    </div>
+    <a href="tel:0770712701">
+      <i class="fa-solid fa-phone"></i>
+      Sună acum
+    </a>
+
+    <a href="#oferta">
+      <i class="fa-solid fa-file-signature"></i>
+      Solicită ofertă
+    </a>
+
   </div>
+
+</div>
+
+
+<main class="contact26-page">
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="contact26-hero">
+
+  <div class="contact26-hero-grid"></div>
+  <div class="contact26-hero-glow contact26-glow-one"></div>
+  <div class="contact26-hero-glow contact26-glow-two"></div>
+
+  <div class="contact26-hero-inner">
+
+    <div class="contact26-hero-copy">
+
+      <div class="contact26-eyebrow reveal">
+        <span></span>
+        Contact BCB Group
+      </div>
+
+      <h1 class="reveal delay-1">
+        Hai să discutăm despre
+        <strong>proiectul tău.</strong>
+      </h1>
+
+      <p class="contact26-hero-text reveal delay-2">
+        Fie că vrei să construiești, să renovezi sau ai nevoie de una dintre
+        diviziile BCB Group, începem cu o discuție clară despre lucrare.
+      </p>
+
+      <div class="contact26-hero-actions reveal delay-3">
+
+        <a
+          href="#oferta"
+          class="bcb26-primary-btn"
+        >
+          <i class="fa-solid fa-file-signature"></i>
+          Solicită ofertă
+        </a>
+
+        <a
+          href="tel:0770712701"
+          class="bcb26-secondary-btn"
+        >
+          <i class="fa-solid fa-phone"></i>
+          Sună acum
+        </a>
+
+      </div>
+
+      <div class="contact26-hero-proof reveal delay-4">
+
+        <div>
+          <strong>04</strong>
+          <span>divizii BCB</span>
+        </div>
+
+        <div>
+          <strong>A–Z</strong>
+          <span>proiecte analizate</span>
+        </div>
+
+        <div>
+          <strong>DIRECT</strong>
+          <span>comunicare clară</span>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="contact26-hero-panel reveal delay-2">
+
+      <div class="contact26-panel-logo">
+        <img
+          src="assets/images/logo.png"
+          alt="BCB Group"
+        >
+      </div>
+
+      <div class="contact26-panel-title">
+        <span>CONTACT DIRECT</span>
+        <strong>BCB Group</strong>
+      </div>
+
+      <div class="contact26-panel-links">
+
+        <a href="tel:0770712701">
+          <i class="fa-solid fa-phone"></i>
+
+          <span>
+            <small>Telefon</small>
+            <strong>0770 712 701</strong>
+          </span>
+
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+        <a href="mailto:office@bcbgroup.ro">
+          <i class="fa-regular fa-envelope"></i>
+
+          <span>
+            <small>Email</small>
+            <strong>office@bcbgroup.ro</strong>
+          </span>
+
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+        <a
+          href="https://wa.me/40770712701"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="fa-brands fa-whatsapp"></i>
+
+          <span>
+            <small>WhatsApp</small>
+            <strong>Trimite mesaj</strong>
+          </span>
+
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+      </div>
+
+      <div class="contact26-panel-meta">
+
+        <div>
+          <i class="fa-solid fa-location-dot"></i>
+          <span>Oradea · Bihor</span>
+        </div>
+
+        <div>
+          <i class="fa-regular fa-clock"></i>
+          <span>Luni – Vineri · 08:00–18:00</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
 
-<section class="contact-dashboard">
 
-  <div class="contact-left reveal">
-    <p class="section-label">Date rapide</p>
-    <h2>Contact direct</h2>
+<!-- =========================================================
+     CONTACT + FORM
+========================================================= -->
 
-    <p class="contact-subtitle">
-      Pentru o discuție eficientă, ne poți trimite câteva detalii despre proiect,
-      zona lucrării și etapa în care te afli.
+<section class="contact26-dashboard">
+
+  <div class="contact26-info reveal">
+
+    <p class="contact26-label">
+      Contact direct
     </p>
 
-    <div class="contact-methods-new">
+    <h2>
+      Spune-ne ce ai
+      <span>în plan.</span>
+    </h2>
 
-      <a href="tel:0770712701" class="contact-box-new">
-        <i class="fa-solid fa-phone"></i>
-        <div>
-          <strong>Telefon</strong>
-          <span>0770 712 701</span>
+    <p class="contact26-info-lead">
+      Pentru o discuție eficientă, ne poți trimite câteva detalii despre
+      proiect, zona lucrării și etapa în care te afli.
+    </p>
+
+    <div class="contact26-methods">
+
+      <a href="tel:0770712701" class="contact26-method">
+
+        <div class="contact26-method-icon">
+          <i class="fa-solid fa-phone"></i>
         </div>
+
+        <div>
+          <small>TELEFON</small>
+          <strong>0770 712 701</strong>
+          <span>Discuție directă</span>
+        </div>
+
       </a>
 
-      <a href="mailto:office@bcbgroup.ro" class="contact-box-new">
-        <i class="fa-regular fa-envelope"></i>
-        <div>
-          <strong>Email</strong>
-          <span>office@bcbgroup.ro</span>
+
+      <a href="mailto:office@bcbgroup.ro" class="contact26-method">
+
+        <div class="contact26-method-icon">
+          <i class="fa-regular fa-envelope"></i>
         </div>
+
+        <div>
+          <small>EMAIL</small>
+          <strong>office@bcbgroup.ro</strong>
+          <span>Pentru detalii și documente</span>
+        </div>
+
       </a>
 
-      <a href="https://wa.me/40770712701" target="_blank" class="contact-box-new">
-        <i class="fa-brands fa-whatsapp"></i>
-        <div>
-          <strong>WhatsApp</strong>
-          <span>Trimite mesaj rapid</span>
+
+      <a
+        href="https://wa.me/40770712701"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="contact26-method"
+      >
+
+        <div class="contact26-method-icon contact26-method-whatsapp">
+          <i class="fa-brands fa-whatsapp"></i>
         </div>
+
+        <div>
+          <small>WHATSAPP</small>
+          <strong>Mesaj rapid</strong>
+          <span>Scrie-ne direct</span>
+        </div>
+
       </a>
 
-      <div class="contact-box-new">
-        <i class="fa-solid fa-location-dot"></i>
-        <div>
-          <strong>Zonă acoperire</strong>
-          <span>Oradea • Bihor • România</span>
-        </div>
-      </div>
 
-      <div class="contact-box-new">
-        <i class="fa-regular fa-clock"></i>
-        <div>
-          <strong>Program</strong>
-          <span>Luni – Vineri: 08:00 – 18:00</span>
+      <div class="contact26-method">
+
+        <div class="contact26-method-icon">
+          <i class="fa-solid fa-location-dot"></i>
         </div>
+
+        <div>
+          <small>ZONĂ</small>
+          <strong>Oradea · Bihor</strong>
+          <span>Proiecte analizate și în alte zone</span>
+        </div>
+
       </div>
 
     </div>
 
-    <div class="trust-card">
-      <i class="fa-solid fa-cross"></i>
+
+    <div class="contact26-verse">
+
+      <div class="contact26-verse-icon">
+        <i class="fa-solid fa-quote-left"></i>
+      </div>
+
       <p>
         „Tot ce faceți, să faceți din toată inima, ca pentru Domnul.”
-        <span>Coloseni 3:23</span>
+        <strong>Coloseni 3:23</strong>
       </p>
+
     </div>
+
   </div>
 
-  <div class="contact-right reveal">
-    <p class="section-label">Solicită ofertă</p>
-    <h2>Trimite-ne detaliile lucrării</h2>
 
-    <form id="oferta" class="premium-form">
+  <div class="contact26-form-panel reveal">
 
-      <div class="form-group">
-        <label>Nume complet</label>
-        <input type="text" name="Nume client" placeholder="Ex: Dumitru Ion" required>
+    <div class="contact26-form-heading">
+
+      <p class="contact26-label">
+        Solicită ofertă
+      </p>
+
+      <h2>
+        Trimite-ne
+        <span>detaliile lucrării.</span>
+      </h2>
+
+      <p>
+        Completează informațiile de mai jos. Cu cât avem mai multe detalii,
+        cu atât putem înțelege mai bine proiectul.
+      </p>
+
+    </div>
+
+
+    <form
+      id="oferta"
+      class="contact26-form"
+    >
+
+      <div class="contact26-field">
+
+        <label for="contact-name">
+          Nume complet
+        </label>
+
+        <div class="contact26-input-wrap">
+          <i class="fa-regular fa-user"></i>
+
+          <input
+            id="contact-name"
+            type="text"
+            name="Nume client"
+            placeholder="Ex: Dumitru Ion"
+            autocomplete="name"
+            required
+          >
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Telefon</label>
-        <input type="tel" name="Telefon" placeholder="Ex: 0712 345 678" required>
+
+      <div class="contact26-field">
+
+        <label for="contact-phone">
+          Telefon
+        </label>
+
+        <div class="contact26-input-wrap">
+          <i class="fa-solid fa-phone"></i>
+
+          <input
+            id="contact-phone"
+            type="tel"
+            name="Telefon"
+            placeholder="Ex: 0712 345 678"
+            autocomplete="tel"
+            required
+          >
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" name="email" placeholder="office@exemplu.ro">
+
+      <div class="contact26-field">
+
+        <label for="contact-email">
+          Email
+        </label>
+
+        <div class="contact26-input-wrap">
+          <i class="fa-regular fa-envelope"></i>
+
+          <input
+            id="contact-email"
+            type="email"
+            name="email"
+            placeholder="office@exemplu.ro"
+            autocomplete="email"
+          >
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Localitate / Zonă</label>
-        <input type="text" name="Zona" placeholder="Ex: Oradea, Bihor">
+
+      <div class="contact26-field">
+
+        <label for="contact-zone">
+          Localitate / Zonă
+        </label>
+
+        <div class="contact26-input-wrap">
+          <i class="fa-solid fa-location-dot"></i>
+
+          <input
+            id="contact-zone"
+            type="text"
+            name="Zona"
+            placeholder="Ex: Oradea, Bihor"
+            autocomplete="address-level2"
+          >
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Tip proiect</label>
-        <select name="Tip proiect">
-          <option>Construcție casă de la zero</option>
-          <option>Construcții rezidențiale</option>
-          <option>Renovare completă</option>
-          <option>Instalații electrice</option>
-          <option>Instalații sanitare</option>
-          <option>Finisaje interioare / exterioare</option>
-          <option>Construcție acoperiș</option>
-          <option>Zidărie</option>
-          <option>Fundații / Cuzineți / Betoane</option>
-          <option>Alt tip de lucrare</option>
-        </select>
+
+      <div class="contact26-field">
+
+        <label for="contact-type">
+          Tip proiect
+        </label>
+
+        <div class="contact26-input-wrap">
+          <i class="fa-solid fa-layer-group"></i>
+
+          <select
+            id="contact-type"
+            name="Tip proiect"
+          >
+            <option>Construcție casă de la zero</option>
+            <option>Construcții rezidențiale</option>
+            <option>Renovare completă</option>
+            <option>Instalații electrice</option>
+            <option>Instalații sanitare</option>
+            <option>Finisaje interioare / exterioare</option>
+            <option>Construcție acoperiș</option>
+            <option>Zidărie</option>
+            <option>Fundații / Cuzineți / Betoane</option>
+            <option>Alt tip de lucrare</option>
+          </select>
+        </div>
+
       </div>
 
-      <div class="form-group">
-       <label>Buget estimativ</label>
-        <select name="Buget estimativ">
-         <option>Nu știu încă</option>
-         <option>Sub 20.000 €</option>
-         <option>20.000 € - 50.000 €</option>
-         <option>50.000 € - 100.000 €</option>
-         <option>Peste 100.000 €</option>
-        </select>
+
+      <div class="contact26-field">
+
+        <label for="contact-budget">
+          Buget estimativ
+        </label>
+
+        <div class="contact26-input-wrap">
+          <i class="fa-solid fa-wallet"></i>
+
+          <select
+            id="contact-budget"
+            name="Buget estimativ"
+          >
+            <option>Nu știu încă</option>
+            <option>Sub 20.000 €</option>
+            <option>20.000 € - 50.000 €</option>
+            <option>50.000 € - 100.000 €</option>
+            <option>Peste 100.000 €</option>
+          </select>
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Perioada dorită pentru începere</label>
-        <select name="Perioada dorită">
-         <option>Doar mă informez momentan</option>
-         <option>Cât mai curând</option>
-         <option>În 1-3 luni</option>
-         <option>În 3-6 luni</option>
-         <option>Peste 6 luni</option>
-       </select>
+
+      <div class="contact26-field">
+
+        <label for="contact-start">
+          Perioada dorită pentru începere
+        </label>
+
+        <div class="contact26-input-wrap">
+          <i class="fa-regular fa-calendar"></i>
+
+          <select
+            id="contact-start"
+            name="Perioada dorită"
+          >
+            <option>Doar mă informez momentan</option>
+            <option>Cât mai curând</option>
+            <option>În 1-3 luni</option>
+            <option>În 3-6 luni</option>
+            <option>Peste 6 luni</option>
+          </select>
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Etapa proiectului</label>
-        <select name="Etapa proiectului">
-          <option>Am proiect / planuri</option>
-          <option>Am autorizație / Se poate începe</option>
-          <option>Lucrarea este începută</option>
-        </select>
+
+      <div class="contact26-field">
+
+        <label for="contact-stage">
+          Etapa proiectului
+        </label>
+
+        <div class="contact26-input-wrap">
+          <i class="fa-solid fa-list-check"></i>
+
+          <select
+            id="contact-stage"
+            name="Etapa proiectului"
+          >
+            <option>Am proiect / planuri</option>
+            <option>Am autorizație / Se poate începe</option>
+            <option>Lucrarea este începută</option>
+          </select>
+        </div>
+
       </div>
 
-      <div class="form-group full">
-        <label>Mesaj</label>
-        <textarea name="Mesaj" rows="6" placeholder="Scrie câteva detalii: ce dorești să construiești, suprafață aproximativă, termen, locație..." required></textarea>
+
+      <div class="contact26-field contact26-field-full">
+
+        <label for="contact-message">
+          Mesaj
+        </label>
+
+        <div class="contact26-input-wrap contact26-textarea-wrap">
+          <i class="fa-regular fa-message"></i>
+
+          <textarea
+            id="contact-message"
+            name="Mesaj"
+            rows="6"
+            placeholder="Scrie câteva detalii: ce dorești să construiești, suprafață aproximativă, termen, locație..."
+            required
+          ></textarea>
+        </div>
+
       </div>
 
-      <input type="hidden" name="_subject" value="Solicitare ofertă nouă - BCB Group">
 
-      <input type="hidden" name="_redirect" value="https://bcbgroup.ro/multumim.html">
+      <input
+        type="hidden"
+        name="_subject"
+        value="Solicitare ofertă nouă - BCB Group"
+      >
 
-      <button type="submit" class="btn btn-gold">
-        <i class="fa-regular fa-paper-plane"></i> Trimite solicitarea
-      </button>
+      <input
+        type="hidden"
+        name="_redirect"
+        value="https://bcbgroup.ro/multumim.html"
+      >
+
+
+      <div class="contact26-submit-row">
+
+        <button
+          type="submit"
+          class="contact26-submit"
+        >
+          <i class="fa-regular fa-paper-plane"></i>
+          Trimite solicitarea
+        </button>
+
+        <p>
+          Prin trimiterea formularului ne oferi informațiile necesare
+          pentru a analiza solicitarea.
+        </p>
+
+      </div>
 
     </form>
+
   </div>
 
 </section>
 
-<section class="contact-process">
-  <p class="section-label">Cum lucrăm</p>
-  <h2>Proces simplu, clar și profesionist</h2>
 
-  <div class="process-grid">
+<!-- =========================================================
+     PROJECT TYPES
+========================================================= -->
 
-    <div class="process-card reveal">
-      <span>01</span>
-      <i class="fa-solid fa-comments"></i>
-      <h3>Discuție inițială</h3>
-      <p>Ne spui ce proiect ai în plan și care este etapa în care te afli.</p>
+<section class="contact26-projects">
+
+  <div class="contact26-section-heading reveal">
+
+    <div>
+
+      <p class="contact26-label">
+        Pentru ce ne poți contacta
+      </p>
+
+      <h2>
+        Un singur contact.
+        <span>Patru direcții de lucru.</span>
+      </h2>
+
     </div>
-
-    <div class="process-card reveal">
-      <span>02</span>
-      <i class="fa-solid fa-ruler-combined"></i>
-      <h3>Analiză</h3>
-      <p>Verificăm detaliile, nevoile proiectului și variantele posibile de execuție.</p>
-    </div>
-
-    <div class="process-card reveal">
-      <span>03</span>
-      <i class="fa-solid fa-file-signature"></i>
-      <h3>Ofertare</h3>
-      <p>Pregătim o ofertă clară, adaptată lucrării și bugetului disponibil.</p>
-    </div>
-
-    <div class="process-card reveal">
-      <span>04</span>
-      <i class="fa-solid fa-helmet-safety"></i>
-      <h3>Execuție</h3>
-      <p>Organizăm lucrarea cu responsabilitate, comunicare și atenție la detalii.</p>
-    </div>
-
-  </div>
-</section>
-
-<section class="contact-project-types">
-  <p class="section-label">Pentru ce ne poți contacta</p>
-  <h2>Lucrări și proiecte pe care le putem analiza</h2>
-
-  <div class="project-type-grid">
-
-    <div class="project-type reveal">
-      <i class="fa-solid fa-house-chimney"></i>
-      <h3>Case</h3>
-      <p>Construcții noi, extinderi, renovări și lucrări complete.</p>
-    </div>
-
-    <div class="project-type reveal">
-      <i class="fa-solid fa-building"></i>
-      <h3>Blocuri</h3>
-      <p>Proiecte rezidențiale, structuri și lucrări civile complexe.</p>
-    </div>
-
-    <div class="project-type reveal">
-      <i class="fa-solid fa-bolt"></i>
-      <h3>Instalații</h3>
-      <p>Electric, sanitar, termic și soluții tehnice integrate.</p>
-    </div>
-
-    <div class="project-type reveal">
-      <i class="fa-solid fa-trowel-bricks"></i>
-      <h3>Finisaje</h3>
-      <p>Finisaje interioare, exterioare și detalii finale curate.</p>
-    </div>
-
-  </div>
-</section>
-
-<section class="contact-final-premium">
-  <div class="reveal">
-    <p class="section-label">BCB Group</p>
-
-    <h2>Construim cu seriozitate, credință și responsabilitate.</h2>
 
     <p>
-      Nu promitem lucruri imposibile. Promitem implicare, comunicare și dorința
-      de a face fiecare lucrare corect, curat și durabil.
+      Poți discuta cu noi atât pentru un proiect complet,
+      cât și pentru una dintre diviziile specializate BCB Group.
     </p>
 
-    <div class="services-cta-buttons">
-      <a class="btn btn-gold" href="tel:0770712701">
-        <i class="fa-solid fa-phone"></i> Sună acum
-      </a>
-
-      <a class="btn btn-outline" href="https://wa.me/40770712701" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i> WhatsApp
-      </a>
-    </div>
   </div>
+
+
+  <div class="contact26-project-grid">
+
+    <a
+      href="servicii.html#construct"
+      class="contact26-project contact26-project-construct reveal"
+    >
+      <span>01</span>
+
+      <i class="fa-solid fa-house-chimney"></i>
+
+      <h3>Construcții</h3>
+
+      <p>
+        Case, structuri, extinderi, renovări și proiecte rezidențiale.
+      </p>
+
+      <strong>
+        BCB Construct
+        <i class="fa-solid fa-arrow-right"></i>
+      </strong>
+    </a>
+
+
+    <a
+      href="servicii.html#electric"
+      class="contact26-project contact26-project-electric reveal"
+    >
+      <span>02</span>
+
+      <i class="fa-solid fa-bolt"></i>
+
+      <h3>Electric</h3>
+
+      <p>
+        Instalații electrice, tablouri, iluminat și soluții integrate.
+      </p>
+
+      <strong>
+        BCB Electric
+        <i class="fa-solid fa-arrow-right"></i>
+      </strong>
+    </a>
+
+
+    <a
+      href="servicii.html#sanitare"
+      class="contact26-project contact26-project-sanitary reveal"
+    >
+      <span>03</span>
+
+      <i class="fa-solid fa-faucet-drip"></i>
+
+      <h3>Sanitare</h3>
+
+      <p>
+        Apă, canalizare, instalații termice și încălzire.
+      </p>
+
+      <strong>
+        BCB Sanitare
+        <i class="fa-solid fa-arrow-right"></i>
+      </strong>
+    </a>
+
+
+    <a
+      href="servicii.html#finisaje"
+      class="contact26-project contact26-project-finish reveal"
+    >
+      <span>04</span>
+
+      <i class="fa-solid fa-trowel-bricks"></i>
+
+      <h3>Finisaje</h3>
+
+      <p>
+        Glet, zugrăveli, gips-carton, placări și detalii finale.
+      </p>
+
+      <strong>
+        BCB Finisaje
+        <i class="fa-solid fa-arrow-right"></i>
+      </strong>
+    </a>
+
+  </div>
+
 </section>
 
-</main>
 
-<a class="whatsapp-float" href="https://wa.me/40770712701" target="_blank" aria-label="WhatsApp">
-  <i class="fa-brands fa-whatsapp"></i>
-</a>
+<!-- =========================================================
+     PROCESS
+========================================================= -->
 
-<footer class="footer-v2">
+<section class="contact26-process">
 
-  <div class="footer-main">
+  <div class="contact26-process-copy reveal">
 
-    <div class="footer-brand-v2">
-      <img src="assets/images/logo.png" alt="BCB Group">
+    <p class="contact26-label contact26-label-light">
+      După ce ne contactezi
+    </p>
 
-      <p class="footer-slogan">
-        Construim nu doar clădiri, ci relații bazate pe încredere,
-        seriozitate și respect.
-      </p>
+    <h2>
+      Un proces simplu.
+      <span>Fără complicații inutile.</span>
+    </h2>
 
-      <p class="footer-legal-note">
-        BCB Group este brandul comercial al BCB Construct Pro S.R.L.
-      </p>
+    <p>
+      Începem prin a înțelege proiectul și mergem etapizat spre
+      o soluție clară și o eventuală colaborare.
+    </p>
+
+  </div>
+
+
+  <div class="contact26-process-grid">
+
+    <div class="contact26-process-step reveal">
+      <span>01</span>
+      <i class="fa-regular fa-comments"></i>
+      <strong>Discuție inițială</strong>
+      <p>Ne spui ce proiect ai în plan și unde te afli cu el.</p>
     </div>
 
-    <div class="footer-links-v2">
-      <h3>Navigare</h3>
-      <a href="index.html">Acasă</a>
-      <a href="despre.html">Despre noi</a>
-      <a href="servicii.html">Servicii</a>
-      <a href="proiecte.html">Proiecte</a>
-      <a href="contact.html">Contact</a>
-      <a href="contact.html#oferta">Solicită ofertă</a>
+    <div class="contact26-process-step reveal">
+      <span>02</span>
+      <i class="fa-solid fa-ruler-combined"></i>
+      <strong>Analiză</strong>
+      <p>Verificăm datele și nevoile reale ale lucrării.</p>
     </div>
 
-    <div class="footer-links-v2">
-      <h3>Diviziile BCB</h3>
-      <a href="servicii.html">🏗️ BCB Construct</a>
-      <a href="servicii.html#electric">⚡ BCB Electric</a>
-      <a href="servicii.html#sanitare">🚿 BCB Sanitare</a>
-      <a href="servicii.html#finisaje">🎨 BCB Finisaje</a>
+    <div class="contact26-process-step reveal">
+      <span>03</span>
+      <i class="fa-solid fa-file-signature"></i>
+      <strong>Ofertare</strong>
+      <p>Stabilim soluția și pregătim oferta potrivită proiectului.</p>
     </div>
 
-    <div class="footer-contact-v2">
-      <h3>Contact</h3>
+    <div class="contact26-process-step reveal">
+      <span>04</span>
+      <i class="fa-solid fa-helmet-safety"></i>
+      <strong>Execuție</strong>
+      <p>Organizăm lucrarea cu responsabilitate și comunicare.</p>
+    </div>
 
-      <a href="tel:0770712701">
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     FINAL CTA
+========================================================= -->
+
+<section class="contact26-final">
+
+  <div class="contact26-final-grid"></div>
+
+  <div class="contact26-final-copy reveal">
+
+    <p class="contact26-label">
+      BCB Group
+    </p>
+
+    <h2>
+      Un proiect bun începe
+      <span>cu o discuție bună.</span>
+    </h2>
+
+    <p>
+      Sună-ne, scrie-ne pe WhatsApp sau trimite formularul de ofertă.
+      Alegem apoi împreună următorul pas.
+    </p>
+
+    <div class="contact26-final-actions">
+
+      <a
+        href="tel:0770712701"
+        class="bcb26-primary-btn"
+      >
         <i class="fa-solid fa-phone"></i>
-        0770 712 701
+        Sună acum
       </a>
 
-      <a href="mailto:office@bcbgroup.ro">
-        <i class="fa-regular fa-envelope"></i>
-        office@bcbgroup.ro
-      </a>
-
-      <a href="https://wa.me/40770712701" target="_blank">
+      <a
+        href="https://wa.me/40770712701"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="contact26-whatsapp-btn"
+      >
         <i class="fa-brands fa-whatsapp"></i>
         WhatsApp
       </a>
 
-      <p>
-        <i class="fa-regular fa-clock"></i>
-        Luni – Vineri: 08:00 – 18:00
-      </p>
-    </div>
-
-    <div class="footer-company-v2">
-      <h3>Date companie</h3>
-
-      <p><strong>Firmă:</strong> BCB CONSTRUCT PRO S.R.L.</p>
-      <p><strong>CUI:</strong> 54634520</p>
-      <p><strong>Reg. Com.:</strong> J2026030027006</p>
-      <p><strong>Sediu:</strong> Sat Roșia, Comuna Roșia, Jud. Bihor</p>
-      <p><strong>CAEN:</strong> 4100 – Lucrări de construcții ale clădirilor rezidențiale și nerezidențiale</p>
     </div>
 
   </div>
 
-  <div class="footer-verse-v2">
-    „Tot ce faceți, să faceți din toată inima, ca pentru Domnul.”
-    <span>Coloseni 3:23</span>
+
+  <div class="contact26-final-logo reveal">
+
+    <img
+      src="assets/images/logo.png"
+      alt="BCB Group"
+    >
+
   </div>
 
-  <div class="footer-bottom-v2">
-    <p>© 2026 BCB Group — Bocoiu Construction Brothers. Toate drepturile rezervate.</p>
-  </div>
+</section>
 
-</footer>
+</main>
+
+
+<!-- =========================================================
+     FOOTER COMUN
+========================================================= -->
+
+<div id="bcb-footer"></div>
+
+
+<!-- =========================================================
+     WHATSAPP FLOAT
+========================================================= -->
+
+<a
+  class="contact26-whatsapp-float"
+  href="https://wa.me/40770712701"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="WhatsApp BCB Group"
+>
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
 
 <script src="js/script.js"></script>
+<script src="js/bcb-2026.js"></script>
+<script src="js/components.js"></script>
+
 </body>
 </html>
