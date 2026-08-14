@@ -1,0 +1,215 @@
+/* =========================================================
+   BCB GROUP 2026 — PAGINA MULTUMIM
+========================================================= */
+
+.thanks26-page{
+  min-height:100vh;
+  padding:145px 7% 95px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 18% 16%,rgba(217,154,22,.10),transparent 27%),
+    radial-gradient(circle at 86% 18%,rgba(255,255,255,.75),transparent 24%),
+    linear-gradient(135deg,#fbf8f2 0%,#f2ede3 52%,#e9e2d5 100%);
+}
+
+.thanks26-page::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.46;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(28,33,38,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(28,33,38,.035) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+
+.thanks26-shell{
+  width:min(100%,980px);
+  position:relative;
+  z-index:2;
+  text-align:center;
+}
+
+.thanks26-card{
+  padding:62px 70px 54px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.92);
+  border-radius:34px;
+  background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(240,235,224,.82));
+  backdrop-filter:blur(22px);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 28px 65px rgba(25,30,35,.11),
+    0 70px 125px rgba(25,30,35,.09);
+}
+
+.thanks26-card::after{
+  content:"BCB";
+  position:absolute;
+  right:-38px;
+  bottom:-72px;
+  color:rgba(28,33,38,.035);
+  font-size:190px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-15px;
+  pointer-events:none;
+}
+
+.thanks26-icon{
+  width:86px;
+  height:86px;
+  margin:0 auto 26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:25px;
+  color:#211806;
+  background:linear-gradient(145deg,#f3cc68,#bf7d10);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    0 18px 40px rgba(184,116,11,.22);
+  font-size:31px;
+}
+
+.thanks26-label{
+  margin:0 0 14px;
+  color:#9c6912;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:3.1px;
+  text-transform:uppercase;
+}
+
+.thanks26-card h1{
+  max-width:760px;
+  margin:0 auto;
+  color:#1d2227;
+  font-size:clamp(42px,5vw,66px);
+  line-height:1.02;
+  letter-spacing:-2.8px;
+  font-weight:950;
+}
+
+.thanks26-card h1 span{
+  display:block;
+  color:transparent;
+  background:linear-gradient(110deg,#a96a08,#dda42d,#93600c);
+  background-clip:text;
+  -webkit-background-clip:text;
+}
+
+.thanks26-lead{
+  max-width:650px;
+  margin:24px auto 0;
+  color:#676d72;
+  font-size:15px;
+  line-height:1.78;
+}
+
+.thanks26-verse{
+  max-width:650px;
+  margin:31px auto 0;
+  padding:17px 20px;
+  position:relative;
+  z-index:2;
+  border:1px solid rgba(201,142,25,.23);
+  border-left:3px solid #cf941d;
+  border-radius:14px;
+  background:linear-gradient(90deg,rgba(207,148,29,.075),rgba(255,255,255,.52));
+  color:#50555a;
+  font-size:11px;
+  line-height:1.6;
+  font-style:italic;
+}
+
+.thanks26-verse strong{
+  display:block;
+  margin-top:5px;
+  color:#9b6811;
+  font-size:9px;
+  font-style:normal;
+}
+
+.thanks26-actions{
+  margin-top:31px;
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.thanks26-secondary,
+.thanks26-whatsapp{
+  min-height:56px;
+  padding:0 22px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  border:1px solid rgba(25,30,35,.08);
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 12px 28px rgba(20,24,28,.07);
+  font-size:11px;
+  font-weight:950;
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+
+.thanks26-secondary{
+  color:#30353a;
+}
+
+.thanks26-whatsapp{
+  color:#1c7a43;
+}
+
+.thanks26-secondary:hover,
+.thanks26-whatsapp:hover{
+  transform:translateY(-4px);
+  box-shadow:0 18px 35px rgba(20,24,28,.10);
+}
+
+@media(max-width:700px){
+  .thanks26-page{
+    padding:120px 5% 70px;
+  }
+
+  .thanks26-card{
+    padding:44px 22px 38px;
+    border-radius:25px;
+  }
+
+  .thanks26-icon{
+    width:72px;
+    height:72px;
+    border-radius:21px;
+    font-size:25px;
+  }
+
+  .thanks26-card h1{
+    font-size:40px;
+    letter-spacing:-1.8px;
+  }
+
+  .thanks26-lead{
+    font-size:13px;
+  }
+
+  .thanks26-actions{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .thanks26-actions a{
+    width:100%;
+  }
+}
