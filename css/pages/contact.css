@@ -389,13 +389,3 @@
     padding:30px;
   }
 }
-
-.division-card .division-icon,
-.division-card h3,
-.division-card p,
-.division-card ul,
-.division-card li,
-.division-card .division-small-line{
-    position:relative;
-    z-index:2;
-}

@@ -133,3 +133,23 @@
   font-weight:900;
   margin-right:8px;
 }
+
+.division-card-link{
+  text-decoration:none;
+  color:inherit;
+  display:block;
+}
+
+.division-card{
+  cursor:pointer;
+}
+
+.division-card .division-icon,
+.division-card h3,
+.division-card p,
+.division-card ul,
+.division-card li,
+.division-card .division-small-line{
+  position:relative;
+  z-index:2;
+}
