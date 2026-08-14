@@ -54,8 +54,14 @@
 
       <section class="bcb-users-invite-panel">
         <div class="bcb-users-invite-icon"><i class="fa-solid fa-user-plus"></i></div>
-        <div><span class="bcb-admin-section-kicker">Invitații</span><h2>Adaugă un membru nou al echipei</h2><p>Invitațiile vor fi trimise printr-o funcție server-side securizată. Nu vom expune chei administrative în browser.</p></div>
-        <button type="button" class="bcb-users-invite-button" disabled title="Conectarea invitațiilor server-side este în curs"><i class="fa-solid fa-lock"></i> Invitație securizată</button>
+        <div class="bcb-users-invite-copy"><span class="bcb-admin-section-kicker">Invitații</span><h2>Adaugă un membru nou al echipei</h2><p>Invitația este trimisă securizat prin Supabase Edge Functions. Persoana își va seta singură parola.</p></div>
+        <form id="bcb-users-invite-form" class="bcb-users-invite-form">
+          <label><span>Nume complet</span><input id="invite-full-name" type="text" maxlength="120" placeholder="Ex: Bocoiu Daniel" required></label>
+          <label><span>Email</span><input id="invite-email" type="email" maxlength="180" placeholder="nume@email.com" required></label>
+          <label><span>Rol</span><select id="invite-role"><option value="editor">Editor</option><option value="admin">Administrator</option></select></label>
+          <button id="bcb-users-invite-button" type="submit" class="bcb-users-invite-button"><i class="fa-solid fa-paper-plane"></i> Trimite invitația</button>
+        </form>
+        <div id="bcb-users-invite-message" class="bcb-users-invite-message" hidden></div>
       </section>
     </main>
   </div>
