@@ -317,17 +317,6 @@
   transform:translateY(-5px) scale(1.05);
 }
 
-.reveal{
-  opacity:0;
-  transform:translateY(38px);
-  transition:1s ease;
-}
-
-.reveal.show{
-  opacity:1;
-  transform:translateY(0);
-}
-
 @media(max-width:950px){
   .premium-service,
   .premium-service.reverse{
