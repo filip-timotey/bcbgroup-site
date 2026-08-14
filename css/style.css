@@ -320,25 +320,6 @@ a{
   margin-right:12px;
 }
 
-
-@media(max-width:1100px){
-  .footer-main{
-    grid-template-columns:1fr 1fr;
-  }
-}
-
-@media(max-width:700px){
-  .footer-main{
-    grid-template-columns:1fr;
-    gap:30px;
-  }
-
-  .footer-brand-v2 img{
-    width:185px;
-  }
-}
-
-
 .page-hero{
   min-height:420px;
   padding:140px 7% 70px;
