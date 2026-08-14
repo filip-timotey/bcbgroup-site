@@ -39,4 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("BCB projects module error:", error);
     });
   }
+
+  if (
+    document.querySelector(".bcb26-hero") ||
+    document.querySelector(".about26-hero") ||
+    document.querySelector(".services26-hero") ||
+    document.querySelector(".social26-hero")
+  ) {
+    import("./live-project-highlight.js").catch(error => {
+      console.error("BCB LIVE project module error:", error);
+    });
+  }
 });
