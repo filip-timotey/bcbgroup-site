@@ -10,13 +10,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("BCB public access dock error:", error);
   });
 
-  const currentPublicPage = window.location.pathname.split("/").pop() || "index.html";
-  if (currentPublicPage === "index.html" || currentPublicPage === "") {
-    import("./home-hero-media.js").catch(error => {
-      console.error("BCB home hero media error:", error);
-    });
-  }
-
   async function loadComponent(selector, path) {
     const mount = document.querySelector(selector);
     if (!mount) return false;
@@ -53,20 +46,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   function openMenu() {
-    if (!menuToggle || !mobileMenu || !mobileOverlay) return;
-    menuToggle.classList.add("is-open");
-    mobileMenu.classList.add("is-open");
-    mobileOverlay.classList.add("is-open");
-    menuToggle.setAttribute("aria-expanded", "true");
+    menuToggle?.classList.add("is-open");
+    mobileMenu?.classList.add("is-open");
+    mobileOverlay?.classList.add("is-open");
     document.body.style.overflow = "hidden";
   }
 
   function closeMenu() {
-    if (!menuToggle || !mobileMenu || !mobileOverlay) return;
-    menuToggle.classList.remove("is-open");
-    mobileMenu.classList.remove("is-open");
-    mobileOverlay.classList.remove("is-open");
-    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle?.classList.remove("is-open");
+    mobileMenu?.classList.remove("is-open");
+    mobileOverlay?.classList.remove("is-open");
     document.body.style.overflow = "";
   }
 
@@ -99,12 +88,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         header.classList.add("is-hidden");
         header.classList.remove("is-visible-up");
         header.style.opacity = "0";
-        header.style.transform = "translateX(-50%) translateY(-120%)";
+        header.style.transform = "translateX(-50%) translateY(-16px)";
         header.style.pointerEvents = "none";
       } else {
         header.classList.remove("is-hidden");
         header.classList.add("is-visible-up");
-        header.style.opacity = "0.96";
+        header.style.opacity = "1";
         header.style.transform = "translateX(-50%) translateY(0)";
         header.style.pointerEvents = "auto";
       }
