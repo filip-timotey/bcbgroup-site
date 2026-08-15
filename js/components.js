@@ -10,6 +10,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("BCB public access dock error:", error);
   });
 
+  const currentPublicPage = window.location.pathname.split("/").pop() || "index.html";
+  if (currentPublicPage === "index.html" || currentPublicPage === "") {
+    import("./home-hero-media.js").catch(error => {
+      console.error("BCB home hero media error:", error);
+    });
+  }
+
   async function loadComponent(selector, path) {
     const mount = document.querySelector(selector);
     if (!mount) return false;
@@ -67,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.body.style.overflow = "";
   }
 
-  menuToggle?.addEventListener("click", () => menuToggle.classList.contains("is-open") ? closeMenu() : openMenu());
+  menuToggle?.addEventListener("click", () => menuToggle.classList.contains("is-open") ? close() : openMenu());
   mobileOverlay?.addEventListener("click", closeMenu);
   mobileLinks.forEach(link => link.addEventListener("click", closeMenu));
   document.addEventListener("keydown", event => { if (event.key === "Escape") closeMenu(); });
