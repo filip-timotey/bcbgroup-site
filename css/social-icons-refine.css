@@ -1,0 +1,166 @@
+/* BCB HOME — SOCIAL ICONS FINAL POSITIONING */
+.bcb26-trust-social-anchor{
+  position:relative !important;
+  padding-right:205px !important;
+  overflow:visible !important;
+}
+
+.bcb26-trust-social-anchor .bcb26-social-dock{
+  position:absolute !important;
+  top:50% !important;
+  right:16px !important;
+  bottom:auto !important;
+  left:auto !important;
+  transform:translateY(-50%) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:8px !important;
+  width:auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+}
+
+.bcb26-trust-social-anchor .bcb26-social-link{
+  position:relative !important;
+  width:34px !important;
+  height:34px !important;
+  flex:0 0 34px !important;
+  display:grid !important;
+  place-items:center !important;
+  border:0 !important;
+  border-radius:50% !important;
+  color:#fff !important;
+  text-decoration:none !important;
+  transform-origin:center !important;
+  isolation:isolate !important;
+  animation:bcbSocialPulseStrong 2.15s ease-in-out infinite !important;
+  transition:transform .24s ease,filter .24s ease !important;
+}
+
+.bcb26-trust-social-anchor .bcb26-social-link:nth-child(1){animation-delay:0s !important}
+.bcb26-trust-social-anchor .bcb26-social-link:nth-child(2){animation-delay:.18s !important}
+.bcb26-trust-social-anchor .bcb26-social-link:nth-child(3){animation-delay:.36s !important}
+.bcb26-trust-social-anchor .bcb26-social-link:nth-child(4){animation-delay:.54s !important}
+.bcb26-trust-social-anchor .bcb26-social-link:nth-child(5){animation-delay:.72s !important}
+
+.bcb26-trust-social-anchor .bcb26-social-link::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:-7px !important;
+  z-index:-1 !important;
+  border-radius:50% !important;
+  background:var(--brand-glow) !important;
+  filter:blur(10px) !important;
+  animation:bcbSocialHaloStrong 2.15s ease-in-out infinite !important;
+}
+
+.bcb26-trust-social-anchor .bcb26-social-link:nth-child(2)::before{animation-delay:.18s !important}
+.bcb26-trust-social-anchor .bcb26-social-link:nth-child(3)::before{animation-delay:.36s !important}
+.bcb26-trust-social-anchor .bcb26-social-link:nth-child(4)::before{animation-delay:.54s !important}
+.bcb26-trust-social-anchor .bcb26-social-link:nth-child(5)::before{animation-delay:.72s !important}
+
+.bcb26-trust-social-anchor .bcb26-social-link i{
+  position:relative !important;
+  z-index:2 !important;
+  font-size:14px !important;
+  color:#fff !important;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.20)) !important;
+}
+
+/* Original brand appearance */
+.bcb26-trust-social-anchor .is-instagram{
+  --brand-glow:rgba(225,48,108,.72) !important;
+  background:radial-gradient(circle at 68% 70%,#ffd600 0 9%,#ff7a00 24%,#ff0169 48%,#d300c5 70%,#7638fa 100%) !important;
+  box-shadow:0 5px 13px rgba(193,53,132,.34) !important;
+}
+
+.bcb26-trust-social-anchor .is-facebook{
+  --brand-glow:rgba(24,119,242,.78) !important;
+  background:#1877f2 !important;
+  box-shadow:0 5px 13px rgba(24,119,242,.34) !important;
+}
+
+.bcb26-trust-social-anchor .is-tiktok{
+  --brand-glow:rgba(37,244,238,.62) !important;
+  background:#000 !important;
+  box-shadow:-2px 0 0 #25f4ee,2px 0 0 #fe2c55,0 5px 13px rgba(0,0,0,.32) !important;
+}
+
+.bcb26-trust-social-anchor .is-tiktok i{
+  text-shadow:-1.3px 0 #25f4ee,1.3px 0 #fe2c55 !important;
+}
+
+.bcb26-trust-social-anchor .is-linkedin{
+  --brand-glow:rgba(10,102,194,.78) !important;
+  background:#0a66c2 !important;
+  box-shadow:0 5px 13px rgba(10,102,194,.34) !important;
+}
+
+.bcb26-trust-social-anchor .is-youtube{
+  --brand-glow:rgba(255,0,0,.78) !important;
+  background:#ff0000 !important;
+  box-shadow:0 5px 13px rgba(255,0,0,.34) !important;
+}
+
+.bcb26-trust-social-anchor .bcb26-social-link:hover{
+  transform:scale(1.18) !important;
+  filter:brightness(1.20) saturate(1.18) !important;
+}
+
+@keyframes bcbSocialPulseStrong{
+  0%,100%{
+    opacity:.58;
+    transform:scale(.88);
+    filter:brightness(.70) saturate(.88);
+  }
+  50%{
+    opacity:1;
+    transform:scale(1.12);
+    filter:brightness(1.38) saturate(1.32);
+  }
+}
+
+@keyframes bcbSocialHaloStrong{
+  0%,100%{
+    opacity:.14;
+    transform:scale(.70);
+  }
+  50%{
+    opacity:1;
+    transform:scale(1.42);
+  }
+}
+
+@media(max-width:1180px){
+  .bcb26-trust-social-anchor{padding-right:178px !important}
+  .bcb26-trust-social-anchor .bcb26-social-dock{right:10px !important;gap:6px !important}
+  .bcb26-trust-social-anchor .bcb26-social-link{width:31px !important;height:31px !important;flex-basis:31px !important}
+  .bcb26-trust-social-anchor .bcb26-social-link i{font-size:13px !important}
+}
+
+@media(max-width:850px){
+  .bcb26-trust-social-anchor{padding-right:0 !important}
+  .bcb26-trust-social-anchor .bcb26-social-dock{
+    position:relative !important;
+    top:auto !important;
+    right:auto !important;
+    transform:none !important;
+    justify-content:flex-start !important;
+    margin-top:10px !important;
+  }
+}
+
+@media(max-width:520px){
+  .bcb26-trust-social-anchor .bcb26-social-link{width:30px !important;height:30px !important;flex-basis:30px !important}
+  .bcb26-trust-social-anchor .bcb26-social-link i{font-size:12px !important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .bcb26-trust-social-anchor .bcb26-social-link,
+  .bcb26-trust-social-anchor .bcb26-social-link::before{animation:none !important}
+}
