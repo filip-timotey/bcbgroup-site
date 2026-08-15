@@ -99,6 +99,10 @@ async function syncAdminNavigation() {
   addCommonLinks();
   setupMobileDrawer();
 
+  if (window.location.pathname.endsWith("site-editor.html")) {
+    import("./admin-site-editor-video.js").catch(error => console.error("Site Editor video controls:", error));
+  }
+
   const { data: sessionData } = await supabase.auth.getSession();
   const session = sessionData.session;
   if (!session) return;
