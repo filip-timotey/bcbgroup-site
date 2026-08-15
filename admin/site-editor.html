@@ -43,11 +43,20 @@
         <div class="site-editor-safe"><i class="fa-solid fa-shield-halved"></i><div><strong>Design protejat</strong><span>Structura și stilurile nu pot fi modificate accidental.</span></div></div>
       </section>
 
+      <section class="site-editor-stats" aria-label="Statistici Site Editor">
+        <article><span>Pagina curentă</span><strong id="site-editor-page-name">Acasă</strong></article>
+        <article><span>Câmpuri disponibile</span><strong id="site-editor-field-count">0</strong></article>
+        <article><span>Personalizate</span><strong id="site-editor-changed-count">0</strong></article>
+      </section>
+
       <div id="site-editor-message" class="site-editor-message" hidden></div>
 
       <section class="site-editor-toolbar">
         <div id="site-editor-tabs" class="site-editor-tabs"></div>
-        <a id="site-editor-preview" class="site-editor-preview" href="../index.html" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Deschide pagina</a>
+        <div class="site-editor-toolbar-actions">
+          <label class="site-editor-search"><i class="fa-solid fa-magnifying-glass"></i><input id="site-editor-search" type="search" placeholder="Caută un titlu, text sau secțiune..."></label>
+          <a id="site-editor-preview" class="site-editor-preview" href="../index.html" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Deschide pagina</a>
+        </div>
       </section>
 
       <section id="site-editor-content" class="site-editor-content">
