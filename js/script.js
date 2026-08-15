@@ -5,6 +5,10 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  import("./site-content.js").catch(error => {
+    console.error("BCB site content module error:", error);
+  });
+
   const revealElements = document.querySelectorAll(".reveal");
 
   if ("IntersectionObserver" in window) {
