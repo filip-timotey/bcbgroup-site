@@ -8,6 +8,27 @@ create unique index if not exists fleet_one_active_trip_per_vehicle_idx
 on public.fleet_trips(vehicle_id)
 where status = 'active';
 
+-- Safe availability endpoint for editors: exposes only whether a vehicle is busy,
+-- not another driver's trip details.
+create or replace function public.fleet_vehicle_availability()
+returns table(vehicle_id uuid, is_busy boolean)
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select v.id,
+         exists(
+           select 1 from public.fleet_trips t
+           where t.vehicle_id = v.id and t.status = 'active'
+         ) as is_busy
+  from public.fleet_vehicles v
+  where v.is_active = true
+    and public.is_bcb_staff();
+$$;
+revoke all on function public.fleet_vehicle_availability() from public;
+grant execute on function public.fleet_vehicle_availability() to authenticated;
+
 create table if not exists public.fleet_incidents (
   id uuid primary key default gen_random_uuid(),
   vehicle_id uuid not null references public.fleet_vehicles(id) on delete restrict,
