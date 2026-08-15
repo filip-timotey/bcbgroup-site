@@ -1,3 +1,4 @@
+import "./admin-nav.js";
 import { supabase } from "./supabase-client.js";
 import { requireStaffContext, bindAdminLogout } from "./admin-session.js";
 
@@ -20,20 +21,12 @@ export async function requireStaff() {
 }
 
 export function esc(value = "") {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+  return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
 
 export function fmtDate(value) {
   if (!value) return "—";
-  return new Intl.DateTimeFormat("ro-RO", {
-    dateStyle: "medium",
-    timeStyle: "short"
-  }).format(new Date(value));
+  return new Intl.DateTimeFormat("ro-RO", { dateStyle:"medium", timeStyle:"short" }).format(new Date(value));
 }
 
 export { supabase };
