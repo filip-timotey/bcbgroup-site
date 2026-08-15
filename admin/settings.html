@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="../assets/images/logo.png">
+  <title>Setări site | BCB Business Manager</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin-2026.css">
+  <link rel="stylesheet" href="../css/admin-nav.css">
+  <link rel="stylesheet" href="../css/admin-settings.css">
+</head>
+<body class="bcb-admin-body">
+  <div class="bcb-admin-app">
+    <aside class="bcb-admin-sidebar">
+      <a href="dashboard.html" class="bcb-admin-sidebar-logo"><img src="../assets/images/logo.png" alt="BCB Group"></a>
+      <div class="bcb-admin-sidebar-title"><span>BCB</span><strong>Business Manager</strong></div>
+      <nav class="bcb-admin-nav" aria-label="Administrare BCB">
+        <a href="dashboard.html"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
+        <a href="dashboard.html#projects"><i class="fa-solid fa-building"></i> Proiecte</a>
+        <a href="quotes.html"><i class="fa-solid fa-file-signature"></i> Cereri ofertă</a>
+        <a href="media.html"><i class="fa-regular fa-images"></i> Media</a>
+        <a href="activity.html"><i class="fa-solid fa-clock-rotate-left"></i> Activitate</a>
+        <a href="site-editor.html"><i class="fa-solid fa-pen-ruler"></i> Site Editor</a>
+        <a class="active" href="settings.html"><i class="fa-solid fa-sliders"></i> Setări site</a>
+        <a id="bcb-admin-users-link" href="users.html" hidden><i class="fa-solid fa-user-shield"></i> Utilizatori</a>
+      </nav>
+      <div class="bcb-admin-sidebar-bottom">
+        <a href="../index.html" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Vezi site-ul</a>
+        <button id="bcb-admin-logout" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i> Deconectare</button>
+      </div>
+    </aside>
+
+    <main class="bcb-admin-main">
+      <header class="bcb-admin-topbar">
+        <div><span class="bcb-admin-eyebrow">BCB Group · Global Website Settings</span><h1>Setări site</h1></div>
+        <div class="bcb-admin-user-card"><div class="bcb-admin-avatar"><i class="fa-solid fa-user-shield"></i></div><div><strong id="settings-user">Administrator</strong><span>Acces complet</span></div></div>
+      </header>
+
+      <section class="settings-hero">
+        <div>
+          <span class="bcb-admin-section-kicker">Sursă unică de date</span>
+          <h2>Modifici o dată. Se actualizează peste tot.</h2>
+          <p>Telefon, email, date juridice, program, social media și footer sunt administrate centralizat. Linkurile tehnice se actualizează împreună cu textele vizibile.</p>
+        </div>
+        <div class="settings-shield"><i class="fa-solid fa-shield-halved"></i><div><strong>Doar Administrator</strong><span>Editorii nu pot vedea sau modifica setările globale ale site-ului.</span></div></div>
+      </section>
+
+      <section class="settings-statusbar">
+        <div><span>Setări disponibile</span><strong id="settings-total">0</strong></div>
+        <div><span>Personalizate</span><strong id="settings-custom">0</strong></div>
+        <div><span>Ultima salvare</span><strong id="settings-last-update">—</strong></div>
+      </section>
+
+      <div id="settings-message" class="settings-message" hidden></div>
+
+      <section class="settings-toolbar">
+        <div id="settings-tabs" class="settings-tabs"></div>
+        <div class="settings-toolbar-actions">
+          <button id="settings-reset-group" class="settings-secondary" type="button"><i class="fa-solid fa-rotate-left"></i> Resetează categoria</button>
+          <button id="settings-save-group" class="settings-primary" type="button"><i class="fa-solid fa-cloud-arrow-up"></i> Salvează categoria</button>
+        </div>
+      </section>
+
+      <section id="settings-content" class="settings-content"><div class="bcb-admin-empty">Se încarcă setările…</div></section>
+    </main>
+  </div>
+
+  <script type="module" src="../js/admin-nav.js"></script>
+  <script type="module" src="../js/admin-settings.js"></script>
+</body>
+</html>
