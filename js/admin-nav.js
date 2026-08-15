@@ -12,6 +12,7 @@ const COMMON_NAV = [
 ];
 
 const ADMIN_NAV = [
+  { href:"employees.html", icon:"fa-users-gear", label:"Angajați", match:["employees.html"] },
   { href:"site-editor.html", icon:"fa-pen-ruler", label:"Site Editor", match:["site-editor.html"] },
   { href:"settings.html", icon:"fa-sliders", label:"Setări site", match:["settings.html"] },
   { href:"data-control.html", icon:"fa-database", label:"Control date", match:["data-control.html"] },
@@ -30,6 +31,7 @@ async function syncAdminNavigation(){
   setupMobileDrawer(); bindAdminLogout(); ensureStyles('../css/admin-owner.css','owner-styles');
   const context=await requireStaffContext(); if(!context)return;
   renderNavigation(context.profile); syncRoleLabel(context.profile);
+  import('./admin-profile.js').then(m=>m.initAdminProfile()).catch(error=>console.error('BCB profile manager:',error));
   if(currentPage()==="fleet.html"){
     ensureStyles('../css/admin-fleet-safety.css','fleet-safety-styles');
     import("./admin-fleet-safety.js").catch(error=>console.error("Fleet safety controls:",error));
