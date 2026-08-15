@@ -134,7 +134,6 @@ alter table public.employee_equipment enable row level security;
 alter table public.hr_alert_settings enable row level security;
 alter table public.hr_alert_log enable row level security;
 
--- Operational HR remains Admin + Owner only.
 do $$
 declare t text;
 begin
@@ -154,25 +153,32 @@ create policy "owner manages hr alert settings" on public.hr_alert_settings for 
 drop policy if exists "admins read hr alert log" on public.hr_alert_log;
 create policy "admins read hr alert log" on public.hr_alert_log for select to authenticated using (public.is_bcb_admin() or public.is_bcb_owner());
 
--- A compact alert feed for the HR dashboard.
 create or replace function public.get_hr_alerts(p_days integer default 30)
 returns table(alert_type text, employee_id uuid, employee_name text, item_id text, title text, due_date date, days_left integer)
 language sql stable security definer set search_path=public as $$
-  select * from (
-    select 'contract'::text,e.id,e.full_name,e.id::text,'Contract angajat'::text,e.contract_end,(e.contract_end-current_date)::int
+  select
+    x.alert_type,
+    x.employee_id,
+    x.employee_name,
+    x.item_id,
+    x.title,
+    x.due_date,
+    x.days_left
+  from (
+    select 'contract'::text as alert_type,e.id as employee_id,e.full_name as employee_name,e.id::text as item_id,'Contract angajat'::text as title,e.contract_end as due_date,(e.contract_end-current_date)::int as days_left
     from employees e where e.contract_end between current_date and current_date + greatest(1,p_days)
     union all
-    select 'document',e.id,e.full_name,d.id::text,d.title,d.expires_at,(d.expires_at-current_date)::int
+    select 'document'::text,e.id,e.full_name,d.id::text,d.title,d.expires_at,(d.expires_at-current_date)::int
     from employee_documents d join employees e on e.id=d.employee_id where d.expires_at between current_date and current_date + greatest(1,p_days)
     union all
-    select 'certification',e.id,e.full_name,c.id::text,c.title,c.expires_on,(c.expires_on-current_date)::int
+    select 'certification'::text,e.id,e.full_name,c.id::text,c.title,c.expires_on,(c.expires_on-current_date)::int
     from employee_certifications c join employees e on e.id=c.employee_id where c.expires_on between current_date and current_date + greatest(1,p_days)
     union all
-    select 'equipment_return',e.id,e.full_name,q.id::text,q.item_name,q.expected_return_on,(q.expected_return_on-current_date)::int
+    select 'equipment_return'::text,e.id,e.full_name,q.id::text,q.item_name,q.expected_return_on,(q.expected_return_on-current_date)::int
     from employee_equipment q join employees e on e.id=q.employee_id where q.status='assigned' and q.expected_return_on between current_date and current_date + greatest(1,p_days)
   ) x
   where public.is_bcb_admin() or public.is_bcb_owner()
-  order by due_date,employee_name;
+  order by x.due_date,x.employee_name;
 $$;
 revoke all on function public.get_hr_alerts(integer) from public,anon;
 grant execute on function public.get_hr_alerts(integer) to authenticated;
