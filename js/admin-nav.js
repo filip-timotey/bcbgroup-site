@@ -17,85 +17,18 @@ const ADMIN_NAV = [
 ];
 
 function currentPage(){ return window.location.pathname.split("/").pop() || "dashboard.html"; }
-
-function makeLink(item, adminOnly=false){
-  const a=document.createElement("a");
-  a.href=item.href;
-  a.dataset.bcbNav="true";
-  if(adminOnly) a.dataset.adminOnly="true";
-  a.innerHTML=`<i class="fa-solid ${item.icon}"></i> ${item.label}`;
-  return a;
-}
-
-function isActive(item){
-  const page=currentPage();
-  if(item.match?.includes(page)) return true;
-  if(page==="dashboard.html" && item.hash && window.location.hash.replace("#","")===item.hash) return true;
-  if(page==="dashboard.html" && item.href==="dashboard.html" && !window.location.hash) return true;
-  return false;
-}
-
-function renderNavigation(profile){
-  const nav=document.querySelector(".bcb-admin-nav");
-  if(!nav) return;
-  const isAdmin=profile?.is_active && profile.role==="admin";
-  const fragment=document.createDocumentFragment();
-
-  [...COMMON_NAV, ...(isAdmin?ADMIN_NAV:[])].forEach(item=>{
-    const link=makeLink(item, ADMIN_NAV.includes(item));
-    link.classList.toggle("active",isActive(item));
-    fragment.appendChild(link);
-  });
-
-  nav.replaceChildren(fragment);
-
-  if(!nav.dataset.hashSync){
-    nav.dataset.hashSync="true";
-    window.addEventListener("hashchange",()=>renderNavigation(profile),{passive:true});
-  }
-}
-
-function setupMobileDrawer(){
-  const sidebar=document.querySelector(".bcb-admin-sidebar");
-  if(!sidebar || document.querySelector(".bcb-mobile-admin-bar")) return;
-
-  const bar=document.createElement("div");
-  bar.className="bcb-mobile-admin-bar";
-  bar.innerHTML=`<div class="bcb-mobile-admin-brand"><img src="../assets/images/logo.png" alt="BCB Group"><span><small>BCB Group</small><strong>Business Manager</strong></span></div><button class="bcb-mobile-admin-menu" type="button" aria-label="Deschide meniul" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>`;
-  const overlay=document.createElement("div");
-  overlay.className="bcb-mobile-admin-overlay";
-  document.body.append(bar,overlay);
-
-  const button=bar.querySelector(".bcb-mobile-admin-menu");
-  const icon=button.querySelector("i");
-  let opened=false;
-  const setOpen=next=>{
-    if(opened===next) return;
-    opened=next;
-    sidebar.classList.toggle("is-mobile-open",next);
-    overlay.classList.toggle("is-open",next);
-    button.setAttribute("aria-expanded",String(next));
-    icon.className=next?"fa-solid fa-xmark":"fa-solid fa-bars";
-    document.body.style.overflow=next?"hidden":"";
-  };
-  button.addEventListener("click",()=>setOpen(!opened));
-  overlay.addEventListener("click",()=>setOpen(false));
-  sidebar.addEventListener("click",e=>{if(e.target.closest("a"))setOpen(false)});
-  document.addEventListener("keydown",e=>{if(e.key==="Escape")setOpen(false)});
-  window.addEventListener("resize",()=>{if(window.innerWidth>620)setOpen(false)},{passive:true});
-}
+function makeLink(item, adminOnly=false){const a=document.createElement("a");a.href=item.href;a.dataset.bcbNav="true";if(adminOnly)a.dataset.adminOnly="true";a.innerHTML=`<i class="fa-solid ${item.icon}"></i> ${item.label}`;return a;}
+function isActive(item){const page=currentPage();if(item.match?.includes(page))return true;if(page==="dashboard.html"&&item.hash&&window.location.hash.replace("#","")===item.hash)return true;if(page==="dashboard.html"&&item.href==="dashboard.html"&&!window.location.hash)return true;return false;}
+function renderNavigation(profile){const nav=document.querySelector(".bcb-admin-nav");if(!nav)return;const isAdmin=profile?.is_active&&profile.role==="admin";const fragment=document.createDocumentFragment();[...COMMON_NAV,...(isAdmin?ADMIN_NAV:[])].forEach(item=>{const link=makeLink(item,ADMIN_NAV.includes(item));link.classList.toggle("active",isActive(item));fragment.appendChild(link);});nav.replaceChildren(fragment);if(!nav.dataset.hashSync){nav.dataset.hashSync="true";window.addEventListener("hashchange",()=>renderNavigation(profile),{passive:true});}}
+function setupMobileDrawer(){const sidebar=document.querySelector(".bcb-admin-sidebar");if(!sidebar||document.querySelector(".bcb-mobile-admin-bar"))return;const bar=document.createElement("div");bar.className="bcb-mobile-admin-bar";bar.innerHTML=`<div class="bcb-mobile-admin-brand"><img src="../assets/images/logo.png" alt="BCB Group"><span><small>BCB Group</small><strong>Business Manager</strong></span></div><button class="bcb-mobile-admin-menu" type="button" aria-label="Deschide meniul" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>`;const overlay=document.createElement("div");overlay.className="bcb-mobile-admin-overlay";document.body.append(bar,overlay);const button=bar.querySelector(".bcb-mobile-admin-menu"),icon=button.querySelector("i");let opened=false;const setOpen=next=>{if(opened===next)return;opened=next;sidebar.classList.toggle("is-mobile-open",next);overlay.classList.toggle("is-open",next);button.setAttribute("aria-expanded",String(next));icon.className=next?"fa-solid fa-xmark":"fa-solid fa-bars";document.body.style.overflow=next?"hidden":"";};button.addEventListener("click",()=>setOpen(!opened));overlay.addEventListener("click",()=>setOpen(false));sidebar.addEventListener("click",e=>{if(e.target.closest("a"))setOpen(false)});document.addEventListener("keydown",e=>{if(e.key==="Escape")setOpen(false)});window.addEventListener("resize",()=>{if(window.innerWidth>620)setOpen(false)},{passive:true});}
 
 async function syncAdminNavigation(){
-  setupMobileDrawer();
-  bindAdminLogout();
-
-  const context=await requireStaffContext();
-  if(!context) return;
+  setupMobileDrawer(); bindAdminLogout();
+  const context=await requireStaffContext(); if(!context)return;
   renderNavigation(context.profile);
-
-  if(context.profile.role==="admin" && currentPage()==="fleet.html") {
-    import("./admin-fleet-delete.js").catch(error=>console.error("Fleet delete controls:",error));
+  if(currentPage()==="fleet.html"){
+    import("./admin-fleet-safety.js").catch(error=>console.error("Fleet safety controls:",error));
+    if(context.profile.role==="admin")import("./admin-fleet-delete.js").catch(error=>console.error("Fleet delete controls:",error));
   }
 }
-
 syncAdminNavigation();
