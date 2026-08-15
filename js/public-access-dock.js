@@ -2,12 +2,21 @@ import { supabase } from "./supabase-client.js";
 import { DEFAULT_SITE_SETTINGS } from "./site-settings-registry.js";
 
 function injectStylesheet() {
-  if (document.querySelector('link[data-bcb-public-access-dock]')) return;
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = "css/public-access-dock.css";
-  link.dataset.bcbPublicAccessDock = "true";
-  document.head.appendChild(link);
+  if (!document.querySelector('link[data-bcb-public-access-dock]')) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "css/public-access-dock.css";
+    link.dataset.bcbPublicAccessDock = "true";
+    document.head.appendChild(link);
+  }
+
+  if (!document.querySelector('link[data-bcb-social-refine]')) {
+    const refine = document.createElement("link");
+    refine.rel = "stylesheet";
+    refine.href = "css/social-icons-refine.css";
+    refine.dataset.bcbSocialRefine = "true";
+    document.head.appendChild(refine);
+  }
 }
 
 function safeManagerUrl(value) {
