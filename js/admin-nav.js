@@ -17,7 +17,7 @@ function addProjectJournalLink() {
   else nav.appendChild(link);
 }
 
-function ensureNavLink(nav, href, icon, label, beforeElement) {
+function ensureNavLink(nav, href, icon, label, beforeElement = null) {
   const existing = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "").split("?")[0] === href);
   if (existing) { existing.hidden = false; return existing; }
   const link = document.createElement("a");
@@ -28,14 +28,13 @@ function ensureNavLink(nav, href, icon, label, beforeElement) {
   return link;
 }
 
-function addFleetLink() {
+function addCommonLinks() {
   const nav = document.querySelector(".bcb-admin-nav");
   if (!nav) return;
-  const userLink = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "users.html");
-  const settingsLink = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "settings.html");
-  const activityLink = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "activity.html");
-  const before = settingsLink || userLink || activityLink?.nextSibling || null;
-  ensureNavLink(nav, "fleet.html", "fa-car-side", "Fleet", before);
+  const activity = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "activity.html");
+  const fleet = ensureNavLink(nav, "fleet.html", "fa-car-side", "Fleet", activity?.nextSibling || null);
+  const current = window.location.pathname.split("/").pop();
+  if (current === "fleet.html") fleet.classList.add("active");
 }
 
 function addAdminOnlyLinks(profile) {
@@ -49,9 +48,55 @@ function addAdminOnlyLinks(profile) {
   ensureNavLink(nav, "settings.html", "fa-sliders", "Setări site", userLink || null);
 }
 
+function setupMobileDrawer() {
+  const sidebar = document.querySelector(".bcb-admin-sidebar");
+  if (!sidebar || document.querySelector(".bcb-mobile-admin-bar")) return;
+
+  const bar = document.createElement("div");
+  bar.className = "bcb-mobile-admin-bar";
+  bar.innerHTML = `
+    <div class="bcb-mobile-admin-brand">
+      <img src="../assets/images/logo.png" alt="BCB Group">
+      <span><small>BCB Group</small><strong>Business Manager</strong></span>
+    </div>
+    <button class="bcb-mobile-admin-menu" type="button" aria-label="Deschide meniul" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>`;
+
+  const overlay = document.createElement("div");
+  overlay.className = "bcb-mobile-admin-overlay";
+  document.body.append(bar, overlay);
+
+  const button = bar.querySelector(".bcb-mobile-admin-menu");
+  const icon = button.querySelector("i");
+
+  const open = () => {
+    sidebar.classList.add("is-mobile-open");
+    overlay.classList.add("is-open");
+    button.setAttribute("aria-expanded", "true");
+    icon.className = "fa-solid fa-xmark";
+    document.body.style.overflow = "hidden";
+  };
+  const close = () => {
+    sidebar.classList.remove("is-mobile-open");
+    overlay.classList.remove("is-open");
+    button.setAttribute("aria-expanded", "false");
+    icon.className = "fa-solid fa-bars";
+    document.body.style.overflow = "";
+  };
+
+  button.addEventListener("click", () => sidebar.classList.contains("is-mobile-open") ? close() : open());
+  overlay.addEventListener("click", close);
+  sidebar.querySelectorAll("a").forEach(a => a.addEventListener("click", close));
+  document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+  window.addEventListener("resize", () => { if (window.innerWidth > 620) close(); });
+}
+
 async function syncAdminNavigation() {
   addProjectJournalLink();
-  addFleetLink();
+  addCommonLinks();
+  setupMobileDrawer();
+
   const { data: sessionData } = await supabase.auth.getSession();
   const session = sessionData.session;
   if (!session) return;
