@@ -27,12 +27,36 @@ function addProjectJournalLink() {
   }
 }
 
+function addAdminOnlyLinks(profile) {
+  if (!profile?.is_active || profile.role !== "admin") return;
+
+  if (usersLink) usersLink.hidden = false;
+
+  const nav = document.querySelector(".bcb-admin-nav");
+  if (!nav || nav.querySelector("[data-site-editor-link]") || window.location.pathname.endsWith("site-editor.html")) return;
+
+  const link = document.createElement("a");
+  link.href = "site-editor.html";
+  link.dataset.siteEditorLink = "true";
+  link.innerHTML = '<i class="fa-solid fa-pen-ruler"></i> Site Editor';
+
+  const activityLink = [...nav.querySelectorAll("a")].find(item => item.textContent.trim().includes("Activitate"));
+  const userLink = nav.querySelector("#bcb-admin-users-link");
+
+  if (userLink) {
+    nav.insertBefore(link, userLink);
+  } else if (activityLink?.nextSibling) {
+    nav.insertBefore(link, activityLink.nextSibling);
+  } else {
+    nav.appendChild(link);
+  }
+}
+
 async function syncAdminNavigation() {
   addProjectJournalLink();
 
   const { data: sessionData } = await supabase.auth.getSession();
   const session = sessionData.session;
-
   if (!session) return;
 
   const { data: profile } = await supabase
@@ -41,9 +65,7 @@ async function syncAdminNavigation() {
     .eq("id", session.user.id)
     .single();
 
-  if (usersLink && profile?.is_active && profile.role === "admin") {
-    usersLink.hidden = false;
-  }
+  addAdminOnlyLinks(profile);
 }
 
 syncAdminNavigation();
