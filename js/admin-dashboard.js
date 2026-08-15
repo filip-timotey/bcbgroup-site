@@ -1,4 +1,5 @@
 import { supabase } from "./supabase-client.js";
+import { requireStaffContext, bindAdminLogout } from "./admin-session.js";
 
 const userName = document.querySelector("#bcb-admin-user-name");
 const userRole = document.querySelector("#bcb-admin-user-role");
@@ -7,7 +8,6 @@ const activeCount = document.querySelector("#bcb-admin-active-count");
 const completedCount = document.querySelector("#bcb-admin-completed-count");
 const mediaCount = document.querySelector("#bcb-admin-media-count");
 const projectsList = document.querySelector("#bcb-admin-projects-list");
-const logoutButton = document.querySelector("#bcb-admin-logout");
 const newProjectButton = document.querySelector(".bcb-admin-primary-action");
 const usersLink = document.querySelector("#bcb-admin-users-link");
 
@@ -30,41 +30,18 @@ function statusLabel(status) {
   return labels[status] || status;
 }
 
-async function requireStaffSession() {
-  const { data: sessionData } = await supabase.auth.getSession();
-  const session = sessionData.session;
-
-  if (!session) {
-    window.location.replace("index.html");
-    return null;
-  }
-
-  const { data: profile, error } = await supabase
-    .from("profiles")
-    .select("id, full_name, role, is_active")
-    .eq("id", session.user.id)
-    .single();
-
-  if (error || !profile?.is_active) {
-    await supabase.auth.signOut();
-    window.location.replace("index.html");
-    return null;
-  }
-
-  return { session, profile };
-}
-
 async function loadDashboard() {
-  const access = await requireStaffSession();
+  const access = await requireStaffContext();
   if (!access) return;
+  bindAdminLogout();
 
   const { profile } = access;
-
   if (userName) userName.textContent = profile.full_name || "BCB User";
   if (userRole) userRole.textContent = profile.role === "admin" ? "Administrator" : "Editor";
   if (usersLink && profile.role === "admin") usersLink.hidden = false;
 
-  if (newProjectButton) {
+  if (newProjectButton && !newProjectButton.dataset.bound) {
+    newProjectButton.dataset.bound = "true";
     newProjectButton.disabled = false;
     newProjectButton.addEventListener("click", () => {
       window.location.href = "project.html";
@@ -94,7 +71,6 @@ async function loadDashboard() {
   if (activeCount) activeCount.textContent = activeProjects;
   if (completedCount) completedCount.textContent = completedProjects;
   if (mediaCount) mediaCount.textContent = mediaTotal || 0;
-
   if (!projectsList) return;
 
   if (!allProjects.length) {
@@ -131,11 +107,6 @@ projectsList?.addEventListener("click", (event) => {
   const row = event.target.closest("[data-project-id]");
   if (!button || !row) return;
   window.location.href = `project.html?id=${encodeURIComponent(row.dataset.projectId)}`;
-});
-
-logoutButton?.addEventListener("click", async () => {
-  await supabase.auth.signOut();
-  window.location.replace("index.html");
 });
 
 loadDashboard();
