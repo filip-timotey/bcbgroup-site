@@ -50,7 +50,9 @@ function createSocialDock(settings) {
   const links = [
     { key:"instagram_url", label:"Instagram", icon:"fa-instagram", className:"is-instagram" },
     { key:"facebook_url", label:"Facebook", icon:"fa-facebook-f", className:"is-facebook" },
-    { key:"tiktok_url", label:"TikTok", icon:"fa-tiktok", className:"is-tiktok" }
+    { key:"tiktok_url", label:"TikTok", icon:"fa-tiktok", className:"is-tiktok" },
+    { key:"linkedin_url", label:"LinkedIn", icon:"fa-linkedin-in", className:"is-linkedin" },
+    { key:"youtube_url", label:"YouTube", icon:"fa-youtube", className:"is-youtube" }
   ].filter(item => settings[item.key]);
 
   if (!links.length) return;
@@ -58,24 +60,19 @@ function createSocialDock(settings) {
   const dock = document.createElement("div");
   dock.className = "bcb26-social-dock reveal delay-4";
   dock.setAttribute("aria-label", "Rețele sociale BCB Group");
-  dock.innerHTML = `
-    <div class="bcb26-social-dock-label">
-      <small>Din teren · în timp real</small>
-      <strong>Urmărește BCB</strong>
-    </div>
-    ${links.map(item => `
+  dock.innerHTML = links.map((item, index) => `
       <a
         class="bcb26-social-link ${item.className}"
         href="${settings[item.key]}"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="${item.label}"
+        data-social-index="${index}"
         data-site-social="${item.key.replace("_url", "")}">
         <i class="fa-brands ${item.icon}" aria-hidden="true"></i>
-      </a>`).join("")}
-  `;
-  area.appendChild(dock);
+      </a>`).join("");
 
+  area.appendChild(dock);
   requestAnimationFrame(() => dock.classList.add("show"));
 }
 
