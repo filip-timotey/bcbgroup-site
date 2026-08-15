@@ -12,7 +12,7 @@ async function resolveStaffContext() {
 
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("id, full_name, email, role, is_active, is_owner")
+    .select("id, full_name, email, role, is_active, is_owner, avatar_path")
     .eq("id", session.user.id)
     .single();
 
