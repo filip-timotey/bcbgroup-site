@@ -10,6 +10,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("BCB public access dock error:", error);
   });
 
+  const currentPublicPage = window.location.pathname.split("/").pop() || "index.html";
+  if ((currentPublicPage === "index.html" || currentPublicPage === "") && !document.querySelector('script[data-bcb-home-hero-media]')) {
+    const heroMediaScript = document.createElement("script");
+    heroMediaScript.type = "module";
+    heroMediaScript.src = "js/home-hero-media.js";
+    heroMediaScript.dataset.bcbHomeHeroMedia = "true";
+    heroMediaScript.onerror = () => console.error("BCB home hero media module could not be loaded.");
+    document.head.appendChild(heroMediaScript);
+  }
+
   async function loadComponent(selector, path) {
     const mount = document.querySelector(selector);
     if (!mount) return false;
