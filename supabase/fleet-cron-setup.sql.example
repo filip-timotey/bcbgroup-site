@@ -1,0 +1,46 @@
+-- BCB FLEET — ONE-TIME CRON SETUP
+-- IMPORTANT: replace ONLY <FLEET_CRON_SECRET> locally in Supabase SQL Editor.
+-- Use the SAME random value in Edge Functions > Secrets as FLEET_CRON_SECRET.
+-- Do not commit the real secret to GitHub.
+
+create extension if not exists pg_cron with schema extensions;
+create extension if not exists pg_net with schema extensions;
+create extension if not exists vault with schema vault;
+
+-- Safe to run once. If a secret already exists with the same name, remove/update it first in Vault UI.
+select vault.create_secret('https://igxkzgsxokdsfgkatkud.supabase.co', 'bcb_fleet_project_url');
+select vault.create_secret('sb_publishable_8uI8lB0bROV4u3Z5B3NaCw_xCEtQ1g-', 'bcb_fleet_publishable_key');
+select vault.create_secret('<FLEET_CRON_SECRET>', 'bcb_fleet_cron_secret');
+
+-- Remove an older version of the job, if present.
+do $$
+declare r record;
+begin
+  for r in select jobid from cron.job where jobname = 'bcb-fleet-monthly-reports' loop
+    perform cron.unschedule(r.jobid);
+  end loop;
+end $$;
+
+-- 01 of every month, 01:10 UTC. The report function automatically selects the previous month.
+select cron.schedule(
+  'bcb-fleet-monthly-reports',
+  '10 1 1 * *',
+  $$
+    select net.http_post(
+      url := (select decrypted_secret from vault.decrypted_secrets where name='bcb_fleet_project_url') || '/functions/v1/generate-fleet-reports',
+      headers := jsonb_build_object(
+        'Content-Type','application/json',
+        'apikey',(select decrypted_secret from vault.decrypted_secrets where name='bcb_fleet_publishable_key'),
+        'x-bcb-cron-secret',(select decrypted_secret from vault.decrypted_secrets where name='bcb_fleet_cron_secret')
+      ),
+      body := jsonb_build_object('send_email', true)
+    )
+    where exists (
+      select 1 from public.fleet_settings
+      where id=true and auto_generate=true
+    );
+  $$
+);
+
+-- Verify:
+-- select jobid, jobname, schedule, active from cron.job where jobname='bcb-fleet-monthly-reports';
