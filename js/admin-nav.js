@@ -17,7 +17,7 @@ function addProjectJournalLink() {
   else nav.appendChild(link);
 }
 
-function ensureAdminLink(nav, href, icon, label, beforeElement) {
+function ensureNavLink(nav, href, icon, label, beforeElement) {
   const existing = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "").split("?")[0] === href);
   if (existing) { existing.hidden = false; return existing; }
   const link = document.createElement("a");
@@ -28,6 +28,16 @@ function ensureAdminLink(nav, href, icon, label, beforeElement) {
   return link;
 }
 
+function addFleetLink() {
+  const nav = document.querySelector(".bcb-admin-nav");
+  if (!nav) return;
+  const userLink = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "users.html");
+  const settingsLink = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "settings.html");
+  const activityLink = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "activity.html");
+  const before = settingsLink || userLink || activityLink?.nextSibling || null;
+  ensureNavLink(nav, "fleet.html", "fa-car-side", "Fleet", before);
+}
+
 function addAdminOnlyLinks(profile) {
   if (!profile?.is_active || profile.role !== "admin") return;
   const nav = document.querySelector(".bcb-admin-nav");
@@ -35,12 +45,13 @@ function addAdminOnlyLinks(profile) {
 
   nav.querySelectorAll("#bcb-admin-users-link,[data-admin-only]").forEach(el => { el.hidden = false; });
   const userLink = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "users.html");
-  ensureAdminLink(nav, "site-editor.html", "fa-pen-ruler", "Site Editor", userLink || null);
-  ensureAdminLink(nav, "settings.html", "fa-sliders", "Setări site", userLink || null);
+  ensureNavLink(nav, "site-editor.html", "fa-pen-ruler", "Site Editor", userLink || null);
+  ensureNavLink(nav, "settings.html", "fa-sliders", "Setări site", userLink || null);
 }
 
 async function syncAdminNavigation() {
   addProjectJournalLink();
+  addFleetLink();
   const { data: sessionData } = await supabase.auth.getSession();
   const session = sessionData.session;
   if (!session) return;
