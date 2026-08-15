@@ -12,7 +12,7 @@ async function resolveStaffContext() {
 
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("id, full_name, email, role, is_active")
+    .select("id, full_name, email, role, is_active, is_owner")
     .eq("id", session.user.id)
     .single();
 
@@ -22,6 +22,14 @@ async function resolveStaffContext() {
   }
 
   return { session, profile };
+}
+
+export function isOwnerProfile(profile) {
+  return Boolean(profile?.is_owner);
+}
+
+export function isAdminProfile(profile) {
+  return Boolean(profile?.is_owner || profile?.role === "admin");
 }
 
 export function getStaffContext() {
@@ -34,7 +42,7 @@ export function getStaffContext() {
   return staffContextPromise;
 }
 
-export async function requireStaffContext({ adminOnly = false, redirect = true } = {}) {
+export async function requireStaffContext({ adminOnly = false, ownerOnly = false, redirect = true } = {}) {
   let context = null;
   try {
     context = await getStaffContext();
@@ -47,7 +55,12 @@ export async function requireStaffContext({ adminOnly = false, redirect = true }
     return null;
   }
 
-  if (adminOnly && context.profile.role !== "admin") {
+  if (ownerOnly && !isOwnerProfile(context.profile)) {
+    if (redirect) window.location.replace("dashboard.html");
+    return null;
+  }
+
+  if (adminOnly && !isAdminProfile(context.profile)) {
     if (redirect) window.location.replace("dashboard.html");
     return null;
   }
