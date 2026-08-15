@@ -10,22 +10,36 @@ function injectStylesheet() {
   document.head.appendChild(link);
 }
 
-function createManagerButton() {
+function safeManagerUrl(value) {
+  const url = String(value || "").trim();
+  if (!url) return "admin/";
+  if (/^https:\/\//i.test(url)) return url;
+  if (/^(\/)?admin\/?(?:[?#].*)?$/i.test(url)) return url;
+  return "admin/";
+}
+
+function createManagerButton(settings) {
   if (window.location.pathname.includes("/admin/")) return;
   if (document.querySelector(".bcb-family-manager")) return;
 
+  const badge = String(settings.manager_badge || DEFAULT_SITE_SETTINGS.manager_badge).trim();
+  const title = String(settings.manager_title || DEFAULT_SITE_SETTINGS.manager_title).trim();
+  const aria = String(settings.manager_aria_label || DEFAULT_SITE_SETTINGS.manager_aria_label).trim();
+
   const link = document.createElement("a");
   link.className = "bcb-family-manager";
-  link.href = "admin/";
-  link.setAttribute("aria-label", "Deschide BCB Business Manager — acces intern Familia Bocoiu");
+  link.href = safeManagerUrl(settings.manager_url);
+  link.setAttribute("aria-label", aria);
   link.innerHTML = `
     <span class="bcb-family-manager-icon" aria-hidden="true"><i class="fa-solid fa-people-roof"></i></span>
     <span class="bcb-family-manager-copy">
-      <small>Familia Bocoiu · Acces intern</small>
-      <strong>Business Manager</strong>
+      <small></small>
+      <strong></strong>
     </span>
     <i class="fa-solid fa-arrow-right bcb-family-manager-arrow" aria-hidden="true"></i>
   `;
+  link.querySelector("small").textContent = badge;
+  link.querySelector("strong").textContent = title;
   document.body.appendChild(link);
 }
 
@@ -52,7 +66,7 @@ function createSocialDock(settings) {
     ${links.map(item => `
       <a
         class="bcb26-social-link ${item.className}"
-        href="${item.key === "instagram_url" ? settings.instagram_url : item.key === "facebook_url" ? settings.facebook_url : settings.tiktok_url}"
+        href="${settings[item.key]}"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="${item.label}"
@@ -82,8 +96,8 @@ async function getSettings() {
 
 export async function initPublicAccessDock() {
   injectStylesheet();
-  createManagerButton();
   const settings = await getSettings();
+  createManagerButton(settings);
   createSocialDock(settings);
 }
 
