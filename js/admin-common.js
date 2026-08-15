@@ -1,18 +1,25 @@
 import { supabase } from "./supabase-client.js";
 
-function addSiteEditorLink(profile) {
+function ensureAdminNavLinks(profile) {
   if (profile?.role !== "admin" || !profile?.is_active) return;
   const nav = document.querySelector(".bcb-admin-nav");
-  if (!nav || nav.querySelector("[data-site-editor-link]") || window.location.pathname.endsWith("site-editor.html")) return;
+  if (!nav) return;
 
-  const link = document.createElement("a");
-  link.href = "site-editor.html";
-  link.dataset.siteEditorLink = "true";
-  link.innerHTML = '<i class="fa-solid fa-pen-ruler"></i> Site Editor';
+  nav.querySelectorAll("[data-admin-only],#bcb-admin-users-link").forEach(el => { el.hidden = false; });
+  const userLink = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "users.html");
 
-  const users = [...nav.querySelectorAll("a")].find(item => item.textContent.trim().includes("Utilizatori"));
-  if (users) nav.insertBefore(link, users);
-  else nav.appendChild(link);
+  const add = (href, icon, label) => {
+    const existing = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === href);
+    if (existing) { existing.hidden = false; return; }
+    const link = document.createElement("a");
+    link.href = href;
+    link.innerHTML = `<i class="fa-solid ${icon}"></i> ${label}`;
+    if (userLink) nav.insertBefore(link, userLink);
+    else nav.appendChild(link);
+  };
+
+  add("site-editor.html", "fa-pen-ruler", "Site Editor");
+  add("settings.html", "fa-sliders", "Setări site");
 }
 
 export async function requireStaff() {
@@ -32,11 +39,8 @@ export async function requireStaff() {
     return null;
   }
 
-  document.querySelectorAll("[data-admin-only]").forEach(el => {
-    el.hidden = profile.role !== "admin";
-  });
-
-  addSiteEditorLink(profile);
+  document.querySelectorAll("[data-admin-only]").forEach(el => { el.hidden = profile.role !== "admin"; });
+  ensureAdminNavLinks(profile);
 
   const name = document.querySelector("#bcb-admin-user-name");
   const role = document.querySelector("#bcb-admin-user-role");
@@ -52,12 +56,7 @@ export async function requireStaff() {
 }
 
 export function esc(value = "") {
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
 
 export function fmtDate(value) {
