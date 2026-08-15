@@ -9,6 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("BCB site content module error:", error);
   });
 
+  import("./site-settings.js").catch(error => {
+    console.error("BCB site settings module error:", error);
+  });
+
   const revealElements = document.querySelectorAll(".reveal");
 
   if ("IntersectionObserver" in window) {
