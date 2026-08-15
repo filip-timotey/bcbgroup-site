@@ -1,0 +1,40 @@
+{
+  "name": "BCB Business Manager",
+  "short_name": "BCB Manager",
+  "description": "Aplicația internă BCB Group pentru echipă, Fleet, HR și operațiuni.",
+  "lang": "ro",
+  "id": "/admin/",
+  "start_url": "/admin/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#f6f0e5",
+  "theme_color": "#20252a",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/assets/images/logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "url": "/admin/dashboard.html"
+    },
+    {
+      "name": "Fleet",
+      "short_name": "Fleet",
+      "url": "/admin/fleet.html"
+    },
+    {
+      "name": "Angajați",
+      "short_name": "Angajați",
+      "url": "/admin/employees.html"
+    }
+  ]
+}
