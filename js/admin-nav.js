@@ -1,6 +1,7 @@
 import { requireStaffContext, bindAdminLogout, isAdminProfile, isOwnerProfile } from "./admin-session.js";
 
 import("./legal-footer.js").catch(error=>console.error("BCB legal footer error:",error));
+import("./pwa-init.js").catch(error=>console.error("BCB PWA init error:",error));
 
 const COMMON_NAV = [
   { href:"dashboard.html", icon:"fa-grid-2", label:"Dashboard", match:["dashboard.html"] },
