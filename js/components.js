@@ -6,6 +6,10 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
 
+  import("./public-access-dock.js").catch(error => {
+    console.error("BCB public access dock error:", error);
+  });
+
   async function loadComponent(selector, path) {
     const mount = document.querySelector(selector);
     if (!mount) return false;
