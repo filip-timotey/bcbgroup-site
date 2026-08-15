@@ -5,6 +5,7 @@ const search = document.querySelector("#quotes-search");
 const filter = document.querySelector("#quotes-filter");
 const refresh = document.querySelector("#quotes-refresh");
 let rows = [];
+let ctx = null;
 
 const labels = { new:"Nouă", contacted:"Contactat", offer_sent:"Ofertă trimisă", accepted:"Acceptată", rejected:"Refuzată", archived:"Arhivată" };
 
@@ -30,6 +31,7 @@ function render() {
         <a class="is-whatsapp" href="https://wa.me/${String(r.phone||"").replace(/\D/g,"").replace(/^0/,"40")}" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
         ${r.email ? `<a href="mailto:${esc(r.email)}"><i class="fa-regular fa-envelope"></i> Email</a>` : ""}
         <button data-action="save"><i class="fa-solid fa-floppy-disk"></i> Salvează</button>
+        ${ctx?.profile?.role === "admin" ? `<button data-action="delete" style="background:#8f3733;color:#fff"><i class="fa-solid fa-trash"></i> Șterge</button>` : ""}
       </div>
     </article>`).join("");
 }
@@ -42,14 +44,28 @@ async function load() {
 }
 
 list?.addEventListener("click", async e => {
-  const btn = e.target.closest("button[data-action='save']");
   const card = e.target.closest("[data-id]");
-  if (!btn || !card) return;
-  btn.disabled = true;
+  if (!card) return;
+  const saveBtn = e.target.closest("button[data-action='save']");
+  const deleteBtn = e.target.closest("button[data-action='delete']");
+
+  if (deleteBtn && ctx?.profile?.role === "admin") {
+    const row = rows.find(r => r.id === card.dataset.id);
+    if (!row) return;
+    if (!confirm(`Ștergi definitiv cererea de ofertă de la ${row.full_name}?`)) return;
+    deleteBtn.disabled = true;
+    const { error } = await supabase.from("quote_requests").delete().eq("id", row.id);
+    if (error) { deleteBtn.disabled = false; alert(error.message); return; }
+    await load();
+    return;
+  }
+
+  if (!saveBtn) return;
+  saveBtn.disabled = true;
   const status = card.querySelector("[data-field='status']")?.value;
   const notes = card.querySelector("[data-field='notes']")?.value.trim() || null;
   const { error } = await supabase.from("quote_requests").update({ status, internal_notes:notes }).eq("id", card.dataset.id);
-  btn.disabled = false;
+  saveBtn.disabled = false;
   if (error) return alert("Nu am putut salva modificarea.");
   await load();
 });
@@ -58,4 +74,4 @@ search?.addEventListener("input", render);
 filter?.addEventListener("change", render);
 refresh?.addEventListener("click", load);
 
-(async()=>{ if (await requireStaff()) await load(); })();
+(async()=>{ ctx = await requireStaff(); if (ctx) await load(); })();
