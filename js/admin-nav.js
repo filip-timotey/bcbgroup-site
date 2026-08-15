@@ -1,5 +1,7 @@
 import { requireStaffContext, bindAdminLogout, isAdminProfile, isOwnerProfile } from "./admin-session.js";
 
+import("./legal-footer.js").catch(error=>console.error("BCB legal footer error:",error));
+
 const COMMON_NAV = [
   { href:"dashboard.html", icon:"fa-grid-2", label:"Dashboard", match:["dashboard.html"] },
   { href:"dashboard.html#projects", icon:"fa-building", label:"Proiecte", match:["project.html","journal.html"], hash:"projects" },
