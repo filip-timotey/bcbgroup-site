@@ -49,7 +49,6 @@ function renderNavigation(profile){
 
   nav.replaceChildren(fragment);
 
-  // When hash changes inside Dashboard, keep the active state synchronized.
   if(!nav.dataset.hashSync){
     nav.dataset.hashSync="true";
     window.addEventListener("hashchange",()=>renderNavigation(profile),{passive:true});
@@ -94,9 +93,6 @@ async function syncAdminNavigation(){
   if(!context) return;
   renderNavigation(context.profile);
 
-  if(currentPage()==="site-editor.html") {
-    import("./admin-site-editor-video.js").catch(error=>console.error("Site Editor video controls:",error));
-  }
   if(context.profile.role==="admin" && currentPage()==="fleet.html") {
     import("./admin-fleet-delete.js").catch(error=>console.error("Fleet delete controls:",error));
   }
