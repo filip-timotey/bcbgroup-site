@@ -44,8 +44,9 @@ function createManagerButton(settings) {
 }
 
 function createSocialDock(settings) {
-  const area = document.querySelector(".bcb26-floating-area");
-  if (!area || area.querySelector(".bcb26-social-dock")) return;
+  const trustItems = document.querySelectorAll(".bcb26-hero-trust > div");
+  const anchor = trustItems[3];
+  if (!anchor || anchor.querySelector(".bcb26-social-dock")) return;
 
   const links = [
     { key:"instagram_url", label:"Instagram", icon:"fa-instagram", className:"is-instagram" },
@@ -57,8 +58,10 @@ function createSocialDock(settings) {
 
   if (!links.length) return;
 
+  anchor.classList.add("bcb26-trust-social-anchor");
+
   const dock = document.createElement("div");
-  dock.className = "bcb26-social-dock reveal delay-4";
+  dock.className = "bcb26-social-dock";
   dock.setAttribute("aria-label", "Rețele sociale BCB Group");
   dock.innerHTML = links.map((item, index) => {
     const configuredUrl = String(settings[item.key] || "").trim();
@@ -77,8 +80,7 @@ function createSocialDock(settings) {
       </a>`;
   }).join("");
 
-  area.appendChild(dock);
-  requestAnimationFrame(() => dock.classList.add("show"));
+  anchor.appendChild(dock);
 }
 
 async function getSettings() {
