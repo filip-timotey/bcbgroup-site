@@ -1,5 +1,22 @@
 import { supabase } from "./supabase-client.js";
 
+function ensureFleetNavLink() {
+  const nav = document.querySelector(".bcb-admin-nav");
+  if (!nav) return;
+  const current = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "fleet.html");
+  if (current) return;
+
+  const link = document.createElement("a");
+  link.href = "fleet.html";
+  link.innerHTML = '<i class="fa-solid fa-car-side"></i> Fleet';
+
+  const activity = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "activity.html");
+  const users = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "users.html");
+  if (activity?.nextSibling) nav.insertBefore(link, activity.nextSibling);
+  else if (users) nav.insertBefore(link, users);
+  else nav.appendChild(link);
+}
+
 function ensureAdminNavLinks(profile) {
   if (profile?.role !== "admin" || !profile?.is_active) return;
   const nav = document.querySelector(".bcb-admin-nav");
@@ -40,6 +57,7 @@ export async function requireStaff() {
   }
 
   document.querySelectorAll("[data-admin-only]").forEach(el => { el.hidden = profile.role !== "admin"; });
+  ensureFleetNavLink();
   ensureAdminNavLinks(profile);
 
   const name = document.querySelector("#bcb-admin-user-name");
