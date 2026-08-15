@@ -1,5 +1,6 @@
 export const SITE_SETTINGS_GROUPS = [
   { key:"identity", label:"Identitate companie", icon:"fa-building" },
+  { key:"internal_access", label:"Acces intern", icon:"fa-shield-halved" },
   { key:"contact", label:"Contact", icon:"fa-address-book" },
   { key:"operations", label:"Program & zonă", icon:"fa-clock" },
   { key:"social", label:"Social Media", icon:"fa-share-nodes" },
@@ -13,6 +14,11 @@ export const SITE_SETTINGS = [
   { key:"cui", group:"identity", label:"CUI", type:"text", defaultValue:"54634520" },
   { key:"trade_register", group:"identity", label:"Registrul Comerțului", type:"text", defaultValue:"J2026030027006" },
   { key:"caen", group:"identity", label:"CAEN principal", type:"textarea", defaultValue:"4100 – Lucrări de construcții ale clădirilor rezidențiale și nerezidențiale" },
+
+  { key:"manager_badge", group:"internal_access", label:"Etichetă buton", type:"text", defaultValue:"Familia Bocoiu · Acces intern", help:"Textul mic afișat deasupra titlului butonului flotant." },
+  { key:"manager_title", group:"internal_access", label:"Titlu buton", type:"text", defaultValue:"Business Manager", help:"Titlul principal al butonului flotant." },
+  { key:"manager_aria_label", group:"internal_access", label:"Descriere accesibilitate", type:"text", defaultValue:"Deschide BCB Business Manager — acces intern Familia Bocoiu", help:"Descriere pentru cititoare de ecran; nu este afișată vizual." },
+  { key:"manager_url", group:"internal_access", label:"Link Business Manager", type:"text", defaultValue:"admin/", help:"Recomandat: admin/. Poți folosi și un URL https complet." },
 
   { key:"phone_display", group:"contact", label:"Telefon — afișare", type:"text", defaultValue:"0770 712 701", help:"Cum apare numărul pe site." },
   { key:"phone_e164", group:"contact", label:"Telefon — format tehnic", type:"tel", defaultValue:"40770712701", help:"Doar cifre, cu prefix de țară. Ex: 40770712701." },
