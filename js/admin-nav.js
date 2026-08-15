@@ -1,127 +1,104 @@
 import { requireStaffContext, bindAdminLogout } from "./admin-session.js";
 
-function addProjectJournalLink() {
-  const currentPath = window.location.pathname;
-  if (!currentPath.endsWith("/admin/project.html") && !currentPath.endsWith("project.html")) return;
-  const projectId = new URLSearchParams(window.location.search).get("id");
-  if (!projectId) return;
+const COMMON_NAV = [
+  { href:"dashboard.html", icon:"fa-grid-2", label:"Dashboard", match:["dashboard.html"] },
+  { href:"dashboard.html#projects", icon:"fa-building", label:"Proiecte", match:["project.html","journal.html"], hash:"projects" },
+  { href:"quotes.html", icon:"fa-file-signature", label:"Cereri ofertă", match:["quotes.html"] },
+  { href:"media.html", icon:"fa-images", label:"Media", match:["media.html"] },
+  { href:"activity.html", icon:"fa-clock-rotate-left", label:"Activitate", match:["activity.html"] },
+  { href:"fleet.html", icon:"fa-car-side", label:"Fleet", match:["fleet.html"] }
+];
 
-  const nav = document.querySelector(".bcb-admin-nav");
-  if (!nav || nav.querySelector("[data-project-journal-link]")) return;
-  const projectsLink = [...nav.querySelectorAll("a")].find((link) => link.textContent.trim().includes("Proiecte"));
-  const link = document.createElement("a");
-  link.href = `journal.html?project=${encodeURIComponent(projectId)}`;
-  link.dataset.projectJournalLink = "true";
-  link.innerHTML = '<i class="fa-solid fa-book-open"></i> Jurnal șantier';
-  if (projectsLink?.nextSibling) nav.insertBefore(link, projectsLink.nextSibling);
-  else nav.appendChild(link);
+const ADMIN_NAV = [
+  { href:"site-editor.html", icon:"fa-pen-ruler", label:"Site Editor", match:["site-editor.html"] },
+  { href:"settings.html", icon:"fa-sliders", label:"Setări site", match:["settings.html"] },
+  { href:"data-control.html", icon:"fa-database", label:"Control date", match:["data-control.html"] },
+  { href:"users.html", icon:"fa-user-shield", label:"Utilizatori", match:["users.html"] }
+];
+
+function currentPage(){ return window.location.pathname.split("/").pop() || "dashboard.html"; }
+
+function makeLink(item, adminOnly=false){
+  const a=document.createElement("a");
+  a.href=item.href;
+  a.dataset.bcbNav="true";
+  if(adminOnly) a.dataset.adminOnly="true";
+  a.innerHTML=`<i class="fa-solid ${item.icon}"></i> ${item.label}`;
+  return a;
 }
 
-function ensureNavLink(nav, href, icon, label, beforeElement = null) {
-  const existing = [...nav.querySelectorAll("a")].find((a) => (a.getAttribute("href") || "").split("?")[0] === href);
-  if (existing) {
-    existing.hidden = false;
-    return existing;
+function isActive(item){
+  const page=currentPage();
+  if(item.match?.includes(page)) return true;
+  if(page==="dashboard.html" && item.hash && window.location.hash.replace("#","")===item.hash) return true;
+  if(page==="dashboard.html" && item.href==="dashboard.html" && !window.location.hash) return true;
+  return false;
+}
+
+function renderNavigation(profile){
+  const nav=document.querySelector(".bcb-admin-nav");
+  if(!nav) return;
+  const isAdmin=profile?.is_active && profile.role==="admin";
+  const fragment=document.createDocumentFragment();
+
+  [...COMMON_NAV, ...(isAdmin?ADMIN_NAV:[])].forEach(item=>{
+    const link=makeLink(item, ADMIN_NAV.includes(item));
+    link.classList.toggle("active",isActive(item));
+    fragment.appendChild(link);
+  });
+
+  nav.replaceChildren(fragment);
+
+  // When hash changes inside Dashboard, keep the active state synchronized.
+  if(!nav.dataset.hashSync){
+    nav.dataset.hashSync="true";
+    window.addEventListener("hashchange",()=>renderNavigation(profile),{passive:true});
   }
-  const link = document.createElement("a");
-  link.href = href;
-  link.innerHTML = `<i class="fa-solid ${icon}"></i> ${label}`;
-  if (beforeElement) nav.insertBefore(link, beforeElement);
-  else nav.appendChild(link);
-  return link;
 }
 
-function setActiveLink(link, page) {
-  if (!link) return;
-  link.classList.toggle("active", window.location.pathname.endsWith(page));
-}
+function setupMobileDrawer(){
+  const sidebar=document.querySelector(".bcb-admin-sidebar");
+  if(!sidebar || document.querySelector(".bcb-mobile-admin-bar")) return;
 
-function addCommonLinks() {
-  const nav = document.querySelector(".bcb-admin-nav");
-  if (!nav) return;
-  const activity = [...nav.querySelectorAll("a")].find((a) => (a.getAttribute("href") || "") === "activity.html");
-  const fleet = ensureNavLink(nav, "fleet.html", "fa-car-side", "Fleet", activity?.nextSibling || null);
-  setActiveLink(fleet, "fleet.html");
-}
+  const bar=document.createElement("div");
+  bar.className="bcb-mobile-admin-bar";
+  bar.innerHTML=`<div class="bcb-mobile-admin-brand"><img src="../assets/images/logo.png" alt="BCB Group"><span><small>BCB Group</small><strong>Business Manager</strong></span></div><button class="bcb-mobile-admin-menu" type="button" aria-label="Deschide meniul" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>`;
+  const overlay=document.createElement("div");
+  overlay.className="bcb-mobile-admin-overlay";
+  document.body.append(bar,overlay);
 
-function addAdminOnlyLinks(profile) {
-  if (!profile?.is_active || profile.role !== "admin") return;
-  const nav = document.querySelector(".bcb-admin-nav");
-  if (!nav) return;
-
-  nav.querySelectorAll("#bcb-admin-users-link,[data-admin-only]").forEach((element) => { element.hidden = false; });
-  const userLink = [...nav.querySelectorAll("a")].find((a) => (a.getAttribute("href") || "") === "users.html");
-  const siteEditor = ensureNavLink(nav, "site-editor.html", "fa-pen-ruler", "Site Editor", userLink || null);
-  const settings = ensureNavLink(nav, "settings.html", "fa-sliders", "Setări site", userLink || null);
-  const dataControl = ensureNavLink(nav, "data-control.html", "fa-database", "Control date", userLink || null);
-
-  setActiveLink(siteEditor, "site-editor.html");
-  setActiveLink(settings, "settings.html");
-  setActiveLink(dataControl, "data-control.html");
-}
-
-function setupMobileDrawer() {
-  const sidebar = document.querySelector(".bcb-admin-sidebar");
-  if (!sidebar || document.querySelector(".bcb-mobile-admin-bar")) return;
-
-  const bar = document.createElement("div");
-  bar.className = "bcb-mobile-admin-bar";
-  bar.innerHTML = `
-    <div class="bcb-mobile-admin-brand">
-      <img src="../assets/images/logo.png" alt="BCB Group">
-      <span><small>BCB Group</small><strong>Business Manager</strong></span>
-    </div>
-    <button class="bcb-mobile-admin-menu" type="button" aria-label="Deschide meniul" aria-expanded="false">
-      <i class="fa-solid fa-bars"></i>
-    </button>`;
-
-  const overlay = document.createElement("div");
-  overlay.className = "bcb-mobile-admin-overlay";
-  document.body.append(bar, overlay);
-
-  const button = bar.querySelector(".bcb-mobile-admin-menu");
-  const icon = button.querySelector("i");
-  let openState = false;
-
-  const setOpen = (next) => {
-    if (openState === next) return;
-    openState = next;
-    sidebar.classList.toggle("is-mobile-open", next);
-    overlay.classList.toggle("is-open", next);
-    button.setAttribute("aria-expanded", String(next));
-    icon.className = next ? "fa-solid fa-xmark" : "fa-solid fa-bars";
-    document.body.style.overflow = next ? "hidden" : "";
+  const button=bar.querySelector(".bcb-mobile-admin-menu");
+  const icon=button.querySelector("i");
+  let opened=false;
+  const setOpen=next=>{
+    if(opened===next) return;
+    opened=next;
+    sidebar.classList.toggle("is-mobile-open",next);
+    overlay.classList.toggle("is-open",next);
+    button.setAttribute("aria-expanded",String(next));
+    icon.className=next?"fa-solid fa-xmark":"fa-solid fa-bars";
+    document.body.style.overflow=next?"hidden":"";
   };
-
-  button.addEventListener("click", () => setOpen(!openState));
-  overlay.addEventListener("click", () => setOpen(false));
-  sidebar.addEventListener("click", (event) => {
-    if (event.target.closest("a")) setOpen(false);
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") setOpen(false);
-  });
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 620) setOpen(false);
-  }, { passive: true });
+  button.addEventListener("click",()=>setOpen(!opened));
+  overlay.addEventListener("click",()=>setOpen(false));
+  sidebar.addEventListener("click",e=>{if(e.target.closest("a"))setOpen(false)});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")setOpen(false)});
+  window.addEventListener("resize",()=>{if(window.innerWidth>620)setOpen(false)},{passive:true});
 }
 
-async function syncAdminNavigation() {
-  addProjectJournalLink();
-  addCommonLinks();
+async function syncAdminNavigation(){
   setupMobileDrawer();
   bindAdminLogout();
 
-  if (window.location.pathname.endsWith("site-editor.html")) {
-    import("./admin-site-editor-video.js").catch((error) => console.error("Site Editor video controls:", error));
+  const context=await requireStaffContext();
+  if(!context) return;
+  renderNavigation(context.profile);
+
+  if(currentPage()==="site-editor.html") {
+    import("./admin-site-editor-video.js").catch(error=>console.error("Site Editor video controls:",error));
   }
-
-  const context = await requireStaffContext();
-  if (!context) return;
-  addAdminOnlyLinks(context.profile);
-
-  if (context.profile.role === "admin" && window.location.pathname.endsWith("fleet.html")) {
-    import("./admin-fleet-delete.js").catch((error) => console.error("Fleet delete controls:", error));
+  if(context.profile.role==="admin" && currentPage()==="fleet.html") {
+    import("./admin-fleet-delete.js").catch(error=>console.error("Fleet delete controls:",error));
   }
 }
 
