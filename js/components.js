@@ -34,10 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const headerLoaded = await loadComponent("#bcb-header", "components/header.html");
   await loadComponent("#bcb-footer", "components/footer.html");
-
-  /* Other public modules can safely synchronize values after this event. */
   document.dispatchEvent(new CustomEvent("bcb:components-loaded"));
-
   if (!headerLoaded) return;
 
   const header = document.querySelector(".bcb26-header");
@@ -45,7 +42,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const mobileMenu = document.querySelector(".bcb26-mobile-menu");
   const mobileOverlay = document.querySelector(".bcb26-mobile-overlay");
   const mobileLinks = document.querySelectorAll(".bcb26-mobile-menu a");
-
   const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
   document.querySelectorAll(".bcb26-nav a, .bcb26-mobile-menu nav a").forEach(link => {
@@ -74,33 +70,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.body.style.overflow = "";
   }
 
-  menuToggle?.addEventListener("click", () => menuToggle.classList.contains("is-open") ? close() : openMenu());
+  menuToggle?.addEventListener("click", () => menuToggle.classList.contains("is-open") ? closeMenu() : openMenu());
   mobileOverlay?.addEventListener("click", closeMenu);
   mobileLinks.forEach(link => link.addEventListener("click", closeMenu));
   document.addEventListener("keydown", event => { if (event.key === "Escape") closeMenu(); });
   window.addEventListener("resize", () => { if (window.innerWidth > 850) closeMenu(); });
 
   if (!header) return;
-
   let lastScrollY = window.scrollY;
   let ticking = false;
 
   function updateHeader() {
     const scrollY = window.scrollY;
     const scrollingDown = scrollY > lastScrollY;
-
     if (scrollY <= 30) {
       header.classList.remove("is-scrolled", "is-fading", "is-hidden", "is-visible-up");
       header.style.opacity = "1";
       header.style.transform = "translateX(-50%) translateY(0)";
-    } else if (scrollY > 30 && scrollY <= 220) {
+    } else if (scrollY <= 220) {
       header.classList.add("is-scrolled", "is-fading");
       header.classList.remove("is-hidden", "is-visible-up");
       const progress = Math.min(1, (scrollY - 30) / 190);
-      const opacity = 1 - (progress * 0.70);
-      const moveY = progress * -9;
-      header.style.opacity = opacity.toFixed(2);
-      header.style.transform = `translateX(-50%) translateY(${moveY}px)`;
+      header.style.opacity = (1 - progress * .70).toFixed(2);
+      header.style.transform = `translateX(-50%) translateY(${progress * -9}px)`;
     } else {
       header.classList.add("is-scrolled");
       if (scrollingDown) {
@@ -117,7 +109,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         header.style.pointerEvents = "auto";
       }
     }
-
     if (scrollY <= 220) header.style.pointerEvents = "auto";
     lastScrollY = Math.max(scrollY, 0);
     ticking = false;
@@ -129,6 +120,5 @@ document.addEventListener("DOMContentLoaded", async () => {
       ticking = true;
     }
   }, { passive:true });
-
   updateHeader();
 });
