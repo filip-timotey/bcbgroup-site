@@ -32,6 +32,7 @@ async function syncAdminNavigation(){
   const context=await requireStaffContext(); if(!context)return;
   renderNavigation(context.profile); syncRoleLabel(context.profile);
   import('./admin-profile.js').then(m=>m.initAdminProfile()).catch(error=>console.error('BCB profile manager:',error));
+  if(currentPage()==='users.html') import('./admin-user-avatars.js').catch(error=>console.error('BCB user avatars:',error));
   if(currentPage()==="fleet.html"){
     ensureStyles('../css/admin-fleet-safety.css','fleet-safety-styles');
     import("./admin-fleet-safety.js").catch(error=>console.error("Fleet safety controls:",error));
