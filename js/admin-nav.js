@@ -46,6 +46,8 @@ function addAdminOnlyLinks(profile) {
   const userLink = [...nav.querySelectorAll("a")].find(a => (a.getAttribute("href") || "") === "users.html");
   ensureNavLink(nav, "site-editor.html", "fa-pen-ruler", "Site Editor", userLink || null);
   ensureNavLink(nav, "settings.html", "fa-sliders", "Setări site", userLink || null);
+  const dataControl = ensureNavLink(nav, "data-control.html", "fa-database", "Control date", userLink || null);
+  if (window.location.pathname.endsWith("data-control.html")) dataControl.classList.add("active");
 }
 
 function setupMobileDrawer() {
@@ -102,6 +104,10 @@ async function syncAdminNavigation() {
   if (!session) return;
   const { data: profile } = await supabase.from("profiles").select("role, is_active").eq("id", session.user.id).single();
   addAdminOnlyLinks(profile);
+
+  if (profile?.role === "admin" && window.location.pathname.endsWith("fleet.html")) {
+    import("./admin-fleet-delete.js").catch(error => console.error("Fleet delete controls:", error));
+  }
 }
 
 syncAdminNavigation();
