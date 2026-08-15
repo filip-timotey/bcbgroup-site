@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="../assets/images/logo.png">
+  <title>Site Editor | BCB Business Manager</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin-2026.css">
+  <link rel="stylesheet" href="../css/admin-nav.css">
+  <link rel="stylesheet" href="../css/admin-site-editor.css">
+</head>
+<body class="bcb-admin-body">
+  <div class="bcb-admin-app">
+    <aside class="bcb-admin-sidebar">
+      <a href="dashboard.html" class="bcb-admin-sidebar-logo"><img src="../assets/images/logo.png" alt="BCB Group"></a>
+      <div class="bcb-admin-sidebar-title"><span>BCB</span><strong>Business Manager</strong></div>
+      <nav class="bcb-admin-nav" aria-label="Administrare BCB">
+        <a href="dashboard.html"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
+        <a href="dashboard.html#projects"><i class="fa-solid fa-building"></i> Proiecte</a>
+        <a href="quotes.html"><i class="fa-solid fa-file-signature"></i> Cereri ofertă</a>
+        <a href="media.html"><i class="fa-regular fa-images"></i> Media</a>
+        <a href="activity.html"><i class="fa-solid fa-clock-rotate-left"></i> Activitate</a>
+        <a class="active" href="site-editor.html"><i class="fa-solid fa-pen-ruler"></i> Site Editor</a>
+        <a id="bcb-admin-users-link" href="users.html" hidden><i class="fa-solid fa-user-shield"></i> Utilizatori</a>
+      </nav>
+      <div class="bcb-admin-sidebar-bottom">
+        <a href="../index.html" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Vezi site-ul</a>
+        <button id="bcb-admin-logout" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i> Deconectare</button>
+      </div>
+    </aside>
+
+    <main class="bcb-admin-main">
+      <header class="bcb-admin-topbar">
+        <div><span class="bcb-admin-eyebrow">BCB Group · Website CMS</span><h1>Site Editor</h1></div>
+        <div class="bcb-admin-user-card"><div class="bcb-admin-avatar"><i class="fa-solid fa-user-shield"></i></div><div><strong id="site-editor-user">Administrator</strong><span>Acces complet</span></div></div>
+      </header>
+
+      <section class="site-editor-hero">
+        <div><span class="bcb-admin-section-kicker">Administrare website</span><h2>Editează site-ul fără cod.</h2><p>Schimbă textele, titlurile și imaginile aprobate fără să atingi HTML-ul sau CSS-ul. Modificările se publică automat pe site.</p></div>
+        <div class="site-editor-safe"><i class="fa-solid fa-shield-halved"></i><div><strong>Design protejat</strong><span>Structura și stilurile nu pot fi modificate accidental.</span></div></div>
+      </section>
+
+      <div id="site-editor-message" class="site-editor-message" hidden></div>
+
+      <section class="site-editor-toolbar">
+        <div id="site-editor-tabs" class="site-editor-tabs"></div>
+        <a id="site-editor-preview" class="site-editor-preview" href="../index.html" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Deschide pagina</a>
+      </section>
+
+      <section id="site-editor-content" class="site-editor-content">
+        <div class="bcb-admin-empty">Se încarcă editorul…</div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="../js/admin-nav.js"></script>
+  <script type="module" src="../js/admin-site-editor.js"></script>
+</body>
+</html>
