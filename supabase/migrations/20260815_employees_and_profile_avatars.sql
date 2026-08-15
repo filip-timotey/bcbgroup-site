@@ -57,7 +57,6 @@ create table if not exists public.employee_documents (
 );
 create index if not exists employee_documents_employee_idx on public.employee_documents(employee_id, expires_at);
 
--- Owner-only sensitive compensation data.
 create table if not exists public.employee_compensation (
   employee_id uuid primary key references public.employees(id) on delete cascade,
   salary_net numeric(12,2),
@@ -87,7 +86,6 @@ as $$
     where p.id = auth.uid() and p.is_active = true and p.is_owner = true
   );
 $$;
-
 revoke all on function public.is_bcb_owner() from public, anon;
 grant execute on function public.is_bcb_owner() to authenticated;
 
@@ -119,7 +117,6 @@ alter table public.employees enable row level security;
 alter table public.employee_documents enable row level security;
 alter table public.employee_compensation enable row level security;
 
--- HR operational data: Admin + Owner only.
 drop policy if exists "bcb admins view employees" on public.employees;
 create policy "bcb admins view employees" on public.employees for select to authenticated
 using (public.is_bcb_admin() or public.is_bcb_owner());
@@ -128,7 +125,6 @@ create policy "bcb admins manage employees" on public.employees for all to authe
 using (public.is_bcb_admin() or public.is_bcb_owner())
 with check (public.is_bcb_admin() or public.is_bcb_owner());
 
--- Documents: Admin + Owner only.
 drop policy if exists "bcb admins view employee documents" on public.employee_documents;
 create policy "bcb admins view employee documents" on public.employee_documents for select to authenticated
 using (public.is_bcb_admin() or public.is_bcb_owner());
@@ -137,7 +133,6 @@ create policy "bcb admins manage employee documents" on public.employee_document
 using (public.is_bcb_admin() or public.is_bcb_owner())
 with check (public.is_bcb_admin() or public.is_bcb_owner());
 
--- Compensation: Owner only.
 drop policy if exists "owner view compensation" on public.employee_compensation;
 create policy "owner view compensation" on public.employee_compensation for select to authenticated
 using (public.is_bcb_owner());
@@ -145,13 +140,28 @@ drop policy if exists "owner manage compensation" on public.employee_compensatio
 create policy "owner manage compensation" on public.employee_compensation for all to authenticated
 using (public.is_bcb_owner()) with check (public.is_bcb_owner());
 
--- Profiles: every active staff member may update only their own avatar_path.
+-- IMPORTANT: do not grant direct UPDATE on profiles to editors merely for avatars.
+-- This security-definer RPC updates only avatar_path for the authenticated user.
 drop policy if exists "staff update own avatar" on public.profiles;
-create policy "staff update own avatar" on public.profiles for update to authenticated
-using (id = auth.uid() and is_active = true)
-with check (id = auth.uid() and is_active = true);
+create or replace function public.set_own_avatar(p_avatar_path text)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if auth.uid() is null then raise exception 'Autentificare necesară.'; end if;
+  if not exists(select 1 from public.profiles where id=auth.uid() and is_active=true) then
+    raise exception 'Cont inactiv sau inexistent.';
+  end if;
+  if p_avatar_path is not null and p_avatar_path !~ ('^' || auth.uid()::text || '/[A-Za-z0-9._-]+$') then
+    raise exception 'Cale avatar invalidă.';
+  end if;
+  update public.profiles set avatar_path = p_avatar_path where id = auth.uid();
+end; $$;
+revoke all on function public.set_own_avatar(text) from public, anon;
+grant execute on function public.set_own_avatar(text) to authenticated;
 
--- Private profile avatar bucket. Files stored as <user-id>/avatar.ext
 insert into storage.buckets (id,name,public,file_size_limit,allowed_mime_types)
 values ('profile-avatars','profile-avatars',false,8388608,array['image/jpeg','image/png','image/webp'])
 on conflict (id) do update set
@@ -159,12 +169,9 @@ on conflict (id) do update set
   file_size_limit=excluded.file_size_limit,
   allowed_mime_types=excluded.allowed_mime_types;
 
--- Active staff can view profile photos used throughout Business Manager.
 drop policy if exists "staff read profile avatars" on storage.objects;
 create policy "staff read profile avatars" on storage.objects for select to authenticated
 using (bucket_id='profile-avatars' and public.is_bcb_staff());
-
--- A user can upload/update/delete only inside their own folder.
 drop policy if exists "staff upload own avatar" on storage.objects;
 create policy "staff upload own avatar" on storage.objects for insert to authenticated
 with check (bucket_id='profile-avatars' and (storage.foldername(name))[1]=auth.uid()::text and public.is_bcb_staff());
@@ -176,7 +183,6 @@ drop policy if exists "staff delete own avatar" on storage.objects;
 create policy "staff delete own avatar" on storage.objects for delete to authenticated
 using (bucket_id='profile-avatars' and (storage.foldername(name))[1]=auth.uid()::text);
 
--- Private HR documents bucket.
 insert into storage.buckets (id,name,public,file_size_limit,allowed_mime_types)
 values ('employee-documents','employee-documents',false,26214400,array['application/pdf','image/jpeg','image/png','image/webp'])
 on conflict (id) do update set
