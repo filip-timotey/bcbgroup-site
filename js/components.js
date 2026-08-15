@@ -10,6 +10,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("BCB public access dock error:", error);
   });
 
+  import("./legal-footer.js").catch(error => {
+    console.error("BCB legal footer error:", error);
+  });
+
   const currentPublicPage = window.location.pathname.split("/").pop() || "index.html";
   if ((currentPublicPage === "index.html" || currentPublicPage === "") && !document.querySelector('script[data-bcb-home-hero-media]')) {
     const heroMediaScript = document.createElement("script");
