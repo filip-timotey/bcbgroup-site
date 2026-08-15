@@ -7,6 +7,10 @@ const previewLink = document.querySelector("#site-editor-preview");
 const messageBox = document.querySelector("#site-editor-message");
 const userBox = document.querySelector("#site-editor-user");
 const logoutButton = document.querySelector("#bcb-admin-logout");
+const searchInput = document.querySelector("#site-editor-search");
+const pageNameBox = document.querySelector("#site-editor-page-name");
+const fieldCountBox = document.querySelector("#site-editor-field-count");
+const changedCountBox = document.querySelector("#site-editor-changed-count");
 
 let currentUser = null;
 let currentPage = "home";
@@ -35,29 +39,60 @@ function displayImageUrl(value) {
   return `../${value.replace(/^\.\//, "")}`;
 }
 
+function currentPageDefinition() {
+  return SITE_EDITOR_PAGES.find((item) => item.key === currentPage);
+}
+
+function pageFields() {
+  return SITE_EDITOR_FIELDS.filter((field) => field.page === currentPage);
+}
+
+function updateStats() {
+  const fields = pageFields();
+  const page = currentPageDefinition();
+  const changed = fields.filter((field) => overrides.has(field.key)).length;
+  if (pageNameBox) pageNameBox.textContent = page?.label || currentPage;
+  if (fieldCountBox) fieldCountBox.textContent = fields.length;
+  if (changedCountBox) changedCountBox.textContent = changed;
+}
+
 function renderTabs() {
   tabs.innerHTML = SITE_EDITOR_PAGES.map((page) => `
     <button type="button" class="site-editor-tab ${page.key === currentPage ? "is-active" : ""}" data-page="${page.key}">${escapeHtml(page.label)}</button>
   `).join("");
 
-  const page = SITE_EDITOR_PAGES.find((item) => item.key === currentPage);
+  const page = currentPageDefinition();
   if (page && previewLink) previewLink.href = page.url;
+  updateStats();
 }
 
 function renderEditor() {
-  const fields = SITE_EDITOR_FIELDS.filter((field) => field.page === currentPage);
-  const groups = [...new Set(fields.map((field) => field.group))];
+  const query = (searchInput?.value || "").trim().toLowerCase();
+  const allFields = pageFields();
+  const fields = !query ? allFields : allFields.filter((field) => {
+    const haystack = `${field.group} ${field.label} ${field.defaultValue || ""}`.toLowerCase();
+    return haystack.includes(query);
+  });
+
+  updateStats();
 
   if (!fields.length) {
-    content.innerHTML = '<div class="bcb-admin-empty">Nu există încă elemente editabile pentru această pagină.</div>';
+    content.innerHTML = query
+      ? '<div class="bcb-admin-empty">Nu am găsit niciun câmp pentru căutarea ta.</div>'
+      : '<div class="bcb-admin-empty">Nu există încă elemente editabile pentru această pagină.</div>';
     return;
   }
 
+  const groups = [...new Set(fields.map((field) => field.group))];
   content.innerHTML = groups.map((group) => {
     const groupFields = fields.filter((field) => field.group === group);
+    const changedInGroup = groupFields.filter((field) => overrides.has(field.key)).length;
     return `
       <section class="site-editor-group">
-        <div class="site-editor-group-heading"><div><span>Conținut editabil</span><h3>${escapeHtml(group)}</h3></div></div>
+        <div class="site-editor-group-heading">
+          <div><span>Conținut editabil</span><h3>${escapeHtml(group)}</h3></div>
+          <small>${changedInGroup ? `${changedInGroup} personalizat${changedInGroup === 1 ? "" : "e"}` : `${groupFields.length} câmp${groupFields.length === 1 ? "" : "uri"}`}</small>
+        </div>
         <div class="site-editor-fields">
           ${groupFields.map(renderField).join("")}
         </div>
@@ -134,6 +169,7 @@ async function loadOverrides() {
   }
 
   overrides = new Map((data || []).map((item) => [item.content_key, item]));
+  updateStats();
   return true;
 }
 
@@ -238,9 +274,12 @@ tabs?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-page]");
   if (!button) return;
   currentPage = button.dataset.page;
+  if (searchInput) searchInput.value = "";
   renderTabs();
   renderEditor();
 });
+
+searchInput?.addEventListener("input", renderEditor);
 
 content?.addEventListener("click", async (event) => {
   const button = event.target.closest("button[data-action]");
