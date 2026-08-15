@@ -5,6 +5,7 @@ const search = document.querySelector("#media-search");
 const projectFilter = document.querySelector("#media-project-filter");
 let items = [];
 let projects = new Map();
+let ctx = null;
 
 function publicUrl(path){ return supabase.storage.from("project-media").getPublicUrl(path).data.publicUrl; }
 
@@ -21,7 +22,7 @@ function render(){
     const url=publicUrl(item.storage_path);
     const project=projects.get(item.project_id);
     const preview=item.media_type==="video"?`<video src="${esc(url)}" controls muted preload="metadata"></video>`:`<img src="${esc(url)}" alt="Media BCB" loading="lazy">`;
-    return `<article>${preview}<footer><strong>${esc(project?.title||"Proiect")}</strong><span>${esc(item.title||item.media_type)}</span><div class="bcb-biz-card-actions"><a href="project.html?id=${encodeURIComponent(item.project_id)}"><i class="fa-solid fa-pen"></i> Deschide proiectul</a></div></footer></article>`;
+    return `<article data-media-id="${esc(item.id)}">${preview}<footer><strong>${esc(project?.title||"Proiect")}</strong><span>${esc(item.title||item.media_type)}</span><div class="bcb-biz-card-actions"><a href="project.html?id=${encodeURIComponent(item.project_id)}"><i class="fa-solid fa-pen"></i> Deschide proiectul</a>${ctx?.profile?.role==="admin"?`<button data-action="delete-media" style="background:#8f3733;color:#fff"><i class="fa-solid fa-trash"></i> Șterge</button>`:""}</div></footer></article>`;
   }).join("");
 }
 
@@ -37,6 +38,20 @@ async function load(){
   render();
 }
 
+library?.addEventListener("click",async e=>{
+  const btn=e.target.closest("button[data-action='delete-media']");
+  if(!btn||ctx?.profile?.role!=="admin")return;
+  const card=e.target.closest("[data-media-id]");
+  const item=items.find(x=>x.id===card?.dataset.mediaId);
+  if(!item)return;
+  if(!confirm(`Ștergi definitiv acest ${item.media_type==='video'?'video':'fișier media'}? Va fi eliminat și din Storage.`))return;
+  btn.disabled=true;
+  if(item.storage_path){const rm=await supabase.storage.from("project-media").remove([item.storage_path]);if(rm.error){btn.disabled=false;alert(rm.error.message);return;}}
+  const {error}=await supabase.from("project_media").delete().eq("id",item.id);
+  if(error){btn.disabled=false;alert(error.message);return;}
+  await load();
+});
+
 search?.addEventListener("input",render);
 projectFilter?.addEventListener("change",render);
-(async()=>{ if(await requireStaff()) await load(); })();
+(async()=>{ ctx=await requireStaff(); if(ctx) await load(); })();
