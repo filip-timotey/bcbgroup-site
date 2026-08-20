@@ -32,6 +32,8 @@ async function syncAdminNavigation(){
   setupMobileDrawer(); bindAdminLogout(); ensureStyles('../css/admin-owner.css','owner-styles');
   const context=await requireStaffContext(); if(!context)return;
   renderNavigation(context.profile); syncRoleLabel(context.profile);
+  ensureStyles('../css/admin-copilot.css','copilot-styles');
+  import('./admin-copilot.js').catch(error=>console.error('BCB AI Copilot:',error));
   import('./admin-profile.js').then(m=>m.initAdminProfile()).catch(error=>console.error('BCB profile manager:',error));
   if(currentPage()==='users.html') import('./admin-user-avatars.js').catch(error=>console.error('BCB user avatars:',error));
   if(currentPage()==="fleet.html"){
