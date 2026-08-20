@@ -1,59 +1,79 @@
 import { supabase } from "./supabase-client.js";
 
-const form = document.getElementById("oferta");
+const form=document.getElementById("oferta");
 
-if (form) {
-  form.addEventListener("submit", async (event) => {
+function buildPayload(fd,requestId){
+  return {
+    external_request_id:requestId,
+    full_name:String(fd.get("Nume client")||"").trim(),
+    phone:String(fd.get("Telefon")||"").trim(),
+    email:String(fd.get("email")||"").trim()||null,
+    location:String(fd.get("Zona")||"").trim()||null,
+    project_type:String(fd.get("Tip proiect")||"").trim()||null,
+    estimated_budget:String(fd.get("Buget estimativ")||"").trim()||null,
+    desired_start:String(fd.get("Perioada dorită")||"").trim()||null,
+    project_stage:String(fd.get("Etapa proiectului")||"").trim()||null,
+    message:String(fd.get("Mesaj")||"").trim(),
+    website:String(fd.get("website")||"").trim()
+  };
+}
+
+async function saveToManager(payload){
+  try{
+    const {data,error}=await supabase.functions.invoke("submit-quote-request",{body:payload});
+    if(!error&&data?.success)return {ok:true,data};
+    if(error)console.warn("BCB CRM intake function:",error);
+  }catch(error){console.warn("BCB CRM intake unavailable:",error);}
+
+  // Compatibility fallback for cached/older deployments. The public RLS policy
+  // still accepts website leads, and external_request_id prevents duplicates.
+  try{
+    const {error}=await supabase.from("quote_requests").insert({
+      external_request_id:payload.external_request_id,
+      full_name:payload.full_name,phone:payload.phone,email:payload.email,location:payload.location,
+      project_type:payload.project_type,estimated_budget:payload.estimated_budget,desired_start:payload.desired_start,
+      project_stage:payload.project_stage,message:payload.message,status:"new",source:"website"
+    });
+    if(!error||error?.code==="23505")return {ok:true,fallback:true};
+    console.warn("BCB CRM direct fallback:",error.message);
+  }catch(error){console.warn("BCB CRM direct fallback error:",error);}
+  return {ok:false};
+}
+
+async function sendFormspree(fd){
+  try{
+    const response=await fetch("https://formspree.io/f/xkolagbg",{method:"POST",body:fd,headers:{Accept:"application/json"}});
+    return response.ok;
+  }catch{return false;}
+}
+
+if(form){
+  if(!form.querySelector('[name="website"]')){
+    const honeypot=document.createElement("input");honeypot.type="text";honeypot.name="website";honeypot.tabIndex=-1;honeypot.autocomplete="off";honeypot.setAttribute("aria-hidden","true");honeypot.style.cssText="position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important";form.appendChild(honeypot);
+  }
+
+  form.addEventListener("submit",async event=>{
     event.preventDefault();
+    if(form.dataset.submitting==="true")return;
+    form.dataset.submitting="true";
+    const submitButton=form.querySelector("button[type='submit']"),originalButton=submitButton?.innerHTML;
+    if(submitButton){submitButton.disabled=true;submitButton.innerHTML='<i class="fa-solid fa-circle-notch fa-spin"></i> Se înregistrează...';}
 
-    const submitButton = form.querySelector("button[type='submit']");
-    const originalButton = submitButton?.innerHTML;
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Se trimite...';
-    }
+    const fd=new FormData(form);
+    const requestId=form.dataset.requestId||(crypto.randomUUID?.()||`${Date.now()}-${Math.random().toString(16).slice(2)}`);
+    form.dataset.requestId=requestId;
+    const payload=buildPayload(fd,requestId);
 
-    const fd = new FormData(form);
-    const payload = {
-      full_name: String(fd.get("Nume client") || "").trim(),
-      phone: String(fd.get("Telefon") || "").trim(),
-      email: String(fd.get("email") || "").trim() || null,
-      location: String(fd.get("Zona") || "").trim() || null,
-      project_type: String(fd.get("Tip proiect") || "").trim() || null,
-      estimated_budget: String(fd.get("Buget estimativ") || "").trim() || null,
-      desired_start: String(fd.get("Perioada dorită") || "").trim() || null,
-      project_stage: String(fd.get("Etapa proiectului") || "").trim() || null,
-      message: String(fd.get("Mesaj") || "").trim(),
-      status: "new",
-      source: "website"
-    };
-
-    let storedInManager = false;
-
-    try {
-      const { error } = await supabase.from("quote_requests").insert(payload);
-      storedInManager = !error;
-      if (error) console.warn("BCB quote sync not available yet:", error.message);
-    } catch (error) {
-      console.warn("BCB quote sync error:", error);
-    }
-
-    try {
-      const response = await fetch("https://formspree.io/f/xkolagbg", {
-        method: "POST",
-        body: fd,
-        headers: { Accept: "application/json" }
-      });
-
-      if (!response.ok && !storedInManager) throw new Error("Form submission failed");
-      window.location.href = "multumim.html";
-    } catch (error) {
-      console.error("BCB contact form error:", error);
-      alert("A apărut o problemă. Te rugăm să încerci din nou sau să ne contactezi telefonic.");
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.innerHTML = originalButton;
-      }
+    try{
+      const [manager,formspree]=await Promise.all([saveToManager(payload),sendFormspree(fd)]);
+      if(!manager.ok&&!formspree)throw new Error("All quote delivery channels failed");
+      sessionStorage.setItem("bcb-last-quote-request",JSON.stringify({id:manager.data?.id||null,at:Date.now()}));
+      window.location.href="multumim.html";
+    }catch(error){
+      console.error("BCB contact form error:",error);
+      alert("A apărut o problemă la trimitere. Datele nu s-au pierdut din formular; încearcă din nou sau contactează-ne telefonic.");
+      form.dataset.submitting="false";
+      if(submitButton){submitButton.disabled=false;submitButton.innerHTML=originalButton;}
     }
   });
 }
