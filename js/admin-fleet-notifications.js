@@ -16,7 +16,7 @@ async function loadState(){
   ]);
   renderTripMonitor(trip,settings||{});
   if(isAdmin())renderAdminSettings(settings||{});
-  if(trip&&Notification?.permission==="granted"){
+  if(trip&&("Notification" in window)&&Notification.permission==="granted"){
     ensureFleetPushSubscription({requestPermission:false}).then(result=>{
       if(result?.ok)return notifyFleetTripPush("refresh",trip.id);
     }).catch(error=>console.warn("BCB Fleet push restore:",error));
