@@ -2,11 +2,11 @@ import { requireStaff, supabase, esc } from "./admin-common.js";
 
 let ctx=null,busy=false;
 const $=(s)=>document.querySelector(s);
-const HISTORY_KEY="bcb-ai-history-v3";
+const HISTORY_KEY="bcb-ai-history-v4";
 let conversation=loadHistory();
 
-function loadHistory(){try{const raw=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");return Array.isArray(raw)?raw.slice(-10).filter(x=>x&&["user","assistant"].includes(x.role)&&typeof x.content==="string"):[];}catch{return [];}}
-function saveHistory(){try{localStorage.setItem(HISTORY_KEY,JSON.stringify(conversation.slice(-10)));}catch{}}
+function loadHistory(){try{const raw=JSON.parse(sessionStorage.getItem(HISTORY_KEY)||"[]");return Array.isArray(raw)?raw.slice(-10).filter(x=>x&&["user","assistant"].includes(x.role)&&typeof x.content==="string"):[];}catch{return [];}}
+function saveHistory(){try{sessionStorage.setItem(HISTORY_KEY,JSON.stringify(conversation.slice(-10)));}catch{}}
 function clearHistory(){conversation=[];saveHistory();const root=$("#bcb-copilot-messages");if(root)root.innerHTML=welcomeMarkup();}
 function currentPage(){return `${location.pathname.split('/').pop()||'dashboard.html'}${location.hash||''}`;}
 
