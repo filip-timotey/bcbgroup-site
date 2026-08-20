@@ -2,74 +2,26 @@ import "./admin-nav.js";
 import { supabase } from "./supabase-client.js";
 import { requireStaffContext, bindAdminLogout } from "./admin-session.js";
 
-const userName = document.querySelector("#bcb-admin-user-name");
-const userRole = document.querySelector("#bcb-admin-user-role");
-const projectsCount = document.querySelector("#bcb-admin-projects-count");
-const activeCount = document.querySelector("#bcb-admin-active-count");
-const completedCount = document.querySelector("#bcb-admin-completed-count");
-const mediaCount = document.querySelector("#bcb-admin-media-count");
-const projectsList = document.querySelector("#bcb-admin-projects-list");
-const newProjectButton = document.querySelector(".bcb-admin-primary-action");
+const userName=document.querySelector("#bcb-admin-user-name"),userRole=document.querySelector("#bcb-admin-user-role"),projectsCount=document.querySelector("#bcb-admin-projects-count"),activeCount=document.querySelector("#bcb-admin-active-count"),completedCount=document.querySelector("#bcb-admin-completed-count"),mediaCount=document.querySelector("#bcb-admin-media-count"),projectsList=document.querySelector("#bcb-admin-projects-list"),newProjectButton=document.querySelector(".bcb-admin-primary-action"),crmNew=document.querySelector("#bcb-dashboard-crm-new"),crmHot=document.querySelector("#bcb-dashboard-crm-hot"),crmDue=document.querySelector("#bcb-dashboard-crm-due"),crmList=document.querySelector("#bcb-dashboard-crm-list");
 
-function escapeHtml(value = "") {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
+function escapeHtml(value=""){return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
+function statusLabel(status){const labels={draft:"Schiță",in_progress:"În desfășurare",completed:"Finalizat",archived:"Arhivat"};return labels[status]||status;}
+function renderCrm(leads=[]){const active=leads.filter(row=>!["rejected","archived"].includes(row.status)),now=Date.now();const newRows=active.filter(row=>row.status==="new"),hotRows=active.filter(row=>Number(row.lead_score)>=70||["high","urgent"].includes(row.priority)),dueRows=active.filter(row=>row.status!=="accepted"&&row.next_follow_up_at&&new Date(row.next_follow_up_at).getTime()<=now);if(crmNew)crmNew.textContent=newRows.length;if(crmHot)crmHot.textContent=hotRows.length;if(crmDue)crmDue.textContent=dueRows.length;if(!crmList)return;const priorities=[...active].sort((a,b)=>{const ad=a.next_follow_up_at&&new Date(a.next_follow_up_at).getTime()<=now?1:0,bd=b.next_follow_up_at&&new Date(b.next_follow_up_at).getTime()<=now?1:0;return bd-ad||Number(b.lead_score||0)-Number(a.lead_score||0)||new Date(b.created_at)-new Date(a.created_at);}).slice(0,4);crmList.innerHTML=priorities.length?priorities.map(row=>`<a class="bcb-dashboard-lead" href="quotes.html?lead=${encodeURIComponent(row.id)}"><span class="bcb-dashboard-lead-score">${Number(row.lead_score||0)}</span><span><strong>${escapeHtml(row.full_name)}</strong><small>${escapeHtml(row.project_type||"Solicitare BCB")} · ${escapeHtml(row.location||"Locație nespecificată")}</small></span><i class="fa-solid fa-arrow-right"></i></a>`).join(""):'<div class="bcb-admin-empty">Nu există lead-uri active în CRM.</div>';}
 
-function statusLabel(status) {
-  const labels = { draft:"Schiță", in_progress:"În desfășurare", completed:"Finalizat", archived:"Arhivat" };
-  return labels[status] || status;
-}
-
-async function loadDashboard() {
-  const access = await requireStaffContext();
-  if (!access) return;
-  bindAdminLogout();
-
-  const { profile } = access;
-  if (userName) userName.textContent = profile.full_name || "BCB User";
-  if (userRole) userRole.textContent = profile.role === "admin" ? "Administrator" : "Editor";
-
-  if (newProjectButton && !newProjectButton.dataset.bound) {
-    newProjectButton.dataset.bound = "true";
-    newProjectButton.disabled = false;
-    newProjectButton.addEventListener("click", () => { window.location.href = "project.html"; });
-  }
-
-  const [{ data: projects, error: projectsError }, { count: mediaTotal }] = await Promise.all([
-    supabase.from("projects").select("id, title, location, status, progress, current_stage, published_at, updated_at").order("updated_at", { ascending:false }),
-    supabase.from("project_media").select("id", { count:"exact", head:true })
+async function loadDashboard(){
+  const access=await requireStaffContext();if(!access)return;bindAdminLogout();const {profile}=access;if(userName)userName.textContent=profile.full_name||"BCB User";if(userRole)userRole.textContent=profile.is_owner?"Owner":profile.role==="admin"?"Administrator":"Editor";
+  if(newProjectButton&&!newProjectButton.dataset.bound){newProjectButton.dataset.bound="true";newProjectButton.disabled=false;newProjectButton.addEventListener("click",()=>{window.location.href="project.html";});}
+  const [{data:projects,error:projectsError},{count:mediaTotal},{data:leads,error:leadsError}]=await Promise.all([
+    supabase.from("projects").select("id,title,location,status,progress,current_stage,published_at,updated_at").order("updated_at",{ascending:false}),
+    supabase.from("project_media").select("id",{count:"exact",head:true}),
+    supabase.from("quote_requests").select("id,full_name,project_type,location,status,priority,lead_score,next_follow_up_at,created_at").not("status","in","(rejected,archived)").order("created_at",{ascending:false}).limit(50)
   ]);
-
-  if (projectsError) {
-    if (projectsList) projectsList.innerHTML = '<div class="bcb-admin-empty">Nu am putut încărca proiectele.</div>';
-    return;
-  }
-
-  const allProjects = projects || [];
-  if (projectsCount) projectsCount.textContent = allProjects.length;
-  if (activeCount) activeCount.textContent = allProjects.filter(p=>p.status==="in_progress").length;
-  if (completedCount) completedCount.textContent = allProjects.filter(p=>p.status==="completed").length;
-  if (mediaCount) mediaCount.textContent = mediaTotal || 0;
-  if (!projectsList) return;
-
-  if (!allProjects.length) {
-    projectsList.innerHTML = '<div class="bcb-admin-empty"><div class="bcb-admin-empty-icon"><i class="fa-regular fa-folder-open"></i></div><strong>Nu există încă proiecte.</strong><span>Apasă „Proiect nou” pentru a crea primul proiect.</span></div>';
-    return;
-  }
-
-  projectsList.innerHTML = allProjects.map(project => `<article class="bcb-admin-project-row" data-project-id="${escapeHtml(project.id)}"><div class="bcb-admin-project-main"><div class="bcb-admin-project-mark"></div><div><h3>${escapeHtml(project.title)}</h3><p>${escapeHtml(project.location || "Locație nespecificată")}</p></div></div><div class="bcb-admin-project-stage"><span>Etapă</span><strong>${escapeHtml(project.current_stage || "—")}</strong></div><div class="bcb-admin-project-progress"><div class="bcb-admin-progress-meta"><span>Progres</span><strong>${project.progress}%</strong></div><div class="bcb-admin-progress-track"><span style="width:${Math.max(0,Math.min(100,project.progress))}%"></span></div></div><div class="bcb-admin-project-status is-${escapeHtml(project.status)}">${escapeHtml(statusLabel(project.status))}</div><button class="bcb-admin-row-action" type="button" data-action="edit" aria-label="Editează proiectul"><i class="fa-solid fa-arrow-right"></i></button></article>`).join("");
+  if(!leadsError)renderCrm(leads||[]);else{console.warn("BCB dashboard CRM:",leadsError);if(crmList)crmList.innerHTML='<div class="bcb-admin-empty">CRM-ul nu a putut fi sincronizat acum.</div>';}
+  if(projectsError){if(projectsList)projectsList.innerHTML='<div class="bcb-admin-empty">Nu am putut încărca proiectele.</div>';return;}
+  const allProjects=projects||[];if(projectsCount)projectsCount.textContent=allProjects.length;if(activeCount)activeCount.textContent=allProjects.filter(p=>p.status==="in_progress").length;if(completedCount)completedCount.textContent=allProjects.filter(p=>p.status==="completed").length;if(mediaCount)mediaCount.textContent=mediaTotal||0;if(!projectsList)return;
+  if(!allProjects.length){projectsList.innerHTML='<div class="bcb-admin-empty"><div class="bcb-admin-empty-icon"><i class="fa-regular fa-folder-open"></i></div><strong>Nu există încă proiecte.</strong><span>Apasă „Proiect nou” pentru a crea primul proiect.</span></div>';return;}
+  projectsList.innerHTML=allProjects.map(project=>`<article class="bcb-admin-project-row" data-project-id="${escapeHtml(project.id)}"><div class="bcb-admin-project-main"><div class="bcb-admin-project-mark"></div><div><h3>${escapeHtml(project.title)}</h3><p>${escapeHtml(project.location||"Locație nespecificată")}</p></div></div><div class="bcb-admin-project-stage"><span>Etapă</span><strong>${escapeHtml(project.current_stage||"—")}</strong></div><div class="bcb-admin-project-progress"><div class="bcb-admin-progress-meta"><span>Progres</span><strong>${project.progress}%</strong></div><div class="bcb-admin-progress-track"><span style="width:${Math.max(0,Math.min(100,project.progress))}%"></span></div></div><div class="bcb-admin-project-status is-${escapeHtml(project.status)}">${escapeHtml(statusLabel(project.status))}</div><button class="bcb-admin-row-action" type="button" data-action="edit" aria-label="Editează proiectul"><i class="fa-solid fa-arrow-right"></i></button></article>`).join("");
 }
 
-projectsList?.addEventListener("click", event => {
-  const button = event.target.closest("button[data-action='edit']");
-  const row = event.target.closest("[data-project-id]");
-  if (!button || !row) return;
-  window.location.href = `project.html?id=${encodeURIComponent(row.dataset.projectId)}`;
-});
-
+projectsList?.addEventListener("click",event=>{const button=event.target.closest("button[data-action='edit']"),row=event.target.closest("[data-project-id]");if(!button||!row)return;window.location.href=`project.html?id=${encodeURIComponent(row.dataset.projectId)}`;});
 loadDashboard();

@@ -6,7 +6,7 @@ import("./pwa-init.js").catch(error=>console.error("BCB PWA init error:",error))
 const COMMON_NAV = [
   { href:"dashboard.html", icon:"fa-grid-2", label:"Dashboard", match:["dashboard.html"] },
   { href:"dashboard.html#projects", icon:"fa-building", label:"Proiecte", match:["project.html","journal.html"], hash:"projects" },
-  { href:"quotes.html", icon:"fa-file-signature", label:"Cereri ofertă", match:["quotes.html"] },
+  { href:"quotes.html", icon:"fa-chart-line", label:"CRM & Oferte", match:["quotes.html"] },
   { href:"media.html", icon:"fa-images", label:"Media", match:["media.html"] },
   { href:"activity.html", icon:"fa-clock-rotate-left", label:"Activitate", match:["activity.html"] },
   { href:"fleet.html", icon:"fa-car-side", label:"Fleet", match:["fleet.html"] }
