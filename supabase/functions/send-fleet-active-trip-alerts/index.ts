@@ -1,10 +1,12 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import webpush from "npm:web-push@3.6.7";
 
 const corsHeaders={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, x-client-info, apikey, content-type, x-bcb-cron-secret","Access-Control-Allow-Methods":"POST, OPTIONS"};
 const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...corsHeaders,"Content-Type":"application/json"}});
 const esc=(value:unknown)=>String(value??"").replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]||c));
 const fmtDateTime=(value:string)=>new Intl.DateTimeFormat("ro-RO",{dateStyle:"medium",timeStyle:"short",timeZone:"Europe/Bucharest"}).format(new Date(value));
+const VAPID_PUBLIC_KEY="BMPBotjiGHzbuPZTSEcuyrryp00xt9BLdQPzAn9dcEvYbRkNTVj-QmQnPOXYlhb69-TA26GypXdjLiJTi0IhWLU";
 
 async function sendEmail(apiKey:string,from:string,to:string[],subject:string,html:string){
   const recipients=[...new Set(to.map(x=>x.trim()).filter(Boolean))];
@@ -12,6 +14,33 @@ async function sendEmail(apiKey:string,from:string,to:string[],subject:string,ht
   const response=await fetch("https://api.resend.com/emails",{method:"POST",headers:{Authorization:`Bearer ${apiKey}`,"Content-Type":"application/json"},body:JSON.stringify({from,to:recipients,subject,html})});
   if(!response.ok)throw new Error(`Resend: ${await response.text()}`);
   return response.json();
+}
+
+async function prepareWebPush(admin:any){
+  const {data:secret,error}=await admin.rpc("get_bcb_web_push_vapid_private_key");
+  if(error||!secret){console.error("Web Push VAPID unavailable",error);return false;}
+  webpush.setVapidDetails("mailto:office@bcbgroup.ro",VAPID_PUBLIC_KEY,String(secret));
+  return true;
+}
+
+async function refreshActivePush(admin:any,trip:any){
+  const {data:subs}=await admin.from("web_push_subscriptions").select("id,endpoint,p256dh,auth").eq("user_id",trip.driver_id).eq("is_active",true);
+  if(!subs?.length)return 0;
+  const label=[trip.registration_number,trip.make,trip.model].filter(Boolean).join(" · ");
+  const route=[trip.origin,trip.destination].filter(Boolean).join(" → ")||trip.purpose||"Deplasare BCB";
+  const payload=JSON.stringify({type:"fleet_trip_active",tripId:trip.trip_id,tag:`bcb-fleet-trip-${trip.trip_id}`,title:"BCB Fleet · Cursă activă",body:`${label} · ${route}`,url:"/admin/fleet.html",silent:true,requireInteraction:true});
+  let sent=0;
+  for(const sub of subs){
+    try{
+      await webpush.sendNotification({endpoint:sub.endpoint,keys:{p256dh:sub.p256dh,auth:sub.auth}},payload,{TTL:1200,urgency:"normal"});
+      sent++;
+    }catch(error:any){
+      const status=Number(error?.statusCode||error?.status||0);
+      if(status===404||status===410)await admin.from("web_push_subscriptions").update({is_active:false}).eq("id",sub.id);
+      else console.error("Fleet push refresh",status,error?.message||error);
+    }
+  }
+  return sent;
 }
 
 Deno.serve(async(req)=>{
@@ -36,18 +65,24 @@ Deno.serve(async(req)=>{
 
     const {data:settings,error:settingsError}=await admin.from("fleet_settings").select("report_email,company_email,active_trip_alerts_enabled,active_trip_threshold_minutes,active_trip_repeat_minutes,active_trip_notify_driver,active_trip_notify_admin").eq("id",true).single();
     if(settingsError)throw settingsError;
-    if(!settings.active_trip_alerts_enabled)return json({success:true,sent:0,reason:"disabled"});
+    if(!settings.active_trip_alerts_enabled)return json({success:true,sent:0,pushSent:0,reason:"disabled"});
+
+    const {data:candidates,error:candidateError}=await admin.rpc("get_active_fleet_trip_alert_candidates");
+    if(candidateError)throw candidateError;
+    const active=candidates||[];
+
+    let pushSent=0;
+    if(active.length&&await prepareWebPush(admin)){
+      for(const trip of active as any[])pushSent+=await refreshActivePush(admin,trip);
+    }
 
     const threshold=Math.max(30,Number(settings.active_trip_threshold_minutes||180));
     const repeat=Math.max(30,Number(settings.active_trip_repeat_minutes||120));
-    const {data:candidates,error:candidateError}=await admin.rpc("get_active_fleet_trip_alert_candidates");
-    if(candidateError)throw candidateError;
-
-    const eligible=(candidates||[]).filter((trip:any)=>Number(trip.elapsed_minutes)>=threshold);
-    if(!eligible.length)return json({success:true,sent:0,count:0});
+    const eligible=active.filter((trip:any)=>Number(trip.elapsed_minutes)>=threshold);
+    if(!eligible.length)return json({success:true,sent:0,pushSent,count:0,activeCount:active.length});
 
     const apiKey=Deno.env.get("RESEND_API_KEY");
-    if(!apiKey)throw new Error("RESEND_API_KEY nu este configurat.");
+    if(!apiKey)return json({success:true,sent:0,pushSent,count:eligible.length,warning:"RESEND_API_KEY missing"});
     const from=Deno.env.get("FLEET_EMAIL_FROM")||"BCB Group <office@bcbgroup.ro>";
     let sent=0;
 
@@ -71,6 +106,6 @@ Deno.serve(async(req)=>{
       sent++;
     }
 
-    return json({success:true,sent,count:eligible.length});
+    return json({success:true,sent,pushSent,count:eligible.length,activeCount:active.length});
   }catch(error){console.error("send-fleet-active-trip-alerts failed",error);return json({error:error instanceof Error?error.message:String(error)},500);}
 });

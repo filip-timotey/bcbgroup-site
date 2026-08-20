@@ -1,4 +1,4 @@
-const CACHE='bcb-manager-shell-v1';
+const CACHE='bcb-manager-shell-v2';
 const SHELL=[
   '/admin/index.html',
   '/admin/dashboard.html',
@@ -7,6 +7,8 @@ const SHELL=[
   '/css/style.css',
   '/css/admin-2026.css',
   '/css/admin-nav.css',
+  '/css/admin-copilot.css',
+  '/css/admin-fleet-notifications.css',
   '/assets/images/logo.png',
   '/manifest.webmanifest'
 ];
@@ -44,14 +46,65 @@ self.addEventListener('fetch',event=>{
     return;
   }
 
-  if(/\.(?:css|js|png|jpg|jpeg|webp|svg|woff2?)$/i.test(url.pathname)){
+  if(/\.(?:css|js)$/i.test(url.pathname)){
+    event.respondWith((async()=>{
+      try{
+        const fresh=await fetch(req,{cache:'no-store'});
+        if(fresh.ok){const cache=await caches.open(CACHE);cache.put(req,fresh.clone()).catch(()=>{});}
+        return fresh;
+      }catch{
+        return (await caches.match(req)) || Response.error();
+      }
+    })());
+    return;
+  }
+
+  if(/\.(?:png|jpg|jpeg|webp|svg|woff2?)$/i.test(url.pathname)){
     event.respondWith((async()=>{
       const cached=await caches.match(req);
-      const network=fetch(req).then(async res=>{
-        if(res.ok){const cache=await caches.open(CACHE);cache.put(req,res.clone()).catch(()=>{});}
-        return res;
-      }).catch(()=>cached);
-      return cached || network;
+      if(cached)return cached;
+      const fresh=await fetch(req);
+      if(fresh.ok){const cache=await caches.open(CACHE);cache.put(req,fresh.clone()).catch(()=>{});}
+      return fresh;
     })());
   }
+});
+
+self.addEventListener('push',event=>{
+  event.waitUntil((async()=>{
+    let payload={};
+    try{payload=event.data?.json?.()||{};}catch{payload={body:event.data?.text?.()||''};}
+    const tag=payload.tag||'bcb-manager';
+
+    if(payload.type==='fleet_trip_stop'){
+      const existing=await self.registration.getNotifications({tag});
+      existing.forEach(notification=>notification.close());
+      await self.registration.showNotification(payload.title||'BCB Fleet · Cursă încheiată',{
+        body:payload.body||'Cursa a fost închisă corect.',
+        icon:'/assets/images/logo.png',badge:'/assets/images/logo.png',
+        tag:`${tag}-completed`,silent:true,data:{url:payload.url||'/admin/fleet.html'}
+      });
+      return;
+    }
+
+    await self.registration.showNotification(payload.title||'BCB Business Manager',{
+      body:payload.body||'Ai o actualizare nouă.',
+      icon:'/assets/images/logo.png',badge:'/assets/images/logo.png',
+      tag,renotify:false,silent:payload.silent===true,
+      requireInteraction:payload.requireInteraction!==false,
+      data:{url:payload.url||'/admin/dashboard.html',tripId:payload.tripId||null},
+      actions:[{action:'open-fleet',title:'Deschide Fleet'}]
+    });
+  })());
+});
+
+self.addEventListener('notificationclick',event=>{
+  event.notification.close();
+  const target=event.notification.data?.url||'/admin/dashboard.html';
+  event.waitUntil((async()=>{
+    const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});
+    const existing=windows.find(client=>new URL(client.url).origin===self.location.origin);
+    if(existing){await existing.focus(); if('navigate'in existing)await existing.navigate(target); return;}
+    await self.clients.openWindow(target);
+  })());
 });
