@@ -20,7 +20,7 @@ export async function requireStaff() {
   if (role) role.textContent = isOwnerProfile(profile) ? "Owner" : profile.role === "admin" ? "Administrator" : "Editor";
 
   bindAdminLogout();
-  return context;
+  return { ...context, user: context.session?.user || null };
 }
 
 export function esc(value = "") {
