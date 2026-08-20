@@ -220,7 +220,8 @@ function buildXlsx({ vehicle, trips, fuel, settings, profiles, year, month, numb
   const driverNames = [...new Set(trips.map((trip: any) => driverDisplay(profiles.get(trip.driver_id))))];
 
   const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(rows, { origin: "A9" });
+  const ws = XLSX.utils.aoa_to_sheet([]);
+  XLSX.utils.sheet_add_json(ws, rows, { origin: "A9" });
   XLSX.utils.sheet_add_aoa(ws, [
     [settings.company_header_name || "BCB Group", settings.company_legal_name || "BCB Construct Pro S.R.L.", "FOAIE DE PARCURS", number],
     ["Perioada", `${monthName(month)} ${year}`, "Vehicul", `${vehicle.make} ${vehicle.model}`],
@@ -294,11 +295,11 @@ Deno.serve(async (req) => {
       callerId = userData.user.id;
       const { data: profile } = await admin
         .from("profiles")
-        .select("role,is_active")
+        .select("role,is_active,is_owner")
         .eq("id", callerId)
         .single();
-      if (!profile?.is_active || profile.role !== "admin") {
-        return json({ error: "Doar administratorii pot genera rapoarte." }, 403);
+      if (!profile?.is_active || !(profile.is_owner || profile.role === "admin")) {
+        return json({ error: "Doar Owner/Admin pot genera rapoarte." }, 403);
       }
     }
 
