@@ -8,104 +8,20 @@ const esc=(value:unknown)=>String(value??"").replace(/[&<>"']/g,(c)=>({"&":"&amp
 const fmtDateTime=(value:string)=>new Intl.DateTimeFormat("ro-RO",{dateStyle:"medium",timeStyle:"short",timeZone:"Europe/Bucharest"}).format(new Date(value));
 const VAPID_PUBLIC_KEY="BMPBotjiGHzbuPZTSEcuyrryp00xt9BLdQPzAn9dcEvYbRkNTVj-QmQnPOXYlhb69-TA26GypXdjLiJTi0IhWLU";
 
-async function sendEmail(apiKey:string,from:string,to:string[],subject:string,html:string){
-  const recipients=[...new Set(to.map(x=>x.trim()).filter(Boolean))];
-  if(!recipients.length)return null;
-  const response=await fetch("https://api.resend.com/emails",{method:"POST",headers:{Authorization:`Bearer ${apiKey}`,"Content-Type":"application/json"},body:JSON.stringify({from,to:recipients,subject,html})});
-  if(!response.ok)throw new Error(`Resend: ${await response.text()}`);
-  return response.json();
-}
-
-async function prepareWebPush(admin:any){
-  const {data:secret,error}=await admin.rpc("get_bcb_web_push_vapid_private_key");
-  if(error||!secret){console.error("Web Push VAPID unavailable",error);return false;}
-  webpush.setVapidDetails("mailto:office@bcbgroup.ro",VAPID_PUBLIC_KEY,String(secret));
-  return true;
-}
-
-async function refreshActivePush(admin:any,trip:any){
-  const {data:subs}=await admin.from("web_push_subscriptions").select("id,endpoint,p256dh,auth").eq("user_id",trip.driver_id).eq("is_active",true);
-  if(!subs?.length)return 0;
-  const label=[trip.registration_number,trip.make,trip.model].filter(Boolean).join(" · ");
-  const route=[trip.origin,trip.destination].filter(Boolean).join(" → ")||trip.purpose||"Deplasare BCB";
-  const payload=JSON.stringify({type:"fleet_trip_active",tripId:trip.trip_id,tag:`bcb-fleet-trip-${trip.trip_id}`,title:"BCB Fleet · Cursă activă",body:`${label} · ${route}`,url:"/admin/fleet.html",silent:true,requireInteraction:true});
-  let sent=0;
-  for(const sub of subs){
-    try{
-      await webpush.sendNotification({endpoint:sub.endpoint,keys:{p256dh:sub.p256dh,auth:sub.auth}},payload,{TTL:1200,urgency:"normal"});
-      sent++;
-    }catch(error:any){
-      const status=Number(error?.statusCode||error?.status||0);
-      if(status===404||status===410)await admin.from("web_push_subscriptions").update({is_active:false}).eq("id",sub.id);
-      else console.error("Fleet push refresh",status,error?.message||error);
-    }
-  }
-  return sent;
-}
+async function sendEmail(apiKey:string,from:string,to:string[],subject:string,html:string){const recipients=[...new Set(to.map(x=>x.trim()).filter(Boolean))];if(!recipients.length)return null;const response=await fetch("https://api.resend.com/emails",{method:"POST",headers:{Authorization:`Bearer ${apiKey}`,"Content-Type":"application/json"},body:JSON.stringify({from,to:recipients,subject,html})});if(!response.ok)throw new Error(`Resend: ${await response.text()}`);return response.json();}
+async function prepareWebPush(admin:any){const {data:secret,error}=await admin.rpc("get_bcb_web_push_vapid_private_key");if(error||!secret){console.error("Web Push VAPID unavailable",error);return false;}webpush.setVapidDetails("mailto:office@bcbgroup.ro",VAPID_PUBLIC_KEY,String(secret));return true;}
+async function refreshActivePush(admin:any,trip:any){const {data:subs}=await admin.from("web_push_subscriptions").select("id,endpoint,p256dh,auth").eq("user_id",trip.driver_id).eq("is_active",true);if(!subs?.length)return 0;const label=[trip.registration_number,trip.make,trip.model].filter(Boolean).join(" · "),route=[trip.origin,trip.destination].filter(Boolean).join(" → ")||trip.purpose||"Deplasare BCB",payload=JSON.stringify({type:"fleet_trip_active",tripId:trip.trip_id,tag:`bcb-fleet-trip-${trip.trip_id}`,title:"BCB Fleet · Cursă activă",body:`${label} · ${route} · Atinge pentru Quick Stop.`,url:`/admin/fleet.html?quickStop=${encodeURIComponent(trip.trip_id)}`,silent:true,requireInteraction:true});let sent=0;for(const sub of subs){try{await webpush.sendNotification({endpoint:sub.endpoint,keys:{p256dh:sub.p256dh,auth:sub.auth}},payload,{TTL:1200,urgency:"normal"});sent++;}catch(error:any){const status=Number(error?.statusCode||error?.status||0);if(status===404||status===410)await admin.from("web_push_subscriptions").update({is_active:false}).eq("id",sub.id);else console.error("Fleet push refresh",status,error?.message||error);}}return sent;}
 
 Deno.serve(async(req)=>{
-  if(req.method==="OPTIONS")return new Response("ok",{headers:corsHeaders});
-  if(req.method!=="POST")return json({error:"Method not allowed"},405);
+  if(req.method==="OPTIONS")return new Response("ok",{headers:corsHeaders});if(req.method!=="POST")return json({error:"Method not allowed"},405);
   try{
-    const url=Deno.env.get("SUPABASE_URL")!;
-    const service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const anon=Deno.env.get("SUPABASE_ANON_KEY")!;
-    const cronSecret=Deno.env.get("FLEET_CRON_SECRET")||"";
-    const supplied=req.headers.get("x-bcb-cron-secret")||"";
-    const auth=req.headers.get("Authorization")||"";
-    const admin=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
-
-    if(!(cronSecret&&supplied===cronSecret)){
-      const caller=createClient(url,anon,{global:{headers:{Authorization:auth}},auth:{persistSession:false,autoRefreshToken:false}});
-      const {data:userData}=await caller.auth.getUser();
-      if(!userData.user)return json({error:"Sesiune invalidă."},401);
-      const {data:profile}=await admin.from("profiles").select("role,is_active,is_owner").eq("id",userData.user.id).single();
-      if(!profile?.is_active||!(profile.is_owner||profile.role==="admin"))return json({error:"Acces administrativ necesar."},403);
-    }
-
-    const {data:settings,error:settingsError}=await admin.from("fleet_settings").select("report_email,company_email,active_trip_alerts_enabled,active_trip_threshold_minutes,active_trip_repeat_minutes,active_trip_notify_driver,active_trip_notify_admin").eq("id",true).single();
-    if(settingsError)throw settingsError;
-    if(!settings.active_trip_alerts_enabled)return json({success:true,sent:0,pushSent:0,reason:"disabled"});
-
-    const {data:candidates,error:candidateError}=await admin.rpc("get_active_fleet_trip_alert_candidates");
-    if(candidateError)throw candidateError;
-    const active=candidates||[];
-
-    let pushSent=0;
-    if(active.length&&await prepareWebPush(admin)){
-      for(const trip of active as any[])pushSent+=await refreshActivePush(admin,trip);
-    }
-
-    const threshold=Math.max(30,Number(settings.active_trip_threshold_minutes||180));
-    const repeat=Math.max(30,Number(settings.active_trip_repeat_minutes||120));
-    const eligible=active.filter((trip:any)=>Number(trip.elapsed_minutes)>=threshold);
-    if(!eligible.length)return json({success:true,sent:0,pushSent,count:0,activeCount:active.length});
-
-    const apiKey=Deno.env.get("RESEND_API_KEY");
-    if(!apiKey)return json({success:true,sent:0,pushSent,count:eligible.length,warning:"RESEND_API_KEY missing"});
-    const from=Deno.env.get("FLEET_EMAIL_FROM")||"BCB Group <office@bcbgroup.ro>";
-    let sent=0;
-
-    for(const trip of eligible as any[]){
-      const since=new Date(Date.now()-repeat*60000).toISOString();
-      const {data:recent}=await admin.from("fleet_trip_alert_log").select("id").eq("trip_id",trip.trip_id).gte("sent_at",since).limit(1);
-      if(recent?.length)continue;
-
-      const recipients:string[]=[];
-      if(settings.active_trip_notify_driver&&trip.driver_email)recipients.push(trip.driver_email);
-      const adminEmail=settings.report_email||settings.company_email;
-      if(settings.active_trip_notify_admin&&adminEmail)recipients.push(...String(adminEmail).split(/[;,]/));
-      const unique=[...new Set(recipients.map(x=>x.trim()).filter(Boolean))];
-      if(!unique.length)continue;
-
-      const hours=(Number(trip.elapsed_minutes)/60).toLocaleString("ro-RO",{maximumFractionDigits:1});
-      const route=[trip.origin,trip.destination].filter(Boolean).join(" → ")||"Traseu nespecificat";
-      const html=`<div style="font-family:Arial,sans-serif;color:#1d2227;max-width:720px"><h2>BCB Group · Fleet</h2><p>O cursă este încă activă după <strong>${esc(hours)} ore</strong>.</p><table style="width:100%;border-collapse:collapse;background:#f7f4ed;border-radius:12px"><tr><td style="padding:10px"><strong>Vehicul</strong></td><td style="padding:10px">${esc(trip.registration_number)} · ${esc(trip.make)} ${esc(trip.model)}</td></tr><tr><td style="padding:10px"><strong>Șofer</strong></td><td style="padding:10px">${esc(trip.driver_name)}</td></tr><tr><td style="padding:10px"><strong>Start</strong></td><td style="padding:10px">${esc(fmtDateTime(trip.start_at))}</td></tr><tr><td style="padding:10px"><strong>Traseu</strong></td><td style="padding:10px">${esc(route)}</td></tr><tr><td style="padding:10px"><strong>Scop</strong></td><td style="padding:10px">${esc(trip.purpose)}</td></tr></table><p style="margin-top:18px">Dacă deplasarea s-a încheiat, deschide BCB Business Manager și apasă <strong>STOP CURSĂ</strong>. Dacă deplasarea continuă, nu este necesară nicio acțiune.</p><p style="color:#777;font-size:12px">Notificare automată BCB Business Manager · Fleet Active Trip Monitoring.</p></div>`;
-      await sendEmail(apiKey,from,unique,`BCB Fleet · Cursă activă de ${hours} ore · ${trip.registration_number}`,html);
-      await admin.from("fleet_trip_alert_log").insert({trip_id:trip.trip_id,alert_kind:Number(trip.elapsed_minutes)>=threshold*2?"active_trip_escalation":"active_trip_reminder",sent_to:unique.join(", "),elapsed_minutes:Number(trip.elapsed_minutes),metadata:{vehicle:trip.registration_number,driver:trip.driver_name}});
-      sent++;
-    }
-
+    const url=Deno.env.get("SUPABASE_URL")!,service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,anon=Deno.env.get("SUPABASE_ANON_KEY")!,cronSecret=Deno.env.get("FLEET_CRON_SECRET")||"",supplied=req.headers.get("x-bcb-cron-secret")||"",auth=req.headers.get("Authorization")||"",admin=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
+    if(!(cronSecret&&supplied===cronSecret)){const caller=createClient(url,anon,{global:{headers:{Authorization:auth}},auth:{persistSession:false,autoRefreshToken:false}}),{data:userData}=await caller.auth.getUser();if(!userData.user)return json({error:"Sesiune invalidă."},401);const {data:profile}=await admin.from("profiles").select("role,is_active,is_owner").eq("id",userData.user.id).single();if(!profile?.is_active||!(profile.is_owner||profile.role==="admin"))return json({error:"Acces administrativ necesar."},403);}
+    const {data:settings,error:settingsError}=await admin.from("fleet_settings").select("report_email,company_email,active_trip_alerts_enabled,active_trip_threshold_minutes,active_trip_repeat_minutes,active_trip_notify_driver,active_trip_notify_admin").eq("id",true).single();if(settingsError)throw settingsError;if(!settings.active_trip_alerts_enabled)return json({success:true,sent:0,pushSent:0,reason:"disabled"});
+    const {data:candidates,error:candidateError}=await admin.rpc("get_active_fleet_trip_alert_candidates");if(candidateError)throw candidateError;const active=candidates||[];let pushSent=0;if(active.length&&await prepareWebPush(admin)){for(const trip of active as any[])pushSent+=await refreshActivePush(admin,trip);}
+    const threshold=Math.max(30,Number(settings.active_trip_threshold_minutes||180)),repeat=Math.max(30,Number(settings.active_trip_repeat_minutes||120)),eligible=active.filter((trip:any)=>Number(trip.elapsed_minutes)>=threshold);if(!eligible.length)return json({success:true,sent:0,pushSent,count:0,activeCount:active.length});
+    const apiKey=Deno.env.get("RESEND_API_KEY");if(!apiKey)return json({success:true,sent:0,pushSent,count:eligible.length,warning:"RESEND_API_KEY missing"});const from=Deno.env.get("FLEET_EMAIL_FROM")||"BCB Group <office@bcbgroup.ro>";let sent=0;
+    for(const trip of eligible as any[]){const since=new Date(Date.now()-repeat*60000).toISOString(),{data:recent}=await admin.from("fleet_trip_alert_log").select("id").eq("trip_id",trip.trip_id).gte("sent_at",since).limit(1);if(recent?.length)continue;const recipients:string[]=[];if(settings.active_trip_notify_driver&&trip.driver_email)recipients.push(trip.driver_email);const adminEmail=settings.report_email||settings.company_email;if(settings.active_trip_notify_admin&&adminEmail)recipients.push(...String(adminEmail).split(/[;,]/));const unique=[...new Set(recipients.map(x=>x.trim()).filter(Boolean))];if(!unique.length)continue;const hours=(Number(trip.elapsed_minutes)/60).toLocaleString("ro-RO",{maximumFractionDigits:1}),route=[trip.origin,trip.destination].filter(Boolean).join(" → ")||"Traseu nespecificat",html=`<div style="font-family:Arial,sans-serif;color:#1d2227;max-width:720px"><h2>BCB Group · Fleet</h2><p>O cursă este încă activă după <strong>${esc(hours)} ore</strong>.</p><table style="width:100%;border-collapse:collapse;background:#f7f4ed;border-radius:12px"><tr><td style="padding:10px"><strong>Vehicul</strong></td><td style="padding:10px">${esc(trip.registration_number)} · ${esc(trip.make)} ${esc(trip.model)}</td></tr><tr><td style="padding:10px"><strong>Șofer</strong></td><td style="padding:10px">${esc(trip.driver_name)}</td></tr><tr><td style="padding:10px"><strong>Start</strong></td><td style="padding:10px">${esc(fmtDateTime(trip.start_at))}</td></tr><tr><td style="padding:10px"><strong>Traseu</strong></td><td style="padding:10px">${esc(route)}</td></tr><tr><td style="padding:10px"><strong>Scop</strong></td><td style="padding:10px">${esc(trip.purpose)}</td></tr></table><p style="margin-top:18px">Dacă deplasarea s-a încheiat, atinge notificarea Fleet pentru <strong>Quick Stop</strong> și introdu doar kilometrajul final.</p><p style="color:#777;font-size:12px">Notificare automată BCB Business Manager · Fleet Active Trip Monitoring.</p></div>`;await sendEmail(apiKey,from,unique,`BCB Fleet · Cursă activă de ${hours} ore · ${trip.registration_number}`,html);await admin.from("fleet_trip_alert_log").insert({trip_id:trip.trip_id,alert_kind:Number(trip.elapsed_minutes)>=threshold*2?"active_trip_escalation":"active_trip_reminder",sent_to:unique.join(", "),elapsed_minutes:Number(trip.elapsed_minutes),metadata:{vehicle:trip.registration_number,driver:trip.driver_name}});sent++;}
     return json({success:true,sent,pushSent,count:eligible.length,activeCount:active.length});
   }catch(error){console.error("send-fleet-active-trip-alerts failed",error);return json({error:error instanceof Error?error.message:String(error)},500);}
 });
