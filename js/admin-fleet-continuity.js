@@ -1,4 +1,5 @@
 import { supabase, esc } from "./admin-common.js";
+import { ensureFleetPushSubscription, notifyFleetTripPush } from "./admin-web-push.js";
 
 const modal = document.querySelector("#fleet-modal");
 const modalContent = document.querySelector("#fleet-modal-content");
@@ -81,12 +82,9 @@ async function openStartFlow() {
       <label>Destinație<input name="destination" placeholder="Destinația planificată"></label>
       <label class="wide">Scop deplasare<input name="purpose" required placeholder="Deplasare la șantier / materiale / client..."></label>
       <label class="wide">Proiect
-        <select name="project_id">
-          <option value="">Fără proiect asociat</option>
-          ${(projects || []).map((project) => `<option value="${project.id}">${esc(project.title)}</option>`).join("")}
-        </select>
+        <select name="project_id"><option value="">Fără proiect asociat</option>${(projects || []).map((project) => `<option value="${project.id}">${esc(project.title)}</option>`).join("")}</select>
       </label>
-      <div class="fleet-gps-note"><i class="fa-solid fa-location-dot"></i> Ora, utilizatorul și kilometrajul de plecare sunt automate. Salvăm și poziția GPS dacă este disponibilă.</div>
+      <div class="fleet-gps-note"><i class="fa-solid fa-location-dot"></i> Ora, utilizatorul și kilometrajul sunt automate. La START activăm și notificarea persistentă a cursei dacă permiți notificările pe dispozitiv.</div>
       <button type="submit"><i class="fa-solid fa-play"></i> PORNEȘTE CURSA</button>
     </form>
   `);
@@ -102,32 +100,39 @@ async function openStartFlow() {
 
   modalContent.querySelector("#fleet-smart-start-form")?.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const vehicle = vehicles.find((item) => item.id === form.get("vehicle_id"));
-    if (!vehicle) return;
-    const position = await getPosition();
+    const formElement=event.currentTarget;
+    const submitButton=formElement.querySelector('button[type="submit"]');
+    if(submitButton){submitButton.disabled=true;submitButton.innerHTML='<i class="fa-solid fa-circle-notch fa-spin"></i> PORNIRE…';}
+    try {
+      const pushState = await ensureFleetPushSubscription({ requestPermission: true }).catch((error) => {
+        console.warn("BCB Fleet push subscription:", error);
+        return { ok:false, reason:"error" };
+      });
+      const form = new FormData(formElement);
+      const vehicle = vehicles.find((item) => item.id === form.get("vehicle_id"));
+      if (!vehicle) return;
+      const position = await getPosition();
 
-    // start_odometer is sent for compatibility, but the DB trigger overwrites it
-    // with fleet_vehicles.current_odometer as the authoritative value.
-    const { error } = await supabase.from("fleet_trips").insert({
-      vehicle_id: vehicle.id,
-      driver_id: session.user.id,
-      project_id: form.get("project_id") || null,
-      start_odometer: Number(vehicle.current_odometer || 0),
-      origin: String(form.get("origin") || "").trim(),
-      destination: String(form.get("destination") || "").trim() || null,
-      purpose: String(form.get("purpose") || "").trim(),
-      start_lat: position?.lat || null,
-      start_lng: position?.lng || null,
-      status: "active",
-    });
+      const { data: trip, error } = await supabase.from("fleet_trips").insert({
+        vehicle_id: vehicle.id,
+        driver_id: session.user.id,
+        project_id: form.get("project_id") || null,
+        start_odometer: Number(vehicle.current_odometer || 0),
+        origin: String(form.get("origin") || "").trim(),
+        destination: String(form.get("destination") || "").trim() || null,
+        purpose: String(form.get("purpose") || "").trim(),
+        start_lat: position?.lat || null,
+        start_lng: position?.lng || null,
+        status: "active",
+      }).select("id").single();
 
-    if (error) {
-      alert(error.message);
-      return;
+      if (error) { alert(error.message); return; }
+      if(pushState?.ok&&trip?.id)notifyFleetTripPush("start",trip.id).catch(error=>console.warn("BCB Fleet start push:",error));
+      hideModal();
+      window.location.reload();
+    } finally {
+      if(submitButton){submitButton.disabled=false;submitButton.innerHTML='<i class="fa-solid fa-play"></i> PORNEȘTE CURSA';}
     }
-    hideModal();
-    window.location.reload();
   });
 }
 
@@ -135,50 +140,35 @@ async function openStopFlow() {
   const session = await getContext();
   if (!session) return;
   const trip = await getActiveTrip(session.user.id);
-  if (!trip) {
-    alert("Nu există nicio cursă activă.");
-    return;
-  }
+  if (!trip) { alert("Nu există nicio cursă activă."); return; }
 
-  const { data: vehicle } = await supabase
-    .from("fleet_vehicles")
-    .select("registration_number,make,model,current_odometer")
-    .eq("id", trip.vehicle_id)
-    .single();
+  const { data: vehicle } = await supabase.from("fleet_vehicles").select("registration_number,make,model,current_odometer").eq("id", trip.vehicle_id).single();
 
   showModal(`
     <h2>Încheie cursa</h2>
     <p style="color:#777;font-size:10px;margin-top:5px">${esc(vehicle ? `${vehicle.make} ${vehicle.model} · ${vehicle.registration_number}` : "Vehicul")} · Plecare ${formatKm(trip.start_odometer)}</p>
     <form id="fleet-smart-stop-form" class="fleet-form">
-      <label>Kilometraj sosire
-        <input name="end_odometer" type="number" step="0.1" min="${Number(trip.start_odometer)}" required autofocus inputmode="decimal" placeholder="Km afișați în bord">
-      </label>
+      <label>Kilometraj sosire<input name="end_odometer" type="number" step="0.1" min="${Number(trip.start_odometer)}" required autofocus inputmode="decimal" placeholder="Km afișați în bord"></label>
       <label>Destinație finală<input name="destination" value="${esc(trip.destination || "")}"></label>
       <label class="wide">Observații<textarea name="notes" placeholder="Opțional"></textarea></label>
-      <div class="fleet-gps-note"><i class="fa-solid fa-gauge-high"></i> La salvare, km sosire devin automat kilometrajul curent al mașinii și vor fi folosiți la următoarea cursă.</div>
+      <div class="fleet-gps-note"><i class="fa-solid fa-gauge-high"></i> La salvare, km sosire devin kilometrajul curent al mașinii. Notificarea persistentă a cursei este închisă automat.</div>
       <button type="submit"><i class="fa-solid fa-stop"></i> ÎNCHEIE CURSA</button>
     </form>
   `);
 
   modalContent.querySelector("#fleet-smart-stop-form")?.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    const formElement=event.currentTarget;
+    const submitButton=formElement.querySelector('button[type="submit"]');
+    const form = new FormData(formElement);
     const endOdometer = Number(form.get("end_odometer"));
     const startOdometer = Number(trip.start_odometer);
-
-    if (!Number.isFinite(endOdometer) || endOdometer < startOdometer) {
-      alert("Kilometrajul final trebuie să fie mai mare sau egal cu cel de plecare.");
-      return;
-    }
-    if (endOdometer - startOdometer > 3000) {
-      const proceed = confirm(`Ai introdus o diferență de ${formatKm(endOdometer - startOdometer)}. Verifică numărul din bord. Continui?`);
-      if (!proceed) return;
-    }
-
-    const position = await getPosition();
-    const { error } = await supabase
-      .from("fleet_trips")
-      .update({
+    if (!Number.isFinite(endOdometer) || endOdometer < startOdometer) { alert("Kilometrajul final trebuie să fie mai mare sau egal cu cel de plecare."); return; }
+    if (endOdometer - startOdometer > 3000 && !confirm(`Ai introdus o diferență de ${formatKm(endOdometer - startOdometer)}. Verifică numărul din bord. Continui?`)) return;
+    if(submitButton){submitButton.disabled=true;submitButton.innerHTML='<i class="fa-solid fa-circle-notch fa-spin"></i> ÎNCHIDERE…';}
+    try {
+      const position = await getPosition();
+      const { error } = await supabase.from("fleet_trips").update({
         end_odometer: endOdometer,
         end_at: new Date().toISOString(),
         destination: String(form.get("destination") || "").trim() || trip.destination,
@@ -186,34 +176,22 @@ async function openStopFlow() {
         end_lat: position?.lat || null,
         end_lng: position?.lng || null,
         status: "completed",
-      })
-      .eq("id", trip.id);
-
-    if (error) {
-      alert(error.message);
-      return;
+      }).eq("id", trip.id);
+      if (error) { alert(error.message); return; }
+      await ensureFleetPushSubscription({requestPermission:false}).catch(()=>null);
+      notifyFleetTripPush("stop",trip.id).catch(error=>console.warn("BCB Fleet stop push:",error));
+      hideModal();
+      window.location.reload();
+    } finally {
+      if(submitButton){submitButton.disabled=false;submitButton.innerHTML='<i class="fa-solid fa-stop"></i> ÎNCHEIE CURSA';}
     }
-    hideModal();
-    window.location.reload();
   });
 }
 
 // Capture phase runs before the legacy target listeners in admin-fleet.js.
 document.addEventListener("click", (event) => {
   const startButton = event.target.closest("#fleet-start-main");
-  if (startButton) {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    openStartFlow();
-    return;
-  }
-
+  if (startButton) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); openStartFlow(); return; }
   const stopButton = event.target.closest("#fleet-stop-active");
-  if (stopButton) {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    openStopFlow();
-  }
+  if (stopButton) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); openStopFlow(); }
 }, true);
