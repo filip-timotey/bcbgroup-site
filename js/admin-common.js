@@ -1,6 +1,6 @@
 import "./admin-nav.js";
 import { supabase } from "./supabase-client.js";
-import { requireStaffContext, bindAdminLogout } from "./admin-session.js";
+import { requireStaffContext, bindAdminLogout, isAdminProfile, isOwnerProfile } from "./admin-session.js";
 
 export async function requireStaff() {
   const context = await requireStaffContext();
@@ -8,13 +8,16 @@ export async function requireStaff() {
 
   const { profile } = context;
   document.querySelectorAll("[data-admin-only]").forEach((element) => {
-    element.hidden = profile.role !== "admin";
+    element.hidden = !isAdminProfile(profile);
+  });
+  document.querySelectorAll("[data-owner-only]").forEach((element) => {
+    element.hidden = !isOwnerProfile(profile);
   });
 
   const name = document.querySelector("#bcb-admin-user-name");
   const role = document.querySelector("#bcb-admin-user-role");
   if (name) name.textContent = profile.full_name || "BCB User";
-  if (role) role.textContent = profile.role === "admin" ? "Administrator" : "Editor";
+  if (role) role.textContent = isOwnerProfile(profile) ? "Owner" : profile.role === "admin" ? "Administrator" : "Editor";
 
   bindAdminLogout();
   return context;
