@@ -31,6 +31,14 @@ function formatKm(value) {
   return `${Number(value || 0).toLocaleString("ro-RO", { maximumFractionDigits: 1 })} km`;
 }
 
+async function bestEffortPush(action, tripId) {
+  if (!tripId) return;
+  await Promise.race([
+    notifyFleetTripPush(action, tripId).catch((error) => console.warn(`BCB Fleet ${action} push:`, error)),
+    new Promise((resolve) => setTimeout(resolve, 2200)),
+  ]);
+}
+
 async function getContext() {
   const { data: sessionData } = await supabase.auth.getSession();
   return sessionData.session || null;
@@ -127,7 +135,7 @@ async function openStartFlow() {
       }).select("id").single();
 
       if (error) { alert(error.message); return; }
-      if(pushState?.ok&&trip?.id)notifyFleetTripPush("start",trip.id).catch(error=>console.warn("BCB Fleet start push:",error));
+      if(pushState?.ok&&trip?.id)await bestEffortPush("start",trip.id);
       hideModal();
       window.location.reload();
     } finally {
@@ -178,8 +186,8 @@ async function openStopFlow() {
         status: "completed",
       }).eq("id", trip.id);
       if (error) { alert(error.message); return; }
-      await ensureFleetPushSubscription({requestPermission:false}).catch(()=>null);
-      notifyFleetTripPush("stop",trip.id).catch(error=>console.warn("BCB Fleet stop push:",error));
+      const pushState=await ensureFleetPushSubscription({requestPermission:false}).catch(()=>({ok:false}));
+      if(pushState?.ok)await bestEffortPush("stop",trip.id);
       hideModal();
       window.location.reload();
     } finally {
