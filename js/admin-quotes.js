@@ -1,77 +1,71 @@
 import { requireStaff, supabase, esc, fmtDate } from "./admin-common.js";
 
-const list = document.querySelector("#quotes-list");
-const search = document.querySelector("#quotes-search");
-const filter = document.querySelector("#quotes-filter");
-const refresh = document.querySelector("#quotes-refresh");
-let rows = [];
-let ctx = null;
+const board=document.querySelector("#crm-pipeline"),closedGrid=document.querySelector("#crm-closed-grid"),search=document.querySelector("#quotes-search"),filter=document.querySelector("#quotes-filter"),sort=document.querySelector("#quotes-sort"),refresh=document.querySelector("#quotes-refresh"),drawerShell=document.querySelector("#crm-drawer-shell"),drawerBody=document.querySelector("#crm-drawer-body");
+let rows=[],profiles=[],ctx=null,currentLeadId=null;
 
-const labels = { new:"Nouă", contacted:"Contactat", offer_sent:"Ofertă trimisă", accepted:"Acceptată", rejected:"Refuzată", archived:"Arhivată" };
+const labels={new:"Nou",contacted:"Contactat",offer_sent:"Ofertă trimisă",accepted:"Câștigat",rejected:"Refuzat",archived:"Arhivat"};
+const priorities={low:"Scăzută",normal:"Normală",high:"Ridicată",urgent:"Urgentă"};
+const activeColumns=[{key:"new",label:"Lead nou",icon:"fa-sparkles"},{key:"contacted",label:"Contactat",icon:"fa-phone"},{key:"offer_sent",label:"Ofertă trimisă",icon:"fa-file-signature"},{key:"accepted",label:"Câștigat",icon:"fa-handshake"}];
+const priorityRank={urgent:4,high:3,normal:2,low:1};
+const isOwnerAdmin=()=>Boolean(ctx?.profile?.is_owner||ctx?.profile?.role==="admin");
+const isClosed=row=>["rejected","archived"].includes(row.status);
+const isDue=row=>Boolean(row.next_follow_up_at&&!isClosed(row)&&new Date(row.next_follow_up_at).getTime()<=Date.now());
+const phoneHref=value=>`tel:${String(value||"").replace(/[^0-9+]/g,"")}`;
+const whatsappHref=value=>`https://wa.me/${String(value||"").replace(/\D/g,"").replace(/^0/,"40")}`;
 
-function render() {
-  const term = (search?.value || "").trim().toLowerCase();
-  const status = filter?.value || "all";
-  const filtered = rows.filter(r => {
-    const hay = [r.full_name,r.phone,r.email,r.location,r.project_type].filter(Boolean).join(" ").toLowerCase();
-    return (!term || hay.includes(term)) && (status === "all" || r.status === status);
-  });
-  if (!filtered.length) { list.innerHTML = '<div class="bcb-biz-empty">Nu există cereri pentru filtrul selectat.</div>'; return; }
-  list.innerHTML = filtered.map(r => `
-    <article class="bcb-biz-card" data-id="${esc(r.id)}">
-      <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap">
-        <div><span class="bcb-biz-tag">${esc(labels[r.status] || r.status)}</span><h3 style="margin-top:8px">${esc(r.full_name)}</h3><div class="bcb-biz-meta"><span>${esc(r.phone)}</span><span>${esc(r.location || "Locație nespecificată")}</span><span>${esc(fmtDate(r.created_at))}</span></div></div>
-        <select class="bcb-biz-status" data-field="status">${Object.entries(labels).map(([v,l]) => `<option value="${v}" ${r.status===v?"selected":""}>${l}</option>`).join("")}</select>
-      </div>
-      <p><strong>${esc(r.project_type || "Proiect")}</strong>${r.estimated_budget ? ` · ${esc(r.estimated_budget)}` : ""}${r.desired_start ? ` · ${esc(r.desired_start)}` : ""}</p>
-      <p>${esc(r.message)}</p>
-      <textarea class="bcb-biz-notes" data-field="notes" placeholder="Notițe interne BCB...">${esc(r.internal_notes || "")}</textarea>
-      <div class="bcb-biz-card-actions">
-        <a class="is-primary" href="tel:${esc(r.phone)}"><i class="fa-solid fa-phone"></i> Sună</a>
-        <a class="is-whatsapp" href="https://wa.me/${String(r.phone||"").replace(/\D/g,"").replace(/^0/,"40")}" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-        ${r.email ? `<a href="mailto:${esc(r.email)}"><i class="fa-regular fa-envelope"></i> Email</a>` : ""}
-        <button data-action="save"><i class="fa-solid fa-floppy-disk"></i> Salvează</button>
-        ${ctx?.profile?.role === "admin" ? `<button data-action="delete" style="background:#8f3733;color:#fff"><i class="fa-solid fa-trash"></i> Șterge</button>` : ""}
-      </div>
-    </article>`).join("");
+function localDateTime(value){if(!value)return "";const date=new Date(value);if(Number.isNaN(date.getTime()))return "";const pad=n=>String(n).padStart(2,"0");return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;}
+function fromLocalDateTime(value){return value?new Date(value).toISOString():null;}
+function profileName(id){return profiles.find(p=>p.id===id)?.full_name||"Nealocat";}
+function statusOptions(selected){return Object.entries(labels).map(([value,label])=>`<option value="${value}" ${selected===value?"selected":""}>${label}</option>`).join("");}
+function priorityOptions(selected){return Object.entries(priorities).map(([value,label])=>`<option value="${value}" ${selected===value?"selected":""}>${label}</option>`).join("");}
+function assignedOptions(selected){return `<option value="">Nealocat</option>${profiles.map(p=>`<option value="${esc(p.id)}" ${selected===p.id?"selected":""}>${esc(p.full_name||p.email||"BCB User")}${p.is_owner?" · Owner":p.role==="admin"?" · Admin":""}</option>`).join("")}`;}
+
+function visibleRows(){
+  const term=String(search?.value||"").trim().toLowerCase(),mode=filter?.value||"all";
+  let result=rows.filter(row=>{const hay=[row.full_name,row.phone,row.email,row.location,row.project_type,row.estimated_budget,row.message].filter(Boolean).join(" ").toLowerCase();if(term&&!hay.includes(term))return false;if(mode==="all")return true;if(mode==="active")return !isClosed(row);if(mode==="hot")return !isClosed(row)&&(Number(row.lead_score)>=70||["high","urgent"].includes(row.priority));if(mode==="due")return isDue(row);return row.status===mode;});
+  const order=sort?.value||"score";
+  result.sort((a,b)=>{if(order==="newest")return new Date(b.created_at)-new Date(a.created_at);if(order==="followup"){const av=a.next_follow_up_at?new Date(a.next_follow_up_at).getTime():Infinity,bv=b.next_follow_up_at?new Date(b.next_follow_up_at).getTime():Infinity;return av-bv;}return (priorityRank[b.priority]||0)-(priorityRank[a.priority]||0)||Number(b.lead_score||0)-Number(a.lead_score||0)||new Date(b.created_at)-new Date(a.created_at);});
+  return result;
 }
 
-async function load() {
-  list.innerHTML = '<div class="bcb-biz-empty">Se încarcă solicitările…</div>';
-  const { data, error } = await supabase.from("quote_requests").select("*").order("created_at", { ascending:false });
-  if (error) { console.error(error); list.innerHTML = '<div class="bcb-biz-empty">Modulul Cereri de ofertă așteaptă activarea schemei Supabase.</div>'; return; }
-  rows = data || []; render();
+function renderStats(){const active=rows.filter(r=>!isClosed(r)),hot=active.filter(r=>Number(r.lead_score)>=70||["high","urgent"].includes(r.priority)),due=active.filter(isDue),won=rows.filter(r=>r.status==="accepted"||r.converted_project_id);document.querySelector("#crm-stat-active").textContent=active.length;document.querySelector("#crm-stat-hot").textContent=hot.length;document.querySelector("#crm-stat-due").textContent=due.length;document.querySelector("#crm-stat-won").textContent=won.length;}
+
+function leadCard(row){const due=isDue(row),score=Number(row.lead_score||0);return `<article class="crm-lead-card" data-lead-id="${esc(row.id)}" tabindex="0"><div class="crm-lead-top"><span class="crm-score ${score>=70?"is-hot":""}">${score}/100</span><span class="crm-priority is-${esc(row.priority||"normal")}">${esc(priorities[row.priority]||"Normală")}</span></div><h3>${esc(row.full_name)}</h3><p><strong>${esc(row.project_type||"Proiect nespecificat")}</strong><br>${esc(row.location||"Locație nespecificată")}</p><div class="crm-lead-meta"><span>${esc(row.estimated_budget||"Buget nespecificat")}</span>${row.assigned_to?`<span><i class="fa-solid fa-user-check"></i> ${esc(profileName(row.assigned_to))}</span>`:""}</div><div class="crm-followup ${due?"is-due":""}">${row.next_follow_up_at?`<i class="fa-regular fa-clock"></i> ${due?"Scadent · ":"Follow-up · "}${esc(fmtDate(row.next_follow_up_at))}`:`<i class="fa-regular fa-calendar-plus"></i> Fără follow-up`}</div></article>`;}
+
+function render(){
+  renderStats();const visible=visibleRows();
+  board.innerHTML=activeColumns.map(column=>{const items=visible.filter(row=>row.status===column.key);return `<section class="crm-column" data-status="${column.key}"><header class="crm-column-head"><div><i class="fa-solid ${column.icon}"></i><strong>${column.label}</strong></div><span>${items.length}</span></header><div class="crm-column-list">${items.length?items.map(leadCard).join(""):'<div class="crm-empty-column">Niciun lead aici.</div>'}</div></section>`;}).join("");
+  const closed=visible.filter(isClosed);closedGrid.innerHTML=closed.length?closed.map(leadCard).join(""):'<div class="bcb-biz-empty">Nu există lead-uri refuzate sau arhivate pentru filtrul curent.</div>';document.querySelector("#crm-closed-count").textContent=rows.filter(isClosed).length;
 }
 
-list?.addEventListener("click", async e => {
-  const card = e.target.closest("[data-id]");
-  if (!card) return;
-  const saveBtn = e.target.closest("button[data-action='save']");
-  const deleteBtn = e.target.closest("button[data-action='delete']");
+async function load(){
+  if(board)board.innerHTML='<div class="bcb-biz-empty">Se sincronizează CRM-ul…</div>';
+  const [leadResult,profileResult]=await Promise.all([supabase.from("quote_requests").select("*").order("created_at",{ascending:false}),supabase.from("profiles").select("id,full_name,email,role,is_owner,is_active").eq("is_active",true).order("full_name")]);
+  if(leadResult.error){console.error(leadResult.error);board.innerHTML='<div class="bcb-biz-empty">CRM-ul nu a putut fi încărcat.</div>';return;}
+  rows=leadResult.data||[];profiles=profileResult.data||[];render();
+  const requested=new URLSearchParams(location.search).get("lead");if(requested&&rows.some(r=>r.id===requested)){history.replaceState({},"",location.pathname);openDrawer(requested);}
+  else if(currentLeadId&&rows.some(r=>r.id===currentLeadId)&&drawerShell?.classList.contains("is-open"))openDrawer(currentLeadId,false);
+}
 
-  if (deleteBtn && ctx?.profile?.role === "admin") {
-    const row = rows.find(r => r.id === card.dataset.id);
-    if (!row) return;
-    if (!confirm(`Ștergi definitiv cererea de ofertă de la ${row.full_name}?`)) return;
-    deleteBtn.disabled = true;
-    const { error } = await supabase.from("quote_requests").delete().eq("id", row.id);
-    if (error) { deleteBtn.disabled = false; alert(error.message); return; }
-    await load();
-    return;
-  }
+function eventLabel(event){const map={created:"Lead creat",status_changed:`Status: ${labels[event.to_status]||event.to_status||"actualizat"}`,follow_up_changed:"Follow-up actualizat",assignment_changed:"Responsabil actualizat",contact_recorded:"Contact înregistrat",converted_to_project:"Convertit în proiect"};return map[event.event_type]||event.event_type;}
+async function loadEvents(id){const {data}=await supabase.from("quote_request_events").select("id,event_type,from_status,to_status,note,metadata,created_at").eq("quote_request_id",id).order("created_at",{ascending:false}).limit(30);const target=document.querySelector("#crm-timeline-list");if(!target)return;const events=data||[];target.innerHTML=events.length?events.map(event=>`<div class="crm-event"><span class="crm-event-dot"></span><p><strong>${esc(eventLabel(event))}</strong>${event.note?`<br>${esc(event.note)}`:""}</p><time>${esc(fmtDate(event.created_at))}</time></div>`).join(""):'<div class="crm-event"><span class="crm-event-dot"></span><p>Istoricul CRM începe de la următoarea acțiune.</p></div>';}
 
-  if (!saveBtn) return;
-  saveBtn.disabled = true;
-  const status = card.querySelector("[data-field='status']")?.value;
-  const notes = card.querySelector("[data-field='notes']")?.value.trim() || null;
-  const { error } = await supabase.from("quote_requests").update({ status, internal_notes:notes }).eq("id", card.dataset.id);
-  saveBtn.disabled = false;
-  if (error) return alert("Nu am putut salva modificarea.");
-  await load();
-});
+function openDrawer(id,focus=true){
+  const row=rows.find(r=>r.id===id);if(!row)return;currentLeadId=id;document.querySelector("#crm-drawer-title").textContent=row.full_name;document.querySelector("#crm-drawer-subtitle").textContent=[row.project_type,row.location].filter(Boolean).join(" · ")||"Solicitare BCB";document.querySelector("#crm-drawer-kicker").textContent=`LEAD SCORE · ${Number(row.lead_score||0)}/100`;
+  drawerBody.innerHTML=`<div class="crm-client-actions"><a href="${esc(phoneHref(row.phone))}"><i class="fa-solid fa-phone"></i> Sună</a><a class="is-wa" href="${esc(whatsappHref(row.phone))}" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>${row.email?`<a href="mailto:${esc(row.email)}"><i class="fa-regular fa-envelope"></i> Email</a>`:'<a aria-disabled="true"><i class="fa-regular fa-envelope"></i> Fără email</a>'}</div><div class="crm-lead-summary"><strong>Solicitare</strong><p>${esc(row.message)}</p><p><b>Buget:</b> ${esc(row.estimated_budget||"—")} · <b>Începere:</b> ${esc(row.desired_start||"—")} · <b>Etapă:</b> ${esc(row.project_stage||"—")}</p></div>${row.converted_project_id?`<a class="crm-converted-link" href="project.html?id=${encodeURIComponent(row.converted_project_id)}"><i class="fa-solid fa-circle-check"></i> Deschide proiectul creat</a>`:""}<div class="crm-form-grid"><div class="crm-field"><label>Status</label><select id="crm-field-status">${statusOptions(row.status)}</select></div><div class="crm-field"><label>Prioritate</label><select id="crm-field-priority">${priorityOptions(row.priority||"normal")}</select></div><div class="crm-field"><label>Responsabil</label><select id="crm-field-assigned">${assignedOptions(row.assigned_to)}</select></div><div class="crm-field"><label>Următorul follow-up</label><input id="crm-field-followup" type="datetime-local" value="${esc(localDateTime(row.next_follow_up_at))}"></div><div class="crm-field wide"><label>Motiv refuz / observație finală</label><input id="crm-field-lost" value="${esc(row.lost_reason||"")}" placeholder="Util mai ales dacă lead-ul este refuzat"></div><div class="crm-field wide"><label>Notițe interne BCB</label><textarea id="crm-field-notes" placeholder="Discuții, cerințe, decizii...">${esc(row.internal_notes||"")}</textarea></div></div><div class="crm-drawer-actions"><button class="crm-action" id="crm-save"><i class="fa-solid fa-floppy-disk"></i> Salvează</button><button class="crm-action is-soft" id="crm-record-contact"><i class="fa-solid fa-phone-volume"></i> Înregistrează contact</button>${!row.converted_project_id?`<button class="crm-action is-gold" id="crm-convert"><i class="fa-solid fa-diagram-project"></i> Transformă în proiect</button>`:""}${isOwnerAdmin()?`<button class="crm-action is-danger" id="crm-delete"><i class="fa-solid fa-trash"></i> Șterge</button>`:""}</div><div class="crm-ai-box"><header><strong><i class="fa-solid fa-wand-magic-sparkles"></i> BCB AI · Lead Intelligence</strong><button class="crm-action is-soft" id="crm-ai-analyze">${row.ai_summary?"Reanalizează":"Analizează"}</button></header><div id="crm-ai-output" class="crm-ai-output">${row.ai_summary?esc(row.ai_summary).replace(/\n/g,"<br>"):"AI-ul poate evalua intenția, următorul pas și riscurile fără să trimită telefonul sau emailul clientului."}</div></div><section class="crm-timeline"><strong>Istoric CRM</strong><div id="crm-timeline-list" class="crm-timeline-list"><div class="crm-event"><span class="crm-event-dot"></span><p>Se încarcă istoricul…</p></div></div></section>`;
+  drawerShell.classList.add("is-open");drawerShell.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";bindDrawer(row);loadEvents(id);if(focus)setTimeout(()=>document.querySelector("#crm-field-status")?.focus(),180);
+}
 
-search?.addEventListener("input", render);
-filter?.addEventListener("change", render);
-refresh?.addEventListener("click", load);
+function closeDrawer(){drawerShell?.classList.remove("is-open");drawerShell?.setAttribute("aria-hidden","true");document.body.style.overflow="";currentLeadId=null;}
+function drawerPayload(){return {status:document.querySelector("#crm-field-status")?.value||"new",priority:document.querySelector("#crm-field-priority")?.value||"normal",assigned_to:document.querySelector("#crm-field-assigned")?.value||null,next_follow_up_at:fromLocalDateTime(document.querySelector("#crm-field-followup")?.value||""),lost_reason:document.querySelector("#crm-field-lost")?.value.trim()||null,internal_notes:document.querySelector("#crm-field-notes")?.value.trim()||null};}
 
-(async()=>{ ctx = await requireStaff(); if (ctx) await load(); })();
+async function saveLead(row,button){const payload=drawerPayload();if(payload.status==="rejected"&&!payload.lost_reason&&!confirm("Lead-ul este marcat Refuzat fără motiv. Continui?"))return;if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-circle-notch fa-spin"></i> Salvare…';}const {error}=await supabase.from("quote_requests").update(payload).eq("id",row.id);if(error)alert(`Nu am putut salva CRM-ul: ${error.message}`);else await load();if(button){button.disabled=false;button.innerHTML='<i class="fa-solid fa-floppy-disk"></i> Salvează';}}
+async function recordContact(row,button){const channel=prompt("Canal contact: telefon, WhatsApp, email sau întâlnire","telefon");if(channel===null)return;const note=prompt("Notă scurtă despre discuție (opțional)","");const followup=fromLocalDateTime(document.querySelector("#crm-field-followup")?.value||"");if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-circle-notch fa-spin"></i> Înregistrare…';}const {error}=await supabase.rpc("bcb_record_quote_contact",{p_quote_id:row.id,p_note:note||null,p_channel:channel||"manual",p_next_follow_up_at:followup});if(error)alert(`Contactul nu a putut fi înregistrat: ${error.message}`);else await load();if(button){button.disabled=false;button.innerHTML='<i class="fa-solid fa-phone-volume"></i> Înregistrează contact';}}
+async function convertLead(row,button){if(!confirm(`Transformi solicitarea de la ${row.full_name} într-un proiect BCB? Proiectul va fi creat ca Schiță și lead-ul va deveni Câștigat.`))return;if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-circle-notch fa-spin"></i> Conversie…';}const {data,error}=await supabase.rpc("bcb_convert_quote_to_project",{p_quote_id:row.id});if(error){alert(`Conversia nu a reușit: ${error.message}`);if(button){button.disabled=false;button.innerHTML='<i class="fa-solid fa-diagram-project"></i> Transformă în proiect';}return;}await load();if(data&&confirm("Proiectul a fost creat. Îl deschizi acum?"))window.location.href=`project.html?id=${encodeURIComponent(data)}`;}
+async function analyzeLead(row,button){const output=document.querySelector("#crm-ai-output");if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-circle-notch fa-spin"></i> Analiză…';}if(output)output.textContent="BCB AI analizează lead-ul…";const question=`Analizează profesional acest lead CRM BCB fără a inventa informații și fără date personale de contact. Tip proiect: ${row.project_type||"nespecificat"}. Locație: ${row.location||"nespecificată"}. Buget: ${row.estimated_budget||"nespecificat"}. Începere dorită: ${row.desired_start||"nespecificată"}. Etapa: ${row.project_stage||"nespecificată"}. Mesaj client: ${row.message}. Scor intern curent: ${row.lead_score}/100. Răspunde scurt cu: 1) evaluarea oportunității, 2) următorul pas recomandat, 3) 2-3 întrebări importante pentru client, 4) riscuri sau informații lipsă.`;try{const {data,error}=await supabase.functions.invoke("bcb-ai-copilot",{body:{question,history:[],page:"quotes.html#crm"}});if(error)throw error;const answer=String(data?.answer||"").trim();if(!answer)throw new Error("Răspuns AI gol");if(output)output.innerHTML=esc(answer).replace(/\n/g,"<br>");await supabase.from("quote_requests").update({ai_summary:answer,ai_summary_updated_at:new Date().toISOString()}).eq("id",row.id);rows=rows.map(item=>item.id===row.id?{...item,ai_summary:answer,ai_summary_updated_at:new Date().toISOString()}:item);}catch(error){console.error(error);if(output)output.textContent="Analiza AI nu este disponibilă momentan. Restul CRM-ului funcționează normal.";}finally{if(button){button.disabled=false;button.textContent="Reanalizează";}}}
+async function deleteLead(row,button){if(!isOwnerAdmin())return;if(!confirm(`Ștergi definitiv lead-ul ${row.full_name}? Istoricul CRM asociat va fi șters împreună cu el.`))return;if(button)button.disabled=true;const {error}=await supabase.from("quote_requests").delete().eq("id",row.id);if(error){alert(error.message);if(button)button.disabled=false;return;}closeDrawer();await load();}
+function bindDrawer(row){document.querySelector("#crm-save")?.addEventListener("click",event=>saveLead(row,event.currentTarget));document.querySelector("#crm-record-contact")?.addEventListener("click",event=>recordContact(row,event.currentTarget));document.querySelector("#crm-convert")?.addEventListener("click",event=>convertLead(row,event.currentTarget));document.querySelector("#crm-ai-analyze")?.addEventListener("click",event=>analyzeLead(row,event.currentTarget));document.querySelector("#crm-delete")?.addEventListener("click",event=>deleteLead(row,event.currentTarget));}
+
+board?.addEventListener("click",event=>{const card=event.target.closest("[data-lead-id]");if(card)openDrawer(card.dataset.leadId);});closedGrid?.addEventListener("click",event=>{const card=event.target.closest("[data-lead-id]");if(card)openDrawer(card.dataset.leadId);});board?.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){const card=event.target.closest("[data-lead-id]");if(card){event.preventDefault();openDrawer(card.dataset.leadId);}}});document.querySelector("#crm-drawer-close")?.addEventListener("click",closeDrawer);document.querySelectorAll("[data-crm-close]").forEach(el=>el.addEventListener("click",closeDrawer));document.addEventListener("keydown",event=>{if(event.key==="Escape"&&drawerShell?.classList.contains("is-open"))closeDrawer();});search?.addEventListener("input",render);filter?.addEventListener("change",render);sort?.addEventListener("change",render);refresh?.addEventListener("click",load);
+
+(async()=>{ctx=await requireStaff();if(ctx)await load();})();
