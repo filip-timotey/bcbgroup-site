@@ -6,6 +6,7 @@ import("./pwa-init.js").catch(error=>console.error("BCB PWA init error:",error))
 const COMMON_NAV = [
   { href:"dashboard.html", icon:"fa-grid-2", label:"Dashboard", match:["dashboard.html"] },
   { href:"dashboard.html#projects", icon:"fa-building", label:"Proiecte", match:["project.html","journal.html"], hash:"projects" },
+  { href:"time.html", icon:"fa-user-clock", label:"Pontaj & Teren", match:["time.html"] },
   { href:"quotes.html", icon:"fa-chart-line", label:"CRM & Oferte", match:["quotes.html"] },
   { href:"media.html", icon:"fa-images", label:"Media", match:["media.html"] },
   { href:"activity.html", icon:"fa-clock-rotate-left", label:"Activitate", match:["activity.html"] },
@@ -34,7 +35,9 @@ async function syncAdminNavigation(){
   renderNavigation(context.profile); syncRoleLabel(context.profile);
   ensureStyles('../css/admin-copilot.css','copilot-styles');
   ensureStyles('../css/admin-copilot-hybrid.css','copilot-hybrid-styles');
+  ensureStyles('../css/admin-time.css','time-global-styles');
   import('./admin-copilot.js').catch(error=>console.error('BCB AI Copilot:',error));
+  import('./admin-workday-status.js').catch(error=>console.error('BCB workday status:',error));
   import('./admin-profile.js').then(m=>m.initAdminProfile()).catch(error=>console.error('BCB profile manager:',error));
   if(currentPage()==='users.html') import('./admin-user-avatars.js').catch(error=>console.error('BCB user avatars:',error));
   if(currentPage()==="fleet.html"){
