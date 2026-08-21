@@ -64,8 +64,12 @@ Deno.serve(async req=>{
     const status=hasCritical||hasBlocking||score<50?"blocked":score<70?"at_risk":score<85?"attention":"healthy";
     const summary={open_tasks:tasks.length,overdue_tasks:overdueTasks.length,blocked_tasks:blockedTasks.length,urgent_tasks:urgentTasks.length,delayed_milestones:delayedMilestones.length,open_material_needs:materials.length,overdue_materials:overdueMaterials.length,high_reports:highReports.length,critical_reports:criticalReports.length,active_workers:activeTime.length,pending_time_approval:pendingTime.length,worked_hours_30d:Math.round(workedMinutes/6)/10,active_trips:activeTrips.length,fleet_km_30d:Math.round(km)};
     const snapshotSignals={summary,signals:signals.map(({key,severity,title,detail,penalty})=>({key,severity,title,detail,penalty})),manual_health:project.health_status,manual_risk:project.risk_level,financial:privileged?financial:undefined};
-    if(privileged){await admin.from("project_health_snapshots").upsert({project_id:projectId,snapshot_date:today,score,status,signals:snapshotSignals,generated_by:user.id,updated_at:new Date().toISOString()},{onConflict:"project_id,snapshot_date"});}
-    const {data:history}=await admin.from("project_health_snapshots").select("snapshot_date,score,status").eq("project_id",projectId).order("snapshot_date",{ascending:false}).limit(14);
-    return out({success:true,project:{id:project.id,title:project.title,status:project.status,progress:project.progress,current_stage:project.current_stage,planned_start:project.planned_start,planned_end:project.planned_end,manual_health:project.health_status,manual_risk:project.risk_level},health:{score,status,signals,summary,trend:(history||[]).reverse(),financial:privileged?financial:null,calculated_at:new Date().toISOString()},permissions:{role:profile.is_owner?"owner":profile.role,finance:privileged,can_manage:privileged}});
+    let history:any[]=[];
+    if(privileged){
+      await admin.from("project_health_snapshots").upsert({project_id:projectId,snapshot_date:today,score,status,signals:snapshotSignals,generated_by:user.id,updated_at:new Date().toISOString()},{onConflict:"project_id,snapshot_date"});
+      const historyResult=await admin.from("project_health_snapshots").select("snapshot_date,score,status").eq("project_id",projectId).order("snapshot_date",{ascending:false}).limit(14);
+      history=historyResult.data||[];
+    }
+    return out({success:true,project:{id:project.id,title:project.title,status:project.status,progress:project.progress,current_stage:project.current_stage,planned_start:project.planned_start,planned_end:project.planned_end,manual_health:project.health_status,manual_risk:project.risk_level},health:{score,status,signals,summary,trend:history.reverse(),financial:privileged?financial:null,calculated_at:new Date().toISOString()},permissions:{role:profile.is_owner?"owner":profile.role,finance:privileged,can_manage:privileged}});
   }catch(error){console.error("bcb-project-health",error);return out({error:error instanceof Error?error.message:String(error)},500);}
 });
