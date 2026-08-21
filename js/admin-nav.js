@@ -47,7 +47,9 @@ async function syncAdminNavigation(){
   }
   if(currentPage()==='project.html'){
     ensureStyles('../css/admin-project-field-intelligence.css','project-field-intelligence-styles');
+    ensureStyles('../css/admin-project-command-center.css','project-command-center-styles');
     import('./admin-project-field-intelligence.js').catch(error=>console.error('BCB project field intelligence:',error));
+    import('./admin-project-command-center.js').catch(error=>console.error('BCB project command center:',error));
     if(isAdminProfile(context.profile)){
       ensureStyles('../css/admin-project-labor.css','project-labor-styles');
       import('./admin-project-labor.js').catch(error=>console.error('BCB project labor:',error));
