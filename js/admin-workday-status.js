@@ -1,0 +1,7 @@
+import { requireStaff, supabase, esc } from "./admin-common.js";
+
+let interval=null;
+function clock(start){const total=Math.max(0,Math.floor((Date.now()-new Date(start).getTime())/1000));const h=Math.floor(total/3600),m=Math.floor((total%3600)/60);return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;}
+function remove(){document.querySelector("#bcb-workday-chip")?.remove();if(interval){clearInterval(interval);interval=null;}}
+async function init(){const ctx=await requireStaff();if(!ctx?.user)return;const {data,error}=await supabase.from("employee_time_entries").select("id,project_id,started_at,work_location").eq("created_by",ctx.user.id).is("ended_at",null).not("started_at","is",null).order("started_at",{ascending:false}).limit(1).maybeSingle();if(error||!data){remove();return;}let project="General BCB";if(data.project_id){const {data:p}=await supabase.from("projects").select("title").eq("id",data.project_id).maybeSingle();if(p?.title)project=p.title;}remove();const link=document.createElement("a");link.id="bcb-workday-chip";link.className="bcb-workday-chip";link.href="time.html";link.innerHTML=`<i class="pulse"></i><span><strong>Zi de lucru activă</strong><small>${esc(project)}${data.work_location?` · ${esc(data.work_location)}`:""}</small></span><time>00:00</time>`;document.body.appendChild(link);const tick=()=>{const t=link.querySelector("time");if(t)t.textContent=clock(data.started_at);};tick();interval=setInterval(tick,30000);}
+init().catch(error=>console.warn("BCB workday status",error));
