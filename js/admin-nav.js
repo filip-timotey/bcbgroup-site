@@ -40,6 +40,11 @@ async function syncAdminNavigation(){
   import('./admin-workday-status.js').catch(error=>console.error('BCB workday status:',error));
   import('./admin-profile.js').then(m=>m.initAdminProfile()).catch(error=>console.error('BCB profile manager:',error));
   if(currentPage()==='users.html') import('./admin-user-avatars.js').catch(error=>console.error('BCB user avatars:',error));
+  if(currentPage()==='time.html'){
+    ensureStyles('../css/admin-field-reports.css','field-report-styles');
+    import('./admin-field-reports.js').catch(error=>console.error('BCB field daily reports:',error));
+    import('./admin-field-report-stop-bridge.js').catch(error=>console.error('BCB field report stop bridge:',error));
+  }
   if(currentPage()==='project.html'&&isAdminProfile(context.profile)){
     ensureStyles('../css/admin-project-labor.css','project-labor-styles');
     import('./admin-project-labor.js').catch(error=>console.error('BCB project labor:',error));
