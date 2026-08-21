@@ -54,7 +54,7 @@ async function context(admin:any,profile:any,requested:boolean,signal:string){
   const todayWorkedMinutes=timeEntries.reduce((s:number,x:any)=>s+Number(x.worked_minutes||0),0);
   if(adminRole&&financeHint.test(signal)){
     const [{data:f},{data:c}]=await Promise.all([admin.from("project_financials").select("project_id,budget_estimated,contract_value,contingency_amount,currency,include_tracked_labor"),admin.from("project_cost_summary").select("project_id,approved_cost,pending_cost,material_cost,labor_cost,fuel_cost,pending_entries")]);
-    const summaries=new Map((c||[]).map((x:any)=>[x.project_id,x]));finance=(f||[]).map((x:any)=>({...x,costs:summaries.get(x.project_id)||null}));
+    const summaries=new Map<string,any>((c||[]).map((x:any)=>[x.project_id,x]));finance=(f||[]).map((x:any)=>({...x,costs:summaries.get(x.project_id)||null}));
   }
   if(adminRole&&(financeHint.test(signal)||timeHint.test(signal))){
     const [{data:approvedRows},{data:rateRows},{data:finRows}]=await Promise.all([
@@ -62,8 +62,10 @@ async function context(admin:any,profile:any,requested:boolean,signal:string){
       admin.from("project_labor_rates").select("project_id,employee_id,hourly_cost,currency"),
       admin.from("project_financials").select("project_id,currency,include_tracked_labor")
     ]);
-    const rateMap=new Map((rateRows||[]).map((r:any)=>[`${r.project_id}:${r.employee_id}`,r]));const finMap=new Map((finRows||[]).map((r:any)=>[r.project_id,r]));const agg=new Map<string,any>();
-    for(const row of approvedRows||[]){const fin=finMap.get(row.project_id);if(!fin)continue;const rate=rateMap.get(`${row.project_id}:${row.employee_id}`);const mins=workedMinutes(row,now),sameCurrency=rate?.currency===fin.currency,hourly=sameCurrency?Number(rate?.hourly_cost||0):0;const prev=agg.get(row.project_id)||{project_id:row.project_id,approved_minutes:0,tracked_labor_cost:0,currency:fin.currency,include_in_job_costing:Boolean(fin.include_tracked_labor)};prev.approved_minutes+=mins;prev.tracked_labor_cost+=mins/60*hourly;agg.set(row.project_id,prev);}trackedLabor=[...agg.values()];
+    const rateMap=new Map<string,any>((rateRows||[]).map((r:any)=>[`${r.project_id}:${r.employee_id}`,r]));
+    const finMap=new Map<string,any>((finRows||[]).map((r:any)=>[r.project_id,r]));
+    const agg=new Map<string,any>();
+    for(const row of approvedRows||[]){const fin:any=finMap.get(row.project_id);if(!fin)continue;const rate:any=rateMap.get(`${row.project_id}:${row.employee_id}`);const mins=workedMinutes(row,now),sameCurrency=rate?.currency===fin.currency,hourly=sameCurrency?Number(rate?.hourly_cost||0):0;const prev=agg.get(row.project_id)||{project_id:row.project_id,approved_minutes:0,tracked_labor_cost:0,currency:fin.currency,include_in_job_costing:Boolean(fin.include_tracked_labor)};prev.approved_minutes+=mins;prev.tracked_labor_cost+=mins/60*hourly;agg.set(row.project_id,prev);}trackedLabor=[...agg.values()];
   }
   return {generatedAt:nowIso,permissions,internalContextLoaded:true,summary:{projects:{total:projectsTotal,active:projectsActive,openTasks,overdueTasks,materialNeeds},fleet:{activeVehicles,activeTrips,longTrips,openIncidents},hr:{activeEmployees:adminRole?activeEmployees:null,alertsNext30Days:adminRole?hrAlerts.length:null},crm:{activeLeads:crmActive,newLeads:crmNew,hotLeads:crmHot,followUpsDue:crmDue},fieldOperations:{activeNow:activeTimeEntries,pendingApproval:pendingTimeEntries,todayWorkedMinutes}},details:{projects:projects||[],projectTasks,milestones,materials,activeTrips:fleet,openIncidents:adminRole?incidents:[],hrAlerts:adminRole?hrAlerts:[],crmLeads:crm,finance:adminRole?finance:[],timeEntries,trackedLabor:adminRole?trackedLabor:[]}};
 }
