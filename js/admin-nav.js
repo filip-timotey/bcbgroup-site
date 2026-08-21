@@ -45,9 +45,13 @@ async function syncAdminNavigation(){
     import('./admin-field-reports.js').catch(error=>console.error('BCB field daily reports:',error));
     import('./admin-field-report-stop-bridge.js').catch(error=>console.error('BCB field report stop bridge:',error));
   }
-  if(currentPage()==='project.html'&&isAdminProfile(context.profile)){
-    ensureStyles('../css/admin-project-labor.css','project-labor-styles');
-    import('./admin-project-labor.js').catch(error=>console.error('BCB project labor:',error));
+  if(currentPage()==='project.html'){
+    ensureStyles('../css/admin-project-field-intelligence.css','project-field-intelligence-styles');
+    import('./admin-project-field-intelligence.js').catch(error=>console.error('BCB project field intelligence:',error));
+    if(isAdminProfile(context.profile)){
+      ensureStyles('../css/admin-project-labor.css','project-labor-styles');
+      import('./admin-project-labor.js').catch(error=>console.error('BCB project labor:',error));
+    }
   }
   if(currentPage()==="fleet.html"){
     ensureStyles('../css/admin-fleet-safety.css','fleet-safety-styles');
