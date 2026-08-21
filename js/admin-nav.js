@@ -40,6 +40,10 @@ async function syncAdminNavigation(){
   import('./admin-workday-status.js').catch(error=>console.error('BCB workday status:',error));
   import('./admin-profile.js').then(m=>m.initAdminProfile()).catch(error=>console.error('BCB profile manager:',error));
   if(currentPage()==='users.html') import('./admin-user-avatars.js').catch(error=>console.error('BCB user avatars:',error));
+  if(currentPage()==='project.html'&&isAdminProfile(context.profile)){
+    ensureStyles('../css/admin-project-labor.css','project-labor-styles');
+    import('./admin-project-labor.js').catch(error=>console.error('BCB project labor:',error));
+  }
   if(currentPage()==="fleet.html"){
     ensureStyles('../css/admin-fleet-safety.css','fleet-safety-styles');
     import("./admin-fleet-safety.js").catch(error=>console.error("Fleet safety controls:",error));
