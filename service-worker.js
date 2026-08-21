@@ -1,7 +1,7 @@
-const CACHE='bcb-manager-shell-v3';
+const CACHE='bcb-manager-shell-v4';
 const SHELL=[
-  '/admin/index.html','/admin/dashboard.html','/admin/fleet.html','/admin/employees.html','/admin/quotes.html',
-  '/css/style.css','/css/admin-2026.css','/css/admin-nav.css','/css/admin-business.css','/css/admin-crm.css','/css/admin-copilot.css','/css/admin-fleet-notifications.css',
+  '/admin/index.html','/admin/dashboard.html','/admin/fleet.html','/admin/employees.html','/admin/quotes.html','/admin/time.html',
+  '/css/style.css','/css/admin-2026.css','/css/admin-nav.css','/css/admin-business.css','/css/admin-crm.css','/css/admin-copilot.css','/css/admin-fleet-notifications.css','/css/admin-time.css',
   '/assets/images/logo.png','/manifest.webmanifest'
 ];
 
@@ -12,9 +12,10 @@ self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='G
 function actionsFor(payload){
   if(payload.type==='fleet_trip_active')return [{action:'quick-stop',title:'Quick Stop'},{action:'open-fleet',title:'Deschide Fleet'}];
   if(payload.type==='crm_lead_new')return [{action:'open-crm',title:'Deschide CRM'}];
+  if(payload.type==='workday_active')return [{action:'open-time',title:'Deschide pontaj'}];
   return [{action:'open-app',title:'Deschide'}];
 }
 
 self.addEventListener('push',event=>{event.waitUntil((async()=>{let payload={};try{payload=event.data?.json?.()||{};}catch{payload={body:event.data?.text?.()||''};}const tag=payload.tag||'bcb-manager';if(payload.type==='fleet_trip_stop'){const existing=await self.registration.getNotifications({tag});existing.forEach(notification=>notification.close());await self.registration.showNotification(payload.title||'BCB Fleet · Cursă încheiată',{body:payload.body||'Cursa a fost închisă corect.',icon:'/assets/images/logo.png',badge:'/assets/images/logo.png',tag:`${tag}-completed`,silent:true,data:{url:payload.url||'/admin/fleet.html',type:payload.type,tripId:payload.tripId||null}});return;}await self.registration.showNotification(payload.title||'BCB Business Manager',{body:payload.body||'Ai o actualizare nouă.',icon:'/assets/images/logo.png',badge:'/assets/images/logo.png',tag,renotify:false,silent:payload.silent===true,requireInteraction:payload.requireInteraction!==false,data:{url:payload.url||'/admin/dashboard.html',type:payload.type||'generic',tripId:payload.tripId||null,leadId:payload.leadId||null},actions:actionsFor(payload)});})());});
 
-self.addEventListener('notificationclick',event=>{event.notification.close();const data=event.notification.data||{};let target=data.url||'/admin/dashboard.html';if(event.action==='quick-stop'&&data.tripId)target=`/admin/fleet.html?quickStop=${encodeURIComponent(data.tripId)}`;event.waitUntil((async()=>{const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});const existing=windows.find(client=>new URL(client.url).origin===self.location.origin);if(existing){await existing.focus();if('navigate'in existing)await existing.navigate(target);return;}await self.clients.openWindow(target);})());});
+self.addEventListener('notificationclick',event=>{event.notification.close();const data=event.notification.data||{};let target=data.url||'/admin/dashboard.html';if(event.action==='quick-stop'&&data.tripId)target=`/admin/fleet.html?quickStop=${encodeURIComponent(data.tripId)}`;if(event.action==='open-time')target='/admin/time.html';event.waitUntil((async()=>{const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});const existing=windows.find(client=>new URL(client.url).origin===self.location.origin);if(existing){await existing.focus();if('navigate'in existing)await existing.navigate(target);return;}await self.clients.openWindow(target);})());});
