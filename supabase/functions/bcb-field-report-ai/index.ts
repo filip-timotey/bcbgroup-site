@@ -1,0 +1,71 @@
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
+
+const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, x-client-info, apikey, content-type","Access-Control-Allow-Methods":"POST, OPTIONS"};
+const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...cors,"Content-Type":"application/json","Cache-Control":"no-store"}});
+const text=(v:unknown,n=6000)=>String(v??"").trim().slice(0,n);
+const allowedRisk=new Set(["low","medium","high","critical"]);
+const allowedPriority=new Set(["low","normal","high","urgent"]);
+const isoDate=(v:unknown)=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||""))?String(v):null;
+
+type Analysis={
+  summary:string; issues:string; materials_text:string; next_steps:string; safety_notes:string;
+  risk_level:"low"|"medium"|"high"|"critical"; confidence:number;
+  tasks:Array<{title:string;description:string;priority:"low"|"normal"|"high"|"urgent";due_date:string|null}>;
+  materials:Array<{title:string;description:string;quantity:number|null;unit:string|null;needed_by:string|null;priority:"low"|"normal"|"high"|"urgent"}>;
+};
+
+function parseOutput(data:any):Analysis{
+  const raw=String(data?.output_text||data?.output?.flatMap((x:any)=>x.content||[]).map((x:any)=>x.text||"").join("\n")||"").trim();
+  if(!raw)throw new Error("AI response empty");
+  const a=JSON.parse(raw);
+  return {
+    summary:text(a.summary,3500),issues:text(a.issues,3000),materials_text:text(a.materials_text,3000),next_steps:text(a.next_steps,3000),safety_notes:text(a.safety_notes,2500),
+    risk_level:allowedRisk.has(a.risk_level)?a.risk_level:"low",confidence:Math.max(0,Math.min(1,Number(a.confidence||0))),
+    tasks:Array.isArray(a.tasks)?a.tasks.slice(0,12).map((x:any)=>({title:text(x.title,220),description:text(x.description,1200),priority:allowedPriority.has(x.priority)?x.priority:"normal",due_date:isoDate(x.due_date)})).filter((x:any)=>x.title.length>1):[],
+    materials:Array.isArray(a.materials)?a.materials.slice(0,15).map((x:any)=>({title:text(x.title,220),description:text(x.description,1000),quantity:Number.isFinite(Number(x.quantity))&&Number(x.quantity)>=0?Number(x.quantity):null,unit:text(x.unit,30)||null,needed_by:isoDate(x.needed_by),priority:allowedPriority.has(x.priority)?x.priority:"normal"})).filter((x:any)=>x.title.length>1):[]
+  };
+}
+
+const schema={type:"object",additionalProperties:false,required:["summary","issues","materials_text","next_steps","safety_notes","risk_level","confidence","tasks","materials"],properties:{
+  summary:{type:"string"},issues:{type:"string"},materials_text:{type:"string"},next_steps:{type:"string"},safety_notes:{type:"string"},
+  risk_level:{type:"string",enum:["low","medium","high","critical"]},confidence:{type:"number",minimum:0,maximum:1},
+  tasks:{type:"array",maxItems:12,items:{type:"object",additionalProperties:false,required:["title","description","priority","due_date"],properties:{title:{type:"string"},description:{type:"string"},priority:{type:"string",enum:["low","normal","high","urgent"]},due_date:{anyOf:[{type:"string"},{type:"null"}]}}}},
+  materials:{type:"array",maxItems:15,items:{type:"object",additionalProperties:false,required:["title","description","quantity","unit","needed_by","priority"],properties:{title:{type:"string"},description:{type:"string"},quantity:{anyOf:[{type:"number"},{type:"null"}]},unit:{anyOf:[{type:"string"},{type:"null"}]},needed_by:{anyOf:[{type:"string"},{type:"null"}]},priority:{type:"string",enum:["low","normal","high","urgent"]}}}}
+}};
+
+Deno.serve(async(req)=>{
+  if(req.method==="OPTIONS")return new Response("ok",{headers:cors});
+  if(req.method!=="POST")return json({error:"Method not allowed"},405);
+  const url=Deno.env.get("SUPABASE_URL")!,anon=Deno.env.get("SUPABASE_ANON_KEY")!,service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,key=Deno.env.get("OPENAI_API_KEY")||"",model=Deno.env.get("OPENAI_MODEL")||"gpt-5.6";
+  const auth=req.headers.get("Authorization")||"";
+  const caller=createClient(url,anon,{global:{headers:{Authorization:auth}},auth:{persistSession:false,autoRefreshToken:false}});
+  const admin=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
+  let reportId="";
+  try{
+    const user=(await caller.auth.getUser()).data.user;if(!user)return json({error:"Sesiune invalidă."},401);
+    const {data:profile}=await admin.from("profiles").select("id,role,is_active,is_owner").eq("id",user.id).single();
+    if(!profile?.is_active||!(["admin","editor"].includes(profile.role)||profile.is_owner))return json({error:"Acces indisponibil."},403);
+    const body=await req.json().catch(()=>({}));reportId=text(body?.report_id,80);if(!reportId)return json({error:"Raport lipsă."},400);
+    const {data:report,error:reportError}=await admin.from("field_daily_reports").select("id,project_id,work_date,status,report_text,created_by,work_summary,issues_notes,materials_needed,next_steps,safety_notes,projects(title,current_stage,location)").eq("id",reportId).single();
+    if(reportError||!report)return json({error:"Raport inexistent."},404);
+    const privileged=Boolean(profile.is_owner||profile.role==="admin");if(report.created_by!==user.id&&!privileged)return json({error:"Acces interzis."},403);
+    if(report.status==="draft")return json({error:"Trimite raportul înainte de analiză."},409);
+    await admin.from("field_daily_reports").update({ai_status:"processing",updated_at:new Date().toISOString()}).eq("id",report.id);
+    if(!key){await admin.from("field_daily_reports").update({ai_status:"failed",updated_at:new Date().toISOString()}).eq("id",report.id);return json({success:false,fallback:true,error:"AI provider indisponibil."},503);}
+    const project:any=Array.isArray(report.projects)?report.projects[0]:report.projects;
+    const prompt=`Analizează un raport zilnic de teren BCB Group. Nu inventa fapte, cantități, termene sau probleme care nu sunt susținute de raport. Extrage doar informații operaționale utile. Dacă o cantitate nu este explicită, quantity=null. Dacă termenul nu este explicit sau nu poate fi dedus sigur, due_date/needed_by=null. Risk level: low=normal, medium=necesită urmărire, high=blocaj/impact major, critical=siguranță sau oprire imediată.\n\nProiect: ${text(project?.title,240)}\nLocație: ${text(project?.location,240)}\nEtapă: ${text(project?.current_stage,240)}\nData: ${report.work_date}\nRaport brut:\n${text(report.report_text,12000)}\n\nCâmpuri suplimentare introduse de utilizator:\nProbleme: ${text(report.issues_notes,2500)}\nMateriale: ${text(report.materials_needed,2500)}\nPași următori: ${text(report.next_steps,2500)}\nSiguranță: ${text(report.safety_notes,2000)}`;
+    const response=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{Authorization:`Bearer ${key}`,"Content-Type":"application/json"},body:JSON.stringify({model,input:[{role:"system",content:[{type:"input_text",text:"Ești BCB Field Report Analyst. Structurezi fidel rapoarte de teren în română. Nu inventezi date și tratezi siguranța conservator."}]},{role:"user",content:[{type:"input_text",text:prompt}]}],text:{format:{type:"json_schema",name:"field_report_analysis",strict:true,schema}},max_output_tokens:2200})});
+    if(!response.ok)throw new Error(`AI provider ${response.status}: ${await response.text()}`);
+    const data=await response.json(),analysis=parseOutput(data),now=new Date().toISOString();
+    const update={work_summary:analysis.summary||report.report_text,issues_notes:analysis.issues||null,materials_needed:analysis.materials_text||null,next_steps:analysis.next_steps||null,safety_notes:analysis.safety_notes||null,risk_level:analysis.risk_level,ai_status:"ready",ai_model:model,ai_confidence:analysis.confidence,ai_payload:analysis,ai_analyzed_at:now,status:["high","critical"].includes(analysis.risk_level)?"needs_attention":"submitted",updated_at:now};
+    const {error:updateError}=await admin.from("field_daily_reports").update(update).eq("id",report.id);if(updateError)throw updateError;
+    await admin.from("field_report_suggestions").delete().eq("report_id",report.id).eq("status","suggested");
+    const suggestions:any[]=[];
+    for(const t of analysis.tasks)suggestions.push({report_id:report.id,project_id:report.project_id,suggestion_type:"task",title:t.title,description:t.description||null,priority:t.priority,due_date:t.due_date});
+    for(const m of analysis.materials)suggestions.push({report_id:report.id,project_id:report.project_id,suggestion_type:"material",title:m.title,description:m.description||null,priority:m.priority,quantity:m.quantity,unit:m.unit,due_date:m.needed_by});
+    if(["high","critical"].includes(analysis.risk_level))suggestions.push({report_id:report.id,project_id:report.project_id,suggestion_type:"risk",title:analysis.risk_level==="critical"?"Risc critic raportat":"Risc ridicat raportat",description:analysis.issues||analysis.safety_notes||analysis.summary,priority:analysis.risk_level==="critical"?"urgent":"high"});
+    if(suggestions.length){const {error:suggestionError}=await admin.from("field_report_suggestions").insert(suggestions);if(suggestionError)throw suggestionError;}
+    return json({success:true,report_id:report.id,risk_level:analysis.risk_level,confidence:analysis.confidence,suggestions:suggestions.length,analysis});
+  }catch(error){console.error("bcb-field-report-ai",error);if(reportId)await admin.from("field_daily_reports").update({ai_status:"failed",updated_at:new Date().toISOString()}).eq("id",reportId).catch(()=>{});return json({error:error instanceof Error?error.message:String(error)},500);}
+});
