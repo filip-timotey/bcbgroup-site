@@ -3,7 +3,18 @@
    Reveal + page modules
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const isProjectsPage = Boolean(document.querySelector(".projects26-page"));
+
+  if (isProjectsPage) {
+    try {
+      await import("./site-editor-projects-registry.js");
+      await import("./projects-public.js");
+    } catch (error) {
+      console.error("BCB projects boot error:", error);
+    }
+  }
 
   import("./site-content.js").catch(error => {
     console.error("BCB site content module error:", error);
@@ -39,12 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("oferta")) {
     import("./contact-request.js").catch(error => {
       console.error("BCB contact module error:", error);
-    });
-  }
-
-  if (document.querySelector(".projects26-page")) {
-    import("./projects-public.js").catch(error => {
-      console.error("BCB projects module error:", error);
     });
   }
 
