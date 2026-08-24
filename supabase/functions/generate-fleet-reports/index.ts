@@ -65,6 +65,15 @@ function driverDisplay(profile: any) {
   return "Conducator auto";
 }
 
+function tripFuel(fuel: any[], tripId: string) {
+  const rows = fuel.filter((entry: any) => entry.trip_id === tripId);
+  return {
+    liters: rows.reduce((sum: number, entry: any) => sum + Number(entry.liters || 0), 0),
+    amount: rows.reduce((sum: number, entry: any) => sum + Number(entry.total_amount || 0), 0),
+    count: rows.length,
+  };
+}
+
 function bytesToBase64(bytes: Uint8Array) {
   let binary = "";
   const chunk = 0x8000;
@@ -83,6 +92,7 @@ async function buildPdf({ vehicle, trips, fuel, settings, profiles, year, month,
   const pageCount = Math.max(1, Math.ceil(trips.length / rowsPerPage));
   const totalKm = trips.reduce((sum: number, trip: any) => sum + Number(trip.distance_km || 0), 0);
   const totalFuel = fuel.reduce((sum: number, entry: any) => sum + Number(entry.liters || 0), 0);
+  const totalFuelAmount = fuel.reduce((sum: number, entry: any) => sum + Number(entry.total_amount || 0), 0);
   const driverNames = [...new Set(trips.map((trip: any) => driverDisplay(profiles.get(trip.driver_id))))];
 
   for (let pageIndex = 0; pageIndex < pageCount; pageIndex++) {
@@ -133,8 +143,9 @@ async function buildPdf({ vehicle, trips, fuel, settings, profiles, year, month,
       draw(String(item[1]).slice(0, 34), x + 7, topY + 11, 7.3, true);
     });
 
-    const cols = [24, 52, 82, 60, 60, 90, 48, 48, 66, 66, 60];
-    const headers = ["Nr.", "Data", "Conducator", "Plecare", "Destinatie", "Scop", "Ora pl.", "Ora sos.", "Km plecare", "Km sosire", "Km parcurs"];
+    // Keep all existing columns and use the available right-side width for fueling.
+    const cols = [24, 52, 82, 60, 60, 90, 48, 48, 66, 66, 60, 55, 65];
+    const headers = ["Nr.", "Data", "Conducator", "Plecare", "Destinatie", "Scop", "Ora pl.", "Ora sos.", "Km plecare", "Km sosire", "Km parcurs", "Alim. L", "Alim. lei"];
     let y = topY - 40;
     let x = 28;
     const headerH = 25;
@@ -150,6 +161,7 @@ async function buildPdf({ vehicle, trips, fuel, settings, profiles, year, month,
       x = 28;
       const globalIndex = pageIndex * rowsPerPage + localIndex + 1;
       const profile = profiles.get(trip.driver_id);
+      const fuelOnTrip = tripFuel(fuel, trip.id);
       const data = [
         globalIndex,
         fmtDate(trip.start_at),
@@ -162,11 +174,13 @@ async function buildPdf({ vehicle, trips, fuel, settings, profiles, year, month,
         fmtNumber(trip.start_odometer),
         fmtNumber(trip.end_odometer),
         fmtNumber(trip.distance_km),
+        fuelOnTrip.count ? fmtNumber(fuelOnTrip.liters, 2) : "",
+        fuelOnTrip.count ? fmtNumber(fuelOnTrip.amount, 2) : "",
       ];
       data.forEach((value, index) => {
         box(x, y, cols[index], rowH);
         const maxLen = index === 2 ? 20 : index === 5 ? 23 : 15;
-        draw(String(value).slice(0, maxLen), x + 3, y + 8, 5.1, index === 10);
+        draw(String(value).slice(0, maxLen), x + 3, y + 8, index >= 11 ? 4.9 : 5.1, index === 10 || (index >= 11 && Boolean(value)));
         x += cols[index];
       });
       y -= rowH;
@@ -178,12 +192,12 @@ async function buildPdf({ vehicle, trips, fuel, settings, profiles, year, month,
       [
         ["Curse finalizate", String(trips.length)],
         ["Total kilometri", `${fmtNumber(totalKm)} km`],
-        ["Total alimentare", `${fmtNumber(totalFuel, 2)} L`],
+        ["Total alimentare", `${fmtNumber(totalFuel, 2)} L / ${fmtNumber(totalFuelAmount, 2)} lei`],
       ].forEach((item, index) => {
         const sx = 28 + index * summaryW;
         box(sx, summaryY, summaryW, 38);
         draw(item[0], sx + 8, summaryY + 25, 6);
-        draw(item[1], sx + 8, summaryY + 9, 10, true);
+        draw(item[1], sx + 8, summaryY + 9, index === 2 ? 8.5 : 10, true);
       });
 
       draw("Conducator(i) auto", 28, 42, 6);
@@ -201,22 +215,28 @@ async function buildPdf({ vehicle, trips, fuel, settings, profiles, year, month,
 }
 
 function buildXlsx({ vehicle, trips, fuel, settings, profiles, year, month, number }: any) {
-  const rows = trips.map((trip: any, index: number) => ({
-    Nr: index + 1,
-    Data: fmtDate(trip.start_at),
-    "Conducator auto": driverDisplay(profiles.get(trip.driver_id)),
-    Plecare: trip.origin || "",
-    Destinatie: trip.destination || "",
-    Scop: trip.purpose || "",
-    "Ora plecare": fmtTime(trip.start_at),
-    "Ora sosire": trip.end_at ? fmtTime(trip.end_at) : "",
-    "Km plecare": Number(trip.start_odometer || 0),
-    "Km sosire": Number(trip.end_odometer || 0),
-    "Km parcurs": Number(trip.distance_km || 0),
-  }));
+  const rows = trips.map((trip: any, index: number) => {
+    const fuelOnTrip = tripFuel(fuel, trip.id);
+    return {
+      Nr: index + 1,
+      Data: fmtDate(trip.start_at),
+      "Conducator auto": driverDisplay(profiles.get(trip.driver_id)),
+      Plecare: trip.origin || "",
+      Destinatie: trip.destination || "",
+      Scop: trip.purpose || "",
+      "Ora plecare": fmtTime(trip.start_at),
+      "Ora sosire": trip.end_at ? fmtTime(trip.end_at) : "",
+      "Km plecare": Number(trip.start_odometer || 0),
+      "Km sosire": Number(trip.end_odometer || 0),
+      "Km parcurs": Number(trip.distance_km || 0),
+      "Alimentare L": fuelOnTrip.count ? Number(fuelOnTrip.liters.toFixed(2)) : "",
+      "Alimentare lei": fuelOnTrip.count ? Number(fuelOnTrip.amount.toFixed(2)) : "",
+    };
+  });
 
   const totalKm = trips.reduce((sum: number, trip: any) => sum + Number(trip.distance_km || 0), 0);
   const totalFuel = fuel.reduce((sum: number, entry: any) => sum + Number(entry.liters || 0), 0);
+  const totalFuelAmount = fuel.reduce((sum: number, entry: any) => sum + Number(entry.total_amount || 0), 0);
   const driverNames = [...new Set(trips.map((trip: any) => driverDisplay(profiles.get(trip.driver_id))))];
 
   const wb = XLSX.utils.book_new();
@@ -227,23 +247,29 @@ function buildXlsx({ vehicle, trips, fuel, settings, profiles, year, month, numb
     ["Perioada", `${monthName(month)} ${year}`, "Vehicul", `${vehicle.make} ${vehicle.model}`],
     ["Nr. inmatriculare", vehicle.registration_number, "Combustibil", vehicle.fuel_type],
     ["Conducatori auto", driverNames.join(" / "), "Curse", trips.length],
-    ["Km total", totalKm, "Alimentare total", totalFuel],
+    ["Km total", totalKm, "Alimentare total", `${Number(totalFuel.toFixed(2))} L / ${Number(totalFuelAmount.toFixed(2))} lei`],
     [], [], [],
   ], { origin: "A1" });
   ws["!cols"] = [
     { wch: 5 }, { wch: 12 }, { wch: 24 }, { wch: 18 }, { wch: 20 }, { wch: 30 },
-    { wch: 13 }, { wch: 13 }, { wch: 14 }, { wch: 14 }, { wch: 14 },
+    { wch: 13 }, { wch: 13 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 13 }, { wch: 15 },
   ];
   XLSX.utils.book_append_sheet(wb, ws, "Foaie parcurs");
 
-  const fuelSheet = XLSX.utils.json_to_sheet(fuel.map((entry: any) => ({
-    Data: fmtDate(entry.fueled_at),
-    "Conducator auto": driverDisplay(profiles.get(entry.driver_id)),
-    Litri: Number(entry.liters),
-    Valoare: entry.total_amount != null ? Number(entry.total_amount) : "",
-    Kilometraj: entry.odometer != null ? Number(entry.odometer) : "",
-    Statie: entry.station || "",
-  })));
+  const tripMap = new Map(trips.map((trip: any) => [trip.id, trip]));
+  const fuelSheet = XLSX.utils.json_to_sheet(fuel.map((entry: any) => {
+    const linkedTrip: any = entry.trip_id ? tripMap.get(entry.trip_id) : null;
+    return {
+      Data: fmtDate(entry.fueled_at),
+      "Conducator auto": driverDisplay(profiles.get(entry.driver_id)),
+      Cursa: linkedTrip ? `${linkedTrip.origin || ""} → ${linkedTrip.destination || ""}` : "Neasociata unei curse",
+      Litri: Number(entry.liters),
+      Valoare: entry.total_amount != null ? Number(entry.total_amount) : "",
+      "Pret / litru": entry.total_amount != null && Number(entry.liters) > 0 ? Number((Number(entry.total_amount) / Number(entry.liters)).toFixed(2)) : "",
+      Kilometraj: entry.odometer != null ? Number(entry.odometer) : "",
+      Statie: entry.station || "",
+    };
+  }));
   XLSX.utils.book_append_sheet(wb, fuelSheet, "Alimentari");
 
   return XLSX.write(wb, { bookType: "xlsx", type: "array" }) as ArrayBuffer;
@@ -361,6 +387,7 @@ Deno.serve(async (req) => {
 
       const totalKm = vehicleTrips.reduce((sum: number, trip: any) => sum + Number(trip.distance_km || 0), 0);
       const totalFuel = vehicleFuel.reduce((sum: number, entry: any) => sum + Number(entry.liters || 0), 0);
+      const totalFuelAmount = vehicleFuel.reduce((sum: number, entry: any) => sum + Number(entry.total_amount || 0), 0);
 
       const reportPayload = {
         vehicle_id: vehicle.id,
@@ -388,7 +415,7 @@ Deno.serve(async (req) => {
         { filename: `${number}.pdf`, content: bytesToBase64(pdfBytes) },
         { filename: `${number}.xlsx`, content: bytesToBase64(xlsxBytes) },
       );
-      generatedReports.push({ vehicle: vehicle.registration_number, report_number: number, trips: vehicleTrips.length, total_km: totalKm });
+      generatedReports.push({ vehicle: vehicle.registration_number, report_number: number, trips: vehicleTrips.length, total_km: totalKm, total_fuel_liters: totalFuel, total_fuel_amount: totalFuelAmount });
       generated++;
     }
 
@@ -405,7 +432,7 @@ Deno.serve(async (req) => {
         settings.report_email,
         settings.report_cc || undefined,
         `BCB Fleet · Foi de parcurs · ${monthName(month)} ${year}`,
-        `<div style="font-family:Arial,sans-serif;color:#20252a"><h2>BCB Group · Fleet Management</h2><p>Atasat gasesti foile de parcurs pentru <strong>${monthName(month)} ${year}</strong>.</p><p>Fiecare vehicul are propriul PDF si fisier Excel, cu toate cursele lunii si conducatorul auto aferent fiecarei deplasari.</p><p>Documente generate automat de BCB Business Manager.</p></div>`,
+        `<div style="font-family:Arial,sans-serif;color:#20252a"><h2>BCB Group · Fleet Management</h2><p>Atasat gasesti foile de parcurs pentru <strong>${monthName(month)} ${year}</strong>.</p><p>Fiecare vehicul are propriul PDF si fisier Excel, cu toate cursele lunii, conducatorul auto si alimentarile asociate fiecarei curse.</p><p>Documente generate automat de BCB Business Manager.</p></div>`,
         emailAttachments,
       );
       emailed = true;
