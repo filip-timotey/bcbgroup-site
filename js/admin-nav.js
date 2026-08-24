@@ -57,6 +57,7 @@ async function syncAdminNavigation(){
   }
   if(currentPage()==="fleet.html"){
     ensureStyles('../css/admin-fleet-safety.css','fleet-safety-styles');
+    ensureStyles('../css/admin-fleet-fuel-stop.css','fleet-fuel-stop-styles');
     import("./admin-fleet-safety.js").catch(error=>console.error("Fleet safety controls:",error));
     if(isAdminProfile(context.profile))import("./admin-fleet-delete.js").catch(error=>console.error("Fleet delete controls:",error));
   }
