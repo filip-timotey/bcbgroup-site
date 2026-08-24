@@ -35,8 +35,10 @@ async function syncAdminNavigation(){
   renderNavigation(context.profile); syncRoleLabel(context.profile);
   ensureStyles('../css/admin-copilot.css','copilot-styles');
   ensureStyles('../css/admin-copilot-hybrid.css','copilot-hybrid-styles');
+  ensureStyles('../css/admin-copilot-mobile-controls.css','copilot-mobile-controls-styles');
   ensureStyles('../css/admin-time.css','time-global-styles');
   import('./admin-copilot.js').catch(error=>console.error('BCB AI Copilot:',error));
+  import('./admin-copilot-mobile-controls.js').catch(error=>console.error('BCB AI mobile controls:',error));
   import('./admin-workday-status.js').catch(error=>console.error('BCB workday status:',error));
   import('./admin-profile.js').then(m=>m.initAdminProfile()).catch(error=>console.error('BCB profile manager:',error));
   if(currentPage()==='users.html') import('./admin-user-avatars.js').catch(error=>console.error('BCB user avatars:',error));
