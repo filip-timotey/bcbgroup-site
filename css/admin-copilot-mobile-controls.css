@@ -1,14 +1,13 @@
+.bcb-ai-widget{touch-action:none;transition:filter .18s ease}.bcb-ai-widget.is-dragging{filter:drop-shadow(0 16px 22px rgba(18,26,32,.25));user-select:none;-webkit-user-select:none}.bcb-ai-widget.is-dragging .bcb-ai-toggle{cursor:grabbing}.bcb-ai-widget.has-custom-position .bcb-ai-toggle{cursor:grab}.bcb-ai-widget.has-custom-position.is-dragging .bcb-ai-toggle{cursor:grabbing}.bcb-ai-widget.has-custom-position .bcb-ai-panel{position:fixed;right:22px;bottom:110px;left:auto;top:auto}
+
 @media(max-width:620px){
-  .bcb-ai-widget{touch-action:none;transition:filter .18s ease}
   .bcb-ai-widget:not(.is-engaged){width:58px;height:58px}
   .bcb-ai-widget:not(.is-engaged) .bcb-ai-toggle{width:58px;height:58px;filter:drop-shadow(0 10px 16px rgba(18,26,32,.2));touch-action:none}
   .bcb-ai-widget:not(.is-engaged) .bcb-ai-toggle .bcb-bot-stage{inset:-6px;transform:scale(.64);transform-origin:center center}
   .bcb-ai-widget:not(.is-engaged) .bcb-ai-orbit.one{inset:4px}
   .bcb-ai-widget:not(.is-engaged) .bcb-ai-orbit.two{inset:10px}
   .bcb-ai-widget:not(.is-engaged) .bcb-ai-live-dot{right:2px;bottom:4px;width:10px;height:10px;border-width:2px}
-  .bcb-ai-widget.is-dragging{filter:drop-shadow(0 16px 22px rgba(18,26,32,.25));user-select:none;-webkit-user-select:none}
-  .bcb-ai-widget.is-dragging .bcb-ai-toggle{cursor:grabbing}
   .bcb-ai-widget.is-engaged .bcb-ai-toggle{width:78px;height:78px}
   .bcb-ai-widget.is-engaged .bcb-ai-toggle .bcb-bot-stage{transform:scale(.9)}
-  .bcb-ai-panel{left:10px!important;right:10px!important;top:auto!important;bottom:150px!important}
+  .bcb-ai-panel,.bcb-ai-widget.has-custom-position .bcb-ai-panel{left:10px!important;right:10px!important;top:auto!important;bottom:150px!important}
 }
