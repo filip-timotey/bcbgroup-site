@@ -35,13 +35,56 @@ function addMessage(role,text,meta="",sources=[],persist=true){
 }
 function setBusy(next){busy=next;const widget=$("#bcb-ai-copilot-widget"),button=$("#bcb-copilot-form button"),input=$("#bcb-copilot-question");widget?.classList.toggle("is-thinking",next);if(button){button.disabled=next;button.innerHTML=next?'<i class="fa-solid fa-circle-notch fa-spin"></i>':'<i class="fa-solid fa-arrow-up"></i>';}if(input)input.disabled=next;}
 async function submitQuestion(event){event.preventDefault();const input=$("#bcb-copilot-question"),q=String(input?.value||"").trim();if(!q||busy)return;input.value="";await ask(q);}
+
+async function getFreshAccessToken(forceRefresh=false){
+  let session=null;
+  if(forceRefresh){
+    const {data,error}=await supabase.auth.refreshSession();
+    if(error)throw error;
+    session=data?.session||null;
+  }else{
+    const {data,error}=await supabase.auth.getSession();
+    if(error)throw error;
+    session=data?.session||null;
+    const expiresAt=Number(session?.expires_at||0);
+    const expiresSoon=expiresAt>0&&expiresAt*1000-Date.now()<90000;
+    if(session&&expiresSoon){
+      const refreshed=await supabase.auth.refreshSession();
+      if(refreshed.error)throw refreshed.error;
+      session=refreshed.data?.session||null;
+    }
+  }
+  if(!session?.access_token){const error=new Error("Sesiunea Business Manager a expirat.");error.code="BCB_SESSION_EXPIRED";throw error;}
+  return session.access_token;
+}
+
+function isUnauthorizedInvoke(error){
+  const status=Number(error?.context?.status||error?.status||0);
+  const message=String(error?.message||"").toLowerCase();
+  return status===401||message.includes("401")||message.includes("jwt")||message.includes("unauthorized");
+}
+
+async function invokeCopilot(payload){
+  let token=await getFreshAccessToken(false);
+  let result=await supabase.functions.invoke("bcb-ai-copilot",{body:payload,headers:{Authorization:`Bearer ${token}`}});
+  if(result.error&&isUnauthorizedInvoke(result.error)){
+    token=await getFreshAccessToken(true);
+    result=await supabase.functions.invoke("bcb-ai-copilot",{body:payload,headers:{Authorization:`Bearer ${token}`}});
+  }
+  return result;
+}
+
 async function ask(question){
   if(busy||!question)return;setOpen(true);const prior=conversation.slice(-8);addMessage("user",question);setBusy(true);
   try{
-    const {data,error}=await supabase.functions.invoke("bcb-ai-copilot",{body:{question,history:prior,page:currentPage()}});if(error)throw error;if(!data?.answer)throw new Error(data?.error||"Răspuns gol de la Copilot");
+    const {data,error}=await invokeCopilot({question,history:prior,page:currentPage()});if(error)throw error;if(!data?.answer)throw new Error(data?.error||"Răspuns gol de la Copilot");
     const meta=data.usedWeb?"AI + web actual + context permis":data.mode?.startsWith("hybrid")?"AI general + context permis":"BCB Operational Intelligence";
     addMessage("assistant",data.answer,meta,data.sources||[]);
-  }catch(error){console.error("BCB Copilot:",error);addMessage("assistant","Nu am putut procesa întrebarea acum. Restul Business Manager funcționează normal; poți încerca din nou.","Eroare de conexiune");}finally{setBusy(false);}
+  }catch(error){
+    console.error("BCB Copilot:",error);
+    const sessionExpired=error?.code==="BCB_SESSION_EXPIRED"||isUnauthorizedInvoke(error);
+    addMessage("assistant",sessionExpired?"Sesiunea ta Business Manager a expirat sau nu a putut fi reîmprospătată. Reautentifică-te și apoi Copilot va funcționa din nou.":"Nu am putut procesa întrebarea acum. Restul Business Manager funcționează normal; poți încerca din nou.",sessionExpired?"Sesiune expirată":"Eroare de conexiune");
+  }finally{setBusy(false);}
 }
 
 (async()=>{ctx=await requireStaff();if(!ctx)return;injectCopilot();})();
