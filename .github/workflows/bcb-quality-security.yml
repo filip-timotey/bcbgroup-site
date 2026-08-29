@@ -29,7 +29,10 @@ jobs:
           while IFS= read -r -d '' file; do
             echo "Checking $file"
             node --check "$file"
-          done < <(find js -type f -name '*.js' -print0)
+          done < <(find js scripts -type f \( -name '*.js' -o -name '*.mjs' \) -print0)
+
+      - name: Static HTML integrity
+        run: node scripts/validate-static.mjs
 
       - name: Block accidental server secrets
         shell: bash

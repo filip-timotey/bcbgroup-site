@@ -1,7 +1,7 @@
-const CACHE='bcb-manager-shell-v4';
+const CACHE='bcb-manager-shell-v5';
 const SHELL=[
-  '/admin/index.html','/admin/dashboard.html','/admin/fleet.html','/admin/employees.html','/admin/quotes.html','/admin/time.html',
-  '/css/style.css','/css/admin-2026.css','/css/admin-nav.css','/css/admin-business.css','/css/admin-crm.css','/css/admin-copilot.css','/css/admin-fleet-notifications.css','/css/admin-time.css',
+  '/admin/index.html','/admin/set-password.html','/admin/dashboard.html','/admin/fleet.html','/admin/employees.html','/admin/quotes.html','/admin/time.html',
+  '/css/style.css','/css/admin-2026.css','/css/admin-auth-recovery.css','/css/admin-set-password.css','/css/admin-nav.css','/css/admin-business.css','/css/admin-crm.css','/css/admin-copilot.css','/css/admin-fleet-notifications.css','/css/admin-time.css',
   '/assets/images/logo.png','/manifest.webmanifest'
 ];
 
