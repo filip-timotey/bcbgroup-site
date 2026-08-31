@@ -19,7 +19,10 @@ const ADMIN_NAV = [
   { href:"data-control.html", icon:"fa-database", label:"Control date", match:["data-control.html"] },
   { href:"users.html", icon:"fa-user-shield", label:"Utilizatori", match:["users.html"] }
 ];
-const OWNER_NAV = [{ href:"security-center.html", icon:"fa-shield-halved", label:"Security Center", match:["security-center.html"] }];
+const OWNER_NAV = [
+ { href:"owner-command-center.html", icon:"fa-crown", label:"Command Center", match:["owner-command-center.html"] },
+ { href:"security-center.html", icon:"fa-shield-halved", label:"Security Center", match:["security-center.html"] }
+];
 function currentPage(){return window.location.pathname.split("/").pop()||"dashboard.html";}
 function makeLink(item,adminOnly=false){const a=document.createElement("a");a.href=item.href;a.dataset.bcbNav="true";if(adminOnly)a.dataset.adminOnly="true";a.innerHTML=`<i class="fa-solid ${item.icon}"></i> ${item.label}`;return a;}
 function isActive(item){const page=currentPage();if(item.match?.includes(page))return true;if(page==="dashboard.html"&&item.hash&&window.location.hash.replace("#","")===item.hash)return true;if(page==="dashboard.html"&&item.href==="dashboard.html"&&!window.location.hash)return true;return false;}
