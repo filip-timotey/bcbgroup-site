@@ -12,7 +12,6 @@ const COMMON_NAV = [
   { href:"activity.html", icon:"fa-clock-rotate-left", label:"Activitate", match:["activity.html"] },
   { href:"fleet.html", icon:"fa-car-side", label:"Fleet", match:["fleet.html"] }
 ];
-
 const ADMIN_NAV = [
   { href:"employees.html", icon:"fa-users-gear", label:"Angajați", match:["employees.html"] },
   { href:"site-editor.html", icon:"fa-pen-ruler", label:"Site Editor", match:["site-editor.html"] },
@@ -21,52 +20,12 @@ const ADMIN_NAV = [
   { href:"users.html", icon:"fa-user-shield", label:"Utilizatori", match:["users.html"] }
 ];
 const OWNER_NAV = [{ href:"security-center.html", icon:"fa-shield-halved", label:"Security Center", match:["security-center.html"] }];
-
-function currentPage(){ return window.location.pathname.split("/").pop() || "dashboard.html"; }
-function makeLink(item, adminOnly=false){const a=document.createElement("a");a.href=item.href;a.dataset.bcbNav="true";if(adminOnly)a.dataset.adminOnly="true";a.innerHTML=`<i class="fa-solid ${item.icon}"></i> ${item.label}`;return a;}
+function currentPage(){return window.location.pathname.split("/").pop()||"dashboard.html";}
+function makeLink(item,adminOnly=false){const a=document.createElement("a");a.href=item.href;a.dataset.bcbNav="true";if(adminOnly)a.dataset.adminOnly="true";a.innerHTML=`<i class="fa-solid ${item.icon}"></i> ${item.label}`;return a;}
 function isActive(item){const page=currentPage();if(item.match?.includes(page))return true;if(page==="dashboard.html"&&item.hash&&window.location.hash.replace("#","")===item.hash)return true;if(page==="dashboard.html"&&item.href==="dashboard.html"&&!window.location.hash)return true;return false;}
-function renderNavigation(profile){const nav=document.querySelector(".bcb-admin-nav");if(!nav)return;const isAdmin=isAdminProfile(profile);const owner=isOwnerProfile(profile);const items=[...COMMON_NAV,...(isAdmin?ADMIN_NAV:[]),...(owner?OWNER_NAV:[])];const fragment=document.createDocumentFragment();items.forEach(item=>{const link=makeLink(item,ADMIN_NAV.includes(item)||OWNER_NAV.includes(item));link.classList.toggle("active",isActive(item));fragment.appendChild(link);});nav.replaceChildren(fragment);if(!nav.dataset.hashSync){nav.dataset.hashSync="true";window.addEventListener("hashchange",()=>renderNavigation(profile),{passive:true});}}
-function syncRoleLabel(profile){const cards=document.querySelectorAll('.bcb-admin-user-card');cards.forEach(card=>{const label=card.querySelector('span');const desired=isOwnerProfile(profile)?'Owner':profile?.role==='admin'?'Administrator':'Editor';if(label&&label.textContent!==desired)label.textContent=desired;card.classList.toggle('is-owner',isOwnerProfile(profile));if(isOwnerProfile(profile)&&label&&!label.dataset.ownerWatch){label.dataset.ownerWatch='true';const observer=new MutationObserver(()=>{if(label.textContent!=='Owner')label.textContent='Owner';});observer.observe(label,{childList:true,characterData:true,subtree:true});}});}
+function renderNavigation(profile){const nav=document.querySelector(".bcb-admin-nav");if(!nav)return;const admin=isAdminProfile(profile),owner=isOwnerProfile(profile);const items=[...COMMON_NAV,...(admin?ADMIN_NAV:[]),...(owner?OWNER_NAV:[])];const fragment=document.createDocumentFragment();items.forEach(item=>{const link=makeLink(item,ADMIN_NAV.includes(item)||OWNER_NAV.includes(item));link.classList.toggle("active",isActive(item));fragment.appendChild(link);});nav.replaceChildren(fragment);if(!nav.dataset.hashSync){nav.dataset.hashSync="true";window.addEventListener("hashchange",()=>renderNavigation(profile),{passive:true});}}
+function syncRoleLabel(profile){document.querySelectorAll('.bcb-admin-user-card').forEach(card=>{const label=card.querySelector('span');const desired=isOwnerProfile(profile)?'Owner':profile?.role==='admin'?'Administrator':'Editor';if(label&&label.textContent!==desired)label.textContent=desired;card.classList.toggle('is-owner',isOwnerProfile(profile));if(isOwnerProfile(profile)&&label&&!label.dataset.ownerWatch){label.dataset.ownerWatch='true';new MutationObserver(()=>{if(label.textContent!=='Owner')label.textContent='Owner';}).observe(label,{childList:true,characterData:true,subtree:true});}});}
 function setupMobileDrawer(){const sidebar=document.querySelector(".bcb-admin-sidebar");if(!sidebar||document.querySelector(".bcb-mobile-admin-bar"))return;const bar=document.createElement("div");bar.className="bcb-mobile-admin-bar";bar.innerHTML=`<div class="bcb-mobile-admin-brand"><img src="../assets/images/logo.png" alt="BCB Group"><span><small>BCB Group</small><strong>Business Manager</strong></span></div><button class="bcb-mobile-admin-menu" type="button" aria-label="Deschide meniul" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>`;const overlay=document.createElement("div");overlay.className="bcb-mobile-admin-overlay";document.body.append(bar,overlay);const button=bar.querySelector(".bcb-mobile-admin-menu"),icon=button.querySelector("i");let opened=false;const setOpen=next=>{if(opened===next)return;opened=next;sidebar.classList.toggle("is-mobile-open",next);overlay.classList.toggle("is-open",next);button.setAttribute("aria-expanded",String(next));icon.className=next?"fa-solid fa-xmark":"fa-solid fa-bars";document.body.style.overflow=next?"hidden":"";};button.addEventListener("click",()=>setOpen(!opened));overlay.addEventListener("click",()=>setOpen(false));sidebar.addEventListener("click",e=>{if(e.target.closest("a"))setOpen(false)});document.addEventListener("keydown",e=>{if(e.key==="Escape")setOpen(false)});window.addEventListener("resize",()=>{if(window.innerWidth>620)setOpen(false)},{passive:true});}
 function ensureStyles(href,key){if(document.querySelector(`link[data-${key}]`))return;const link=document.createElement('link');link.rel='stylesheet';link.href=href;link.setAttribute(`data-${key}`,'true');document.head.appendChild(link);}
-
-async function syncAdminNavigation(){
-  setupMobileDrawer(); bindAdminLogout(); ensureStyles('../css/admin-owner.css','owner-styles');
-  const context=await requireStaffContext(); if(!context)return;
-  renderNavigation(context.profile); syncRoleLabel(context.profile);
-  ensureStyles('../css/admin-copilot.css','copilot-styles');
-  ensureStyles('../css/admin-copilot-hybrid.css','copilot-hybrid-styles');
-  ensureStyles('../css/admin-copilot-mobile-controls.css','copilot-mobile-controls-styles');
-  ensureStyles('../css/admin-time.css','time-global-styles');
-  import('./admin-copilot.js').catch(error=>console.error('BCB AI Copilot:',error));
-  import('./admin-copilot-mobile-controls.js').catch(error=>console.error('BCB AI mobile controls:',error));
-  import('./admin-workday-status.js').catch(error=>console.error('BCB workday status:',error));
-  import('./admin-profile.js').then(m=>m.initAdminProfile()).catch(error=>console.error('BCB profile manager:',error));
-  if(currentPage()==='users.html') import('./admin-user-avatars.js').catch(error=>console.error('BCB user avatars:',error));
-  if(currentPage()==='time.html'){
-    ensureStyles('../css/admin-field-reports.css','field-report-styles');
-    import('./admin-field-reports.js').catch(error=>console.error('BCB field daily reports:',error));
-    import('./admin-field-report-stop-bridge.js').catch(error=>console.error('BCB field report stop bridge:',error));
-  }
-  if(currentPage()==='project.html'){
-    ensureStyles('../css/admin-project-field-intelligence.css','project-field-intelligence-styles');
-    ensureStyles('../css/admin-project-command-center.css','project-command-center-styles');
-    import('./admin-project-field-intelligence.js').catch(error=>console.error('BCB project field intelligence:',error));
-    import('./admin-project-command-center.js').catch(error=>console.error('BCB project command center:',error));
-    if(isAdminProfile(context.profile)){
-      ensureStyles('../css/admin-project-labor.css','project-labor-styles');
-      import('./admin-project-labor.js').catch(error=>console.error('BCB project labor:',error));
-    }
-  }
-  if(currentPage()==="fleet.html"){
-    ensureStyles('../css/admin-fleet-safety.css','fleet-safety-styles');
-    ensureStyles('../css/admin-fleet-fuel-stop.css','fleet-fuel-stop-styles');
-    import("./admin-fleet-safety.js").catch(error=>console.error("Fleet safety controls:",error));
-    if(isAdminProfile(context.profile)){
-      ensureStyles('../css/admin-fleet-trip-corrections.css','fleet-trip-correction-styles');
-      import("./admin-fleet-delete.js").catch(error=>console.error("Fleet delete controls:",error));
-      import("./admin-fleet-trip-corrections.js").catch(error=>console.error("Fleet trip corrections:",error));
-    }
-  }
-}
+async function syncAdminNavigation(){setupMobileDrawer();bindAdminLogout();ensureStyles('../css/admin-owner.css','owner-styles');const context=await requireStaffContext();if(!context)return;renderNavigation(context.profile);syncRoleLabel(context.profile);ensureStyles('../css/admin-notification-center.css','notification-center-styles');import('./admin-notification-center.js').then(m=>m.initNotificationCenter()).catch(error=>console.error('BCB notifications:',error));ensureStyles('../css/admin-copilot.css','copilot-styles');ensureStyles('../css/admin-copilot-hybrid.css','copilot-hybrid-styles');ensureStyles('../css/admin-copilot-mobile-controls.css','copilot-mobile-controls-styles');ensureStyles('../css/admin-time.css','time-global-styles');import('./admin-copilot.js').catch(error=>console.error('BCB AI Copilot:',error));import('./admin-copilot-mobile-controls.js').catch(error=>console.error('BCB AI mobile controls:',error));import('./admin-workday-status.js').catch(error=>console.error('BCB workday status:',error));import('./admin-profile.js').then(m=>m.initAdminProfile()).catch(error=>console.error('BCB profile manager:',error));if(currentPage()==='users.html')import('./admin-user-avatars.js').catch(error=>console.error('BCB user avatars:',error));if(currentPage()==='time.html'){ensureStyles('../css/admin-field-reports.css','field-report-styles');import('./admin-field-reports.js').catch(error=>console.error('BCB field daily reports:',error));import('./admin-field-report-stop-bridge.js').catch(error=>console.error('BCB field report stop bridge:',error));}if(currentPage()==='project.html'){ensureStyles('../css/admin-project-field-intelligence.css','project-field-intelligence-styles');ensureStyles('../css/admin-project-command-center.css','project-command-center-styles');import('./admin-project-field-intelligence.js').catch(error=>console.error('BCB project field intelligence:',error));import('./admin-project-command-center.js').catch(error=>console.error('BCB project command center:',error));if(isAdminProfile(context.profile)){ensureStyles('../css/admin-project-labor.css','project-labor-styles');import('./admin-project-labor.js').catch(error=>console.error('BCB project labor:',error));}}if(currentPage()==="fleet.html"){ensureStyles('../css/admin-fleet-safety.css','fleet-safety-styles');ensureStyles('../css/admin-fleet-fuel-stop.css','fleet-fuel-stop-styles');import("./admin-fleet-safety.js").catch(error=>console.error("Fleet safety controls:",error));if(isAdminProfile(context.profile)){ensureStyles('../css/admin-fleet-trip-corrections.css','fleet-trip-correction-styles');import("./admin-fleet-delete.js").catch(error=>console.error("Fleet delete controls:",error));import("./admin-fleet-trip-corrections.js").catch(error=>console.error("Fleet trip corrections:",error));}}}
 syncAdminNavigation();
