@@ -38,11 +38,17 @@ const PAGE_CAPABILITY = {
 };
 
 let effectiveCaps=null;
+let capabilityChannel=null;
+let capabilityPollTimer=null;
+let capabilityRefreshTimer=null;
+let capabilityRefreshBusy=false;
+let capabilityContext=null;
+
 function currentPage(){return window.location.pathname.split("/").pop()||"dashboard.html";}
 function hasCap(capability,profile){return !capability||isOwnerProfile(profile)||effectiveCaps?.has(capability);}
 
 async function loadCapabilities(profile){
-  if(isOwnerProfile(profile)){effectiveCaps=new Set(["*"]);return true;}
+  if(isOwnerProfile(profile)){effectiveCaps=new Set(["*"]);window.__BCB_EFFECTIVE_CAPABILITIES__=effectiveCaps;return true;}
   try{
     const {data,error}=await supabase.rpc("get_effective_user_capabilities",{p_user_id:profile.id});
     if(error)throw error;
@@ -85,13 +91,63 @@ function renderNavigation(profile,legacy=false){
   const groups=[...NAV_GROUPS,ADMIN_GROUP];if(isOwnerProfile(profile))groups.push(OWNER_GROUP);
   const fragment=document.createDocumentFragment();groups.forEach(group=>{const el=makeGroup(group,profile,legacy);if(el)fragment.appendChild(el);});
   nav.replaceChildren(fragment);nav.setAttribute("aria-label","Navigare Business Manager");
-  if(!nav.dataset.hashSync){nav.dataset.hashSync="true";window.addEventListener("hashchange",()=>renderNavigation(profile,legacy),{passive:true});}
+  if(!nav.dataset.hashSync){nav.dataset.hashSync="true";window.addEventListener("hashchange",()=>renderNavigation(profile,!effectiveCaps),{passive:true});}
 }
 
 function enforcePageAccess(profile,capabilitiesLoaded){
   if(isOwnerProfile(profile)||!capabilitiesLoaded)return true;
   const required=PAGE_CAPABILITY[currentPage()];if(!required||hasCap(required,profile))return true;
   window.location.replace("dashboard.html?access=restricted");return false;
+}
+
+function setVisible(el,visible){if(!el)return;el.hidden=!visible;el.setAttribute('aria-hidden',String(!visible));}
+function syncDashboardSurfaces(profile){
+  if(currentPage()!=="dashboard.html"||isOwnerProfile(profile))return;
+  const projects=hasCap('projects.work',profile),crm=hasCap('crm.work',profile),media=hasCap('media.work',profile);
+  setVisible(document.querySelector('#projects'),projects);
+  setVisible(document.querySelector('.bcb-dashboard-crm'),crm);
+  setVisible(document.querySelector('#bcb-admin-projects-count')?.closest('article'),projects);
+  setVisible(document.querySelector('#bcb-admin-active-count')?.closest('article'),projects);
+  setVisible(document.querySelector('#bcb-admin-completed-count')?.closest('article'),projects);
+  setVisible(document.querySelector('#bcb-admin-media-count')?.closest('article'),media);
+  const newProject=document.querySelector('.bcb-admin-primary-action');if(newProject&&!projects)newProject.hidden=true;
+  if(location.hash==="#projects"&&!projects)history.replaceState(null,"",location.pathname+location.search);
+}
+
+function emitCapabilitiesUpdated(profile){
+  window.dispatchEvent(new CustomEvent('bcb:capabilities-updated',{detail:{profileId:profile.id,capabilities:effectiveCaps?Array.from(effectiveCaps):null}}));
+}
+
+async function refreshEffectiveAccess(reason='sync'){
+  if(!capabilityContext||isOwnerProfile(capabilityContext.profile)||capabilityRefreshBusy)return;
+  capabilityRefreshBusy=true;
+  try{
+    const ok=await loadCapabilities(capabilityContext.profile);
+    if(!ok)return;
+    if(!enforcePageAccess(capabilityContext.profile,true))return;
+    renderNavigation(capabilityContext.profile,false);
+    syncDashboardSurfaces(capabilityContext.profile);
+    emitCapabilitiesUpdated(capabilityContext.profile);
+  }catch(error){console.error(`BCB capability refresh (${reason}):`,error);}
+  finally{capabilityRefreshBusy=false;}
+}
+
+function scheduleCapabilityRefresh(reason='realtime'){
+  clearTimeout(capabilityRefreshTimer);
+  capabilityRefreshTimer=setTimeout(()=>refreshEffectiveAccess(reason),120);
+}
+
+function setupCapabilitySync(context){
+  capabilityContext=context;
+  if(isOwnerProfile(context.profile))return;
+  if(capabilityChannel){supabase.removeChannel(capabilityChannel);capabilityChannel=null;}
+  capabilityChannel=supabase.channel(`bcb-access-${context.profile.id}`)
+    .on('postgres_changes',{event:'*',schema:'public',table:'user_capability_overrides',filter:`user_id=eq.${context.profile.id}`},()=>scheduleCapabilityRefresh('user-override'))
+    .on('postgres_changes',{event:'*',schema:'public',table:'role_capabilities',filter:`role=eq.${context.profile.role}`},()=>scheduleCapabilityRefresh('role-default'))
+    .subscribe(status=>{if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')console.warn('BCB access realtime:',status);});
+  clearInterval(capabilityPollTimer);capabilityPollTimer=setInterval(()=>refreshEffectiveAccess('fallback-poll'),60000);
+  window.addEventListener('focus',()=>refreshEffectiveAccess('window-focus'),{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshEffectiveAccess('visibility');});
 }
 
 function syncRoleLabel(profile){document.querySelectorAll('.bcb-admin-user-card').forEach(card=>{const label=card.querySelector('span');const desired=isOwnerProfile(profile)?'Owner':profile?.role==='admin'?'Administrator':'Editor';if(label&&label.textContent!==desired)label.textContent=desired;card.classList.toggle('is-owner',isOwnerProfile(profile));if(isOwnerProfile(profile)&&label&&!label.dataset.ownerWatch){label.dataset.ownerWatch='true';new MutationObserver(()=>{if(label.textContent!=='Owner')label.textContent='Owner';}).observe(label,{childList:true,characterData:true,subtree:true});}});}
@@ -109,7 +165,7 @@ function ensureStyles(href,key){if(document.querySelector(`link[data-${key}]`))r
 
 async function syncAdminNavigation(){
   setupMobileDrawer();bindAdminLogout();ensureStyles('../css/admin-owner.css','owner-styles');const context=await requireStaffContext();if(!context)return;
-  const capsLoaded=await loadCapabilities(context.profile);if(!enforcePageAccess(context.profile,capsLoaded))return;renderNavigation(context.profile,!capsLoaded);syncRoleLabel(context.profile);
+  const capsLoaded=await loadCapabilities(context.profile);if(!enforcePageAccess(context.profile,capsLoaded))return;renderNavigation(context.profile,!capsLoaded);syncRoleLabel(context.profile);syncDashboardSurfaces(context.profile);setupCapabilitySync(context);
   ensureStyles('../css/admin-notification-center.css','notification-center-styles');import('./admin-notification-center.js').then(m=>m.initNotificationCenter()).catch(error=>console.error('BCB notifications:',error));
   ensureStyles('../css/admin-copilot.css','copilot-styles');ensureStyles('../css/admin-copilot-hybrid.css','copilot-hybrid-styles');ensureStyles('../css/admin-copilot-mobile-controls.css','copilot-mobile-controls-styles');ensureStyles('../css/admin-time.css','time-global-styles');
   import('./admin-copilot.js').catch(error=>console.error('BCB AI Copilot:',error));import('./admin-copilot-mobile-controls.js').catch(error=>console.error('BCB AI mobile controls:',error));import('./admin-workday-status.js').catch(error=>console.error('BCB workday status:',error));import('./admin-profile.js').then(m=>m.initAdminProfile()).catch(error=>console.error('BCB profile manager:',error));
