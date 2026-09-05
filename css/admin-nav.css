@@ -1,92 +1,113 @@
-/* BCB BUSINESS MANAGER — PERSISTENT NAVIGATION */
-.bcb-admin-sidebar{z-index:600}
-.bcb-admin-nav a{transition:background .2s ease,color .2s ease,transform .2s ease}
-.bcb-admin-nav a:hover{color:#f5d071;background:rgba(210,154,31,.08);transform:translateX(2px)}
+/* BCB BUSINESS MANAGER — NAVIGATION SYSTEM V2 */
+.bcb-admin-sidebar{z-index:600;overflow:hidden}
+.bcb-admin-nav{min-height:0;flex:1;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(210,154,31,.28) transparent;padding-right:3px;margin-right:-3px}
+.bcb-admin-nav::-webkit-scrollbar{width:5px}
+.bcb-admin-nav::-webkit-scrollbar-thumb{background:rgba(210,154,31,.25);border-radius:99px}
+.bcb-admin-nav::-webkit-scrollbar-track{background:transparent}
+.bcb-nav-group{position:relative;padding:0 0 14px;margin:0 0 14px;border-bottom:1px solid rgba(255,255,255,.065)}
+.bcb-nav-group:last-child{margin-bottom:0;border-bottom:0;padding-bottom:4px}
+.bcb-nav-group-title{padding:0 11px 8px;color:#70777d;font-size:8px;font-weight:950;letter-spacing:1.45px;text-transform:uppercase;white-space:nowrap}
+.bcb-nav-group-owner .bcb-nav-group-title{color:#b88a2a}
+.bcb-nav-group-links{display:flex;flex-direction:column;gap:5px}
+.bcb-admin-nav a{position:relative;transition:background .18s ease,color .18s ease,transform .18s ease,box-shadow .18s ease;border:1px solid transparent;outline:0;isolation:isolate}
+.bcb-admin-nav a:hover{color:#f5d071;background:rgba(210,154,31,.075);transform:translateX(2px)}
+.bcb-admin-nav a:focus-visible{color:#f7d77f;border-color:rgba(239,199,101,.48);box-shadow:0 0 0 3px rgba(210,154,31,.13);background:rgba(210,154,31,.085)}
+.bcb-admin-nav a.active{transform:none!important;border-color:rgba(231,184,78,.08)}
+.bcb-nav-icon{width:28px;height:28px;flex:0 0 28px;display:grid;place-items:center;border-radius:8px;background:rgba(255,255,255,.025);transition:.18s ease}
+.bcb-admin-nav a.active .bcb-nav-icon{background:rgba(210,154,31,.12)}
+.bcb-admin-nav i{width:auto!important;font-size:13px}
+.bcb-nav-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bcb-project-main{min-width:0}
 .bcb-project-top-back{display:inline-flex;align-items:center;gap:9px;padding:11px 14px;border:1px solid rgba(29,34,39,.08);border-radius:12px;background:rgba(255,255,255,.72);color:#596068;font-size:11px;font-weight:900;box-shadow:0 8px 22px rgba(24,29,34,.04)}
 .bcb-project-top-back:hover{color:#9b6b10;border-color:rgba(210,154,31,.28)}
 
-.bcb-mobile-admin-bar,
-.bcb-mobile-admin-overlay{display:none}
+.bcb-mobile-admin-bar,.bcb-mobile-admin-overlay{display:none}
+.bcb-admin-sidebar-bottom{flex:0 0 auto}
+.bcb-admin-sidebar-bottom a,.bcb-admin-sidebar-bottom button{transition:background .18s ease,color .18s ease,border-color .18s ease}
+.bcb-admin-sidebar-bottom a:hover,.bcb-admin-sidebar-bottom button:hover{background:rgba(255,255,255,.045);color:#f1d27f}
 
-@media(max-width:900px){
-  .bcb-admin-app{grid-template-columns:86px minmax(0,1fr)}
-  .bcb-admin-sidebar{padding:20px 12px}
-  .bcb-admin-sidebar-logo{width:60px;padding:7px}
-  .bcb-admin-sidebar-title{display:none}
-  .bcb-admin-nav a,.bcb-admin-sidebar-bottom a,.bcb-admin-sidebar-bottom button{justify-content:center;padding:0;font-size:0}
-  .bcb-admin-nav i,.bcb-admin-sidebar-bottom i{width:auto;font-size:15px}
+@media(min-width:1181px){
+  .bcb-admin-app{grid-template-columns:264px minmax(0,1fr)}
+  .bcb-admin-sidebar{padding:24px 19px 18px}
+  .bcb-admin-sidebar-logo{width:124px}
+  .bcb-admin-sidebar-title{margin:18px 4px 22px}
+  .bcb-admin-nav a{min-height:42px;padding:0 10px;gap:9px;border-radius:11px;font-size:10.5px}
+  .bcb-admin-sidebar-bottom{padding-top:13px}
+  .bcb-admin-sidebar-bottom a,.bcb-admin-sidebar-bottom button{min-height:39px;font-size:10px}
+}
+
+@media(min-width:901px) and (max-width:1180px){
+  .bcb-admin-app{grid-template-columns:220px minmax(0,1fr)}
+  .bcb-admin-sidebar{padding:20px 15px 16px}
+  .bcb-admin-sidebar-logo{width:108px;padding:8px 10px}
+  .bcb-admin-sidebar-title{margin:15px 4px 18px}
+  .bcb-admin-sidebar-title strong{font-size:11px}
+  .bcb-nav-group{padding-bottom:11px;margin-bottom:11px}
+  .bcb-nav-group-title{padding-left:9px;padding-bottom:6px;font-size:7px;letter-spacing:1.2px}
+  .bcb-admin-nav a{min-height:39px;padding:0 8px;gap:8px;font-size:9.5px;border-radius:10px}
+  .bcb-nav-icon{width:26px;height:26px;flex-basis:26px}
+  .bcb-admin-nav i{font-size:12px}
+  .bcb-admin-sidebar-bottom{padding-top:11px}
+  .bcb-admin-sidebar-bottom a,.bcb-admin-sidebar-bottom button{min-height:37px;padding:0 8px;font-size:9.5px}
+  .bcb-admin-main{padding-left:26px;padding-right:26px}
+}
+
+@media(min-width:721px) and (max-width:900px){
+  .bcb-admin-app{grid-template-columns:82px minmax(0,1fr)}
+  .bcb-admin-sidebar{padding:16px 10px 14px;align-items:stretch}
+  .bcb-admin-sidebar-logo{width:58px;padding:6px;margin:0 auto;border-radius:11px}
+  .bcb-admin-sidebar-title{height:12px;margin:12px 0 15px;display:block;text-align:center}
+  .bcb-admin-sidebar-title span{font-size:7px;letter-spacing:1.1px}
+  .bcb-admin-sidebar-title strong{display:none}
+  .bcb-admin-nav{padding-right:0;margin-right:0;scrollbar-width:none;overflow-x:visible}
+  .bcb-admin-nav::-webkit-scrollbar{display:none}
+  .bcb-nav-group{padding-bottom:9px;margin-bottom:9px}
+  .bcb-nav-group-title{height:8px;padding:0;font-size:0;text-align:center}
+  .bcb-nav-group-title:after{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;background:rgba(210,154,31,.45)}
+  .bcb-nav-group-links{gap:4px}
+  .bcb-admin-nav a{width:54px;min-height:44px;height:44px;margin:0 auto;padding:0;justify-content:center;border-radius:12px;overflow:visible}
+  .bcb-nav-icon{width:32px;height:32px;flex:0 0 32px;border-radius:9px}
+  .bcb-nav-label{position:absolute;left:calc(100% + 10px);top:50%;z-index:50;transform:translate(4px,-50%);max-width:190px;padding:7px 9px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:#20262b;color:#f5f0e5;font-size:9px;font-weight:850;box-shadow:0 10px 28px rgba(0,0,0,.22);opacity:0;visibility:hidden;pointer-events:none;transition:.15s ease;white-space:nowrap}
+  .bcb-admin-nav a:hover .bcb-nav-label,.bcb-admin-nav a:focus-visible .bcb-nav-label{opacity:1;visibility:visible;transform:translate(0,-50%)}
+  .bcb-admin-nav a:hover{transform:none}
+  .bcb-admin-nav i{font-size:14px}
+  .bcb-admin-sidebar-bottom{padding-top:10px}
+  .bcb-admin-sidebar-bottom a,.bcb-admin-sidebar-bottom button{width:54px;min-height:42px;margin:0 auto;padding:0;justify-content:center;font-size:0;border-radius:11px}
+  .bcb-admin-sidebar-bottom i{font-size:14px;width:auto}
   .bcb-admin-main{padding-left:22px;padding-right:22px}
 }
 
-@media(max-width:620px){
+@media(max-width:720px){
   .bcb-admin-body{overflow-x:hidden}
+  .bcb-admin-body.bcb-mobile-nav-open{overflow:hidden}
   .bcb-admin-app{display:block;min-height:100vh;padding-top:64px}
-
-  .bcb-mobile-admin-bar{
-    position:fixed;top:0;left:0;right:0;z-index:720;
-    height:64px;padding:8px 12px;
-    display:flex;align-items:center;gap:10px;
-    background:rgba(22,26,31,.97);
-    backdrop-filter:blur(20px) saturate(130%);
-    border-bottom:1px solid rgba(255,255,255,.07);
-    box-shadow:0 8px 24px rgba(8,11,14,.18);
-  }
-
-  .bcb-mobile-admin-brand{
-    min-width:0;flex:1;display:flex;align-items:center;gap:10px;color:#fff;
-  }
-  .bcb-mobile-admin-brand img{
-    width:42px;height:42px;object-fit:contain;padding:5px;border-radius:11px;
-    background:linear-gradient(145deg,#fff,#eee8db);
-  }
+  .bcb-mobile-admin-bar{position:fixed;top:0;left:0;right:0;z-index:720;height:64px;padding:8px 12px;display:flex;align-items:center;gap:10px;background:rgba(22,26,31,.975);backdrop-filter:blur(20px) saturate(130%);border-bottom:1px solid rgba(255,255,255,.07);box-shadow:0 8px 24px rgba(8,11,14,.18)}
+  .bcb-mobile-admin-brand{min-width:0;flex:1;display:flex;align-items:center;gap:10px;color:#fff}
+  .bcb-mobile-admin-brand img{width:42px;height:42px;object-fit:contain;padding:5px;border-radius:11px;background:linear-gradient(145deg,#fff,#eee8db)}
   .bcb-mobile-admin-brand span{display:flex;flex-direction:column;min-width:0}
   .bcb-mobile-admin-brand small{color:#c9972d;font-size:7px;font-weight:950;letter-spacing:1.45px;text-transform:uppercase}
   .bcb-mobile-admin-brand strong{margin-top:2px;color:#f4f5f4;font-size:11px;font-weight:900;white-space:nowrap}
-
-  .bcb-mobile-admin-menu{
-    width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;
-    border:1px solid rgba(225,177,66,.24);border-radius:13px;
-    background:rgba(255,255,255,.05);color:#e4b851;font-size:17px;
-  }
-
-  .bcb-mobile-admin-overlay{
-    position:fixed;inset:0;z-index:690;display:block;
-    background:rgba(8,11,14,.48);backdrop-filter:blur(3px);
-    opacity:0;visibility:hidden;transition:.25s ease;
-  }
+  .bcb-mobile-admin-menu{width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;border:1px solid rgba(225,177,66,.24);border-radius:13px;background:rgba(255,255,255,.05);color:#e4b851;font-size:17px;outline:0}
+  .bcb-mobile-admin-menu:focus-visible{border-color:#e7b94d;box-shadow:0 0 0 3px rgba(210,154,31,.16)}
+  .bcb-mobile-admin-overlay{position:fixed;inset:0;z-index:690;display:block;background:rgba(8,11,14,.52);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:.24s ease}
   .bcb-mobile-admin-overlay.is-open{opacity:1;visibility:visible}
-
-  .bcb-admin-sidebar{
-    position:fixed;top:0;left:0;bottom:0;z-index:710;
-    width:min(82vw,310px);height:100dvh;min-height:0;
-    padding:20px 16px 18px;display:flex;flex-direction:column;align-items:stretch;gap:0;
-    background:radial-gradient(circle at 20% 8%,rgba(214,157,38,.13),transparent 25%),linear-gradient(180deg,#22282e,#15191d 65%,#101317);
-    border-right:1px solid rgba(255,255,255,.07);border-bottom:0;
-    box-shadow:24px 0 60px rgba(7,10,13,.30);
-    transform:translateX(-105%);transition:transform .32s cubic-bezier(.2,.8,.2,1);
-    overflow-y:auto;
-  }
+  .bcb-admin-sidebar{position:fixed;top:0;left:0;bottom:0;z-index:710;width:min(86vw,318px);height:100dvh;min-height:0;padding:18px 15px 14px;display:flex;flex-direction:column;align-items:stretch;gap:0;background:radial-gradient(circle at 20% 8%,rgba(214,157,38,.13),transparent 25%),linear-gradient(180deg,#22282e,#15191d 65%,#101317);border-right:1px solid rgba(255,255,255,.07);border-bottom:0;box-shadow:24px 0 60px rgba(7,10,13,.30);transform:translateX(-105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);overflow:hidden}
   .bcb-admin-sidebar.is-mobile-open{transform:translateX(0)}
-
-  .bcb-admin-sidebar-logo{width:112px;padding:9px 11px;flex:0 0 auto}
-  .bcb-admin-sidebar-title{display:block;margin:17px 4px 20px}
+  .bcb-admin-sidebar-logo{width:104px;padding:8px 10px;flex:0 0 auto}
+  .bcb-admin-sidebar-title{display:block;margin:14px 4px 15px}
   .bcb-admin-sidebar-title span{font-size:8px}
-  .bcb-admin-sidebar-title strong{font-size:12px}
-
-  .bcb-admin-nav{flex:0 0 auto;display:flex;flex-direction:column;justify-content:flex-start;gap:5px}
-  .bcb-admin-nav a,.bcb-admin-nav button{
-    width:100%;min-height:44px;flex:0 0 auto;padding:0 12px;justify-content:flex-start;
-    gap:11px;font-size:10.5px;border-radius:11px;
-  }
-  .bcb-admin-nav i{width:18px;font-size:14px}
-
-  .bcb-admin-sidebar-bottom{margin-top:auto;padding-top:15px;border-top:1px solid rgba(255,255,255,.07);display:block}
-  .bcb-admin-sidebar-bottom a,.bcb-admin-sidebar-bottom button{
-    width:100%;min-height:42px;padding:0 12px;justify-content:flex-start;gap:10px;font-size:10px;
-  }
+  .bcb-admin-sidebar-title strong{font-size:11px}
+  .bcb-admin-nav{flex:1 1 auto;min-height:0;display:block;overflow-y:auto;overflow-x:hidden;padding:0 2px 8px 0;margin:0}
+  .bcb-nav-group{padding-bottom:10px;margin-bottom:10px}
+  .bcb-nav-group-title{padding:0 10px 6px;font-size:7px;letter-spacing:1.3px}
+  .bcb-nav-group-links{gap:4px}
+  .bcb-admin-nav a,.bcb-admin-nav button{width:100%;min-height:42px;flex:0 0 auto;padding:0 10px;justify-content:flex-start;gap:9px;font-size:10px;border-radius:10px}
+  .bcb-nav-icon{width:28px;height:28px;flex-basis:28px}
+  .bcb-admin-nav i{font-size:13px}
+  .bcb-nav-label{position:static;opacity:1;visibility:visible;transform:none;padding:0;background:none;border:0;box-shadow:none;color:inherit;font-size:inherit;pointer-events:auto}
+  .bcb-admin-sidebar-bottom{margin-top:0;padding-top:11px;border-top:1px solid rgba(255,255,255,.07);display:block;flex:0 0 auto}
+  .bcb-admin-sidebar-bottom a,.bcb-admin-sidebar-bottom button{width:100%;min-height:40px;padding:0 10px;justify-content:flex-start;gap:9px;font-size:9.5px}
   .bcb-admin-sidebar-bottom a{display:flex}
-
   .bcb-admin-main{padding:18px 14px 42px;min-height:calc(100vh - 64px)}
   .bcb-admin-topbar{align-items:center;gap:10px;margin-bottom:0}
   .bcb-admin-topbar>div:first-child{min-width:0}
@@ -96,15 +117,12 @@
   .bcb-admin-avatar{width:32px;height:32px;flex:0 0 32px;border-radius:9px}
   .bcb-admin-user-card strong{max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px}
   .bcb-admin-user-card span{font-size:8px}
-
   .bcb-admin-welcome{margin-top:20px;padding:24px 20px;display:block;border-radius:22px}
   .bcb-admin-welcome h2{font-size:30px;line-height:1.04;letter-spacing:-1.3px}
   .bcb-admin-welcome p{font-size:11px;line-height:1.65}
   .bcb-admin-welcome .bcb-admin-primary-action{margin-top:17px;width:100%}
-
   .bcb-admin-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
   .bcb-admin-stats article{min-height:88px;padding:14px;border-radius:17px;gap:10px}
-
   .bcb-project-top-back{font-size:0;width:40px;height:40px;padding:0;justify-content:center}
   .bcb-project-top-back i{font-size:13px}
 }
@@ -114,8 +132,25 @@
   .bcb-admin-app{padding-top:60px}
   .bcb-mobile-admin-brand img{width:39px;height:39px}
   .bcb-mobile-admin-menu{width:40px;height:40px;flex-basis:40px}
+  .bcb-admin-sidebar{width:min(89vw,304px);padding-left:12px;padding-right:12px}
   .bcb-admin-main{padding-left:11px;padding-right:11px}
   .bcb-admin-user-card{max-width:49%}
   .bcb-admin-welcome{padding:21px 17px}
   .bcb-admin-welcome h2{font-size:27px}
+}
+
+@media(max-height:760px) and (min-width:901px){
+  .bcb-admin-sidebar{padding-top:16px;padding-bottom:12px}
+  .bcb-admin-sidebar-logo{width:100px;padding:7px 9px}
+  .bcb-admin-sidebar-title{margin-top:12px;margin-bottom:14px}
+  .bcb-nav-group{padding-bottom:8px;margin-bottom:8px}
+  .bcb-nav-group-title{padding-bottom:5px}
+  .bcb-admin-nav a{min-height:36px}
+  .bcb-nav-icon{width:24px;height:24px;flex-basis:24px}
+  .bcb-admin-sidebar-bottom{padding-top:8px}
+  .bcb-admin-sidebar-bottom a,.bcb-admin-sidebar-bottom button{min-height:34px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .bcb-admin-nav a,.bcb-mobile-admin-overlay,.bcb-admin-sidebar,.bcb-nav-label{transition:none!important}
 }
