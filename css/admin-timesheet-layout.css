@@ -1,0 +1,2 @@
+.ts-table .ts-employee{display:table-cell;vertical-align:middle;white-space:nowrap}.ts-table .ts-employee>.ts-avatar{display:inline-grid;vertical-align:middle;margin-right:8px}.ts-table .ts-employee>div:not(.ts-avatar){display:inline-block;vertical-align:middle;width:calc(100% - 45px);min-width:0}.ts-table .ts-corner{display:table-cell;vertical-align:middle}.ts-table .ts-corner>span{display:block}
+@media(max-width:720px){.ts-table .ts-employee>.ts-avatar{margin-right:6px}.ts-table .ts-employee>div:not(.ts-avatar){width:calc(100% - 38px)}}
