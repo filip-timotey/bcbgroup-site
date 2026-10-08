@@ -143,7 +143,7 @@ function setupCapabilitySync(context){
   if(capabilityChannel){supabase.removeChannel(capabilityChannel);capabilityChannel=null;}
   capabilityChannel=supabase.channel(`bcb-access-${context.profile.id}`)
     .on('postgres_changes',{event:'*',schema:'public',table:'user_capability_overrides',filter:`user_id=eq.${context.profile.id}`},()=>scheduleCapabilityRefresh('user-override'))
-    .on('postgres_changes',{event:'*',schema:'public',table:'role_capabilities',filter:`role=eq.${context.profile.role}`},()=>scheduleCapabilityRefresh('role-default'))
+    .on('postgres_changes',{event:'*',schema:'public',table:'role_capabilities'},payload=>{if(!payload?.new?.role&&!payload?.old?.role||payload?.new?.role===context.profile.role||payload?.old?.role===context.profile.role)scheduleCapabilityRefresh('role-default');})
     .subscribe(status=>{if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')console.warn('BCB access realtime:',status);});
   clearInterval(capabilityPollTimer);capabilityPollTimer=setInterval(()=>refreshEffectiveAccess('fallback-poll'),60000);
   window.addEventListener('focus',()=>refreshEffectiveAccess('window-focus'),{passive:true});
