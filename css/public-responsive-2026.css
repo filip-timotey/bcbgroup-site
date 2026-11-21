@@ -1,0 +1,64 @@
+/* BCB Group — responsive refinement v1. Additive; public pages only. */
+@media (max-width: 850px) {
+  html { scroll-padding-top: 90px; }
+  body { overflow-x: clip; }
+  main, main section { min-width: 0; }
+  .bcb26-header, .bcb26-header.is-scrolled { width: calc(100% - 24px); max-width: 560px; }
+  .bcb26-menu-toggle { min-width: 44px; min-height: 44px; justify-content: center; }
+  .bcb26-mobile-menu { top: 84px; width: calc(100% - 24px); max-width: 560px; max-height: calc(100dvh - 104px); overflow-y: auto; overscroll-behavior: contain; }
+  .bcb26-mobile-menu nav a { min-height: 48px; }
+  .bcb26-mobile-actions a { min-height: 48px; }
+  .bcb26-hero-container { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .bcb26-hero-content { min-width: 0; }
+  .bcb26-floating-area { min-height: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 4px 0 14px; pointer-events: auto; }
+  .bcb26-floating-card, .bcb26-card-construct, .bcb26-card-electric, .bcb26-card-sanitary, .bcb26-card-finish {
+    position: relative; inset: auto; width: 100%; min-width: 0; min-height: 84px;
+    transform: none !important; grid-template-columns: 38px minmax(0, 1fr) 12px;
+    padding: 12px; gap: 8px;
+  }
+  .bcb26-floating-card:hover { transform: none !important; }
+  .bcb26-floating-card small { display: block; font-size: 10px; line-height: 1.35; overflow-wrap: anywhere; }
+  .bcb26-floating-card strong { font-size: 13px; }
+  .bcb26-floating-card > div:nth-child(2) { min-width: 0; }
+  .bcb26-hero-trust { margin-top: 18px; }
+  .bcb26-hero h1 { overflow-wrap: break-word; }
+  .bcb26-hero-description { max-width: 60ch; }
+  .bcb26-intro, .bcb26-divisions, .bcb26-process, .bcb26-project, .bcb26-values, .bcb26-final-cta { min-width: 0; }
+  .bcb26-division-grid, .bcb26-process-grid, .bcb26-values-grid { min-width: 0; }
+  .bcb26-section-heading, .bcb26-intro-left, .bcb26-intro-right { min-width: 0; }
+  .bcb26-final-mark img { max-width: 70%; height: auto; }
+}
+@media (max-width: 600px) {
+  .bcb26-hero { padding-top: 104px; }
+  .bcb26-hero h1 { font-size: clamp(34px, 9.6vw, 46px); line-height: 1.06; letter-spacing: -.055em; }
+  .bcb26-hero-description { font-size: 14px; }
+  .bcb26-hero-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
+  .bcb26-stat { min-width: 0; }
+  .bcb26-stat span { font-size: 10px; line-height: 1.3; overflow-wrap: anywhere; }
+  .bcb26-floating-area { gap: 10px; }
+  .bcb26-floating-card { min-height: 88px; grid-template-columns: 34px minmax(0, 1fr); border-radius: 16px; }
+  .bcb26-floating-card .bcb26-card-arrow { display: none; }
+  .bcb26-floating-icon { width: 34px; height: 34px; }
+  .bcb26-floating-card strong { font-size: 12px; }
+  .bcb26-floating-card small { font-size: 9px; }
+  .bcb26-hero-trust { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bcb26-hero-trust > div { min-width: 0; justify-content: flex-start; }
+  .bcb26-hero-trust span { min-width: 0; }
+  .bcb26-hero-trust strong { overflow-wrap: anywhere; }
+  .bcb26-intro-left h2, .bcb26-section-heading h2, .bcb26-project-content h2,
+  .bcb26-values-left h2, .bcb26-final-copy h2 { font-size: clamp(29px, 8vw, 38px); line-height: 1.12; letter-spacing: -.04em; overflow-wrap: break-word; }
+  .bcb26-division-card { min-height: 330px; }
+  .bcb26-manifest blockquote { font-size: clamp(24px, 7vw, 32px); }
+  .bcb26-final-actions a, .bcb26-hero-actions a { min-height: 48px; }
+  .bcb-footer-grid { min-width: 0; }
+  .bcb-footer-company p { overflow-wrap: anywhere; }
+}
+@media (max-width: 380px) {
+  .bcb26-floating-area { grid-template-columns: 1fr; }
+  .bcb26-floating-card { min-height: 70px; grid-template-columns: 38px minmax(0, 1fr); }
+  .bcb26-hero-stats { grid-template-columns: 1fr; }
+  .bcb26-stat { min-height: 58px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bcb26-floating-card { transition: none; }
+}
