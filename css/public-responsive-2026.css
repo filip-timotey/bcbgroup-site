@@ -111,46 +111,51 @@
 }
 
 
-/* v4 — airy, video-friendly homepage hero (mobile preview).
-   Preserve original markup, media integration, cards, navigation and links. */
+/* v5 — mobile cinematic hero, breathing space for image or future video.
+   Only homepage styling. Content, media loading and navigation remain unchanged. */
 @media (max-width: 600px) {
   .bcb26-hero {
     min-height: 100svh;
-    padding: 90px 5% 22px;
+    padding: 90px 5% 28px;
   }
   .bcb26-hero-bg { background-position: 62% center; }
   .bcb26-hero-bg-media { object-position: 62% center; }
   .bcb26-hero-bg::after {
     background: linear-gradient(180deg,
-      rgba(250,247,241,.72) 0%,
-      rgba(250,247,241,.62) 23%,
-      rgba(250,247,241,.38) 47%,
-      rgba(250,247,241,.12) 75%,
-      rgba(250,247,241,.05) 100%);
+      rgba(250,247,241,.82) 0%,
+      rgba(250,247,241,.67) 25%,
+      rgba(250,247,241,.33) 43%,
+      rgba(250,247,241,.04) 65%,
+      rgba(250,247,241,.10) 100%);
   }
-  .bcb26-hero-light { opacity: .12; }
-  .bcb26-hero-container { gap: 25px; align-content: start; }
-  .bcb26-hero-content { max-width: 100%; }
-  .bcb26-eyebrow { margin-bottom: 14px; letter-spacing: 1.65px; }
+  .bcb26-hero-light { opacity: .10; }
+  .bcb26-hero-container { gap: 20px; align-content: start; }
+  .bcb26-hero-content {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .bcb26-eyebrow { margin-bottom: 15px; letter-spacing: 1.6px; }
   .bcb26-hero h1 {
     max-width: none;
-    font-size: clamp(31px, 9vw, 40px);
-    line-height: 1;
-    letter-spacing: -.05em;
+    font-size: clamp(30px, 8.6vw, 39px);
+    line-height: 1.04;
+    letter-spacing: -.052em;
     text-wrap: balance;
   }
   .bcb26-hero-description {
-    max-width: 42ch;
-    margin-top: 17px;
+    max-width: 43ch;
+    margin-top: 18px;
     font-size: 12.5px;
     line-height: 1.55;
   }
   .bcb26-hero-actions {
-    margin-top: 21px;
+    margin-top: 20px;
     display: grid;
     grid-template-columns: 1.1fr .9fr;
-    gap: 9px;
     align-items: stretch;
+    gap: 10px;
   }
   .bcb26-hero-actions a {
     min-width: 0;
@@ -159,17 +164,30 @@
     border-radius: 12px;
     font-size: 9px;
     letter-spacing: .1px;
-    gap: 5px;
     text-align: center;
+    gap: 5px;
+  }
+  /* Intentional cinematic window: background is visible without glass cards. */
+  .bcb26-hero-content::after {
+    content: "";
+    order: 2;
+    display: block;
+    flex: none;
+    height: clamp(120px, 21svh, 200px);
+    pointer-events: none;
   }
   .bcb26-hero-stats {
-    margin-top: 19px;
+    order: 3;
+    margin-top: 0;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0,1fr));
-    border-radius: 15px;
-    background: rgba(255,255,255,.52);
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    background: rgba(255,255,255,.54);
+    border: 1px solid rgba(255,255,255,.72);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
-  .bcb26-stat { min-height: 59px; padding: 8px 6px; }
+  .bcb26-stat { min-height: 60px; padding: 8px 6px; }
   .bcb26-stat strong { font-size: 17px; }
   .bcb26-stat span { font-size: 8px; line-height: 1.2; }
   .bcb26-stat + .bcb26-stat::before {
@@ -178,10 +196,10 @@
   .bcb26-floating-area {
     min-height: 0;
     margin-top: 0;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: 9px;
     padding: 0 0 12px;
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 11px;
   }
   .bcb26-floating-card,
   .bcb26-card-construct,
@@ -191,30 +209,31 @@
     position: relative;
     inset: auto;
     width: 100%;
-    min-height: 64px;
-    padding: 8px;
-    gap: 6px;
-    grid-template-columns: 28px minmax(0,1fr);
-    border-radius: 14px;
-    background: rgba(255,255,255,.66);
-    border-color: rgba(255,255,255,.75);
-    backdrop-filter: blur(10px) saturate(115%);
+    min-height: 68px;
+    padding: 9px;
+    gap: 7px;
+    grid-template-columns: 29px minmax(0,1fr);
+    border-radius: 15px;
+    background: rgba(255,255,255,.62);
+    border: 1px solid rgba(255,255,255,.76);
+    backdrop-filter: blur(12px) saturate(115%);
+    -webkit-backdrop-filter: blur(12px) saturate(115%);
   }
-  .bcb26-floating-icon { width: 28px; height: 28px; font-size: 12px; }
+  .bcb26-floating-icon { width: 29px; height: 29px; font-size: 12px; }
   .bcb26-floating-card strong { font-size: 11px; }
   .bcb26-floating-card small { display: none; }
   .bcb26-hero-trust {
-    margin-top: 15px;
-    background: rgba(255,255,255,.52);
-    backdrop-filter: blur(10px);
+    margin-top: 20px;
+    background: rgba(255,255,255,.57);
+    backdrop-filter: blur(12px);
   }
   .bcb26-hero-trust > div { min-height: 58px; padding: 8px; }
   .bcb26-hero-trust strong { font-size: 10px; }
   .bcb26-hero-trust span { font-size: 9px; }
-  .bcb26-hero .bcb26-social-dock { flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+  .bcb26-hero .bcb26-social-dock { flex-wrap: wrap; gap: 8px; margin-top: 10px; }
   .bcb26-hero .bcb26-social-link { width: 34px; height: 34px; }
   .bcb-family-manager {
-    left: 9px; bottom: max(9px, env(safe-area-inset-bottom));
+    left: 9px; bottom: max(9px,env(safe-area-inset-bottom));
     min-height: 44px; width: 44px; max-width: 44px;
     padding: 4px; border-radius: 13px; justify-content: center;
   }
@@ -223,7 +242,10 @@
 }
 @media (max-width: 380px) {
   .bcb26-hero-stats { grid-template-columns: repeat(3,minmax(0,1fr)); }
-  .bcb26-stat { min-height: 59px; }
+  .bcb26-stat { min-height: 60px; }
   .bcb26-floating-area { grid-template-columns: repeat(2,minmax(0,1fr)); }
-  .bcb26-floating-card { min-height: 64px; }
+  .bcb26-floating-card { min-height: 68px; }
+}
+@media (max-width: 600px) and (prefers-reduced-motion: reduce) {
+  .bcb26-floating-card { animation: none !important; }
 }
