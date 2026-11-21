@@ -62,3 +62,50 @@
 @media (prefers-reduced-motion: reduce) {
   .bcb26-floating-card { transition: none; }
 }
+
+
+/* v2 preview — keep the original photo/video hero visible on phones.
+   No markup, content, admin or media-loading changes. */
+@media (max-width: 850px) {
+  .bcb26-hero { position: relative; min-height: 100svh; isolation: isolate; }
+  .bcb26-hero-bg { inset: 0; background-position: 64% center; }
+  .bcb26-hero-bg-media { width: 100%; height: 100%; object-fit: cover; object-position: 64% center; }
+  .bcb26-hero-bg::after {
+    background: linear-gradient(90deg,
+      rgba(250,247,241,.94) 0%,
+      rgba(250,247,241,.78) 38%,
+      rgba(250,247,241,.36) 70%,
+      rgba(250,247,241,.10) 100%);
+  }
+  .bcb26-hero-light { opacity: .55; }
+  .bcb26-hero-container { position: relative; z-index: 2; }
+  .bcb26-floating-area { max-width: 680px; }
+  .bcb26-floating-card { background: rgba(255,255,255,.79); border-color: rgba(255,255,255,.78); }
+}
+@media (max-width: 600px) {
+  .bcb26-hero { padding: 100px 5% 24px; min-height: 100svh; }
+  .bcb26-hero-bg { background-position: 63% center; }
+  .bcb26-hero-bg-media { object-position: 63% center; }
+  .bcb26-hero-bg::after {
+    background: linear-gradient(180deg,
+      rgba(250,247,241,.89) 0%,
+      rgba(250,247,241,.81) 30%,
+      rgba(250,247,241,.55) 62%,
+      rgba(250,247,241,.28) 100%);
+  }
+  .bcb26-hero-content { max-width: 520px; }
+  .bcb26-hero h1 { max-width: 13ch; text-wrap: balance; }
+  .bcb26-hero-description { max-width: 44ch; }
+  .bcb26-hero-container { gap: 22px; }
+  .bcb26-floating-area { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; padding-bottom: 10px; }
+  .bcb26-floating-card { min-height: 66px; padding: 9px; gap: 7px; }
+  .bcb26-floating-card small { display: none; }
+  .bcb26-floating-card strong { font-size: 12px; }
+  .bcb26-hero-trust { position: relative; z-index: 2; }
+}
+@media (max-width: 380px) {
+  .bcb26-floating-area { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .bcb26-floating-card { min-height: 62px; grid-template-columns: 28px minmax(0,1fr); padding: 7px; }
+  .bcb26-floating-icon { width: 28px; height: 28px; }
+  .bcb26-floating-card strong { font-size: 10px; }
+}
