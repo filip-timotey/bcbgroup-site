@@ -111,61 +111,67 @@
 }
 
 
-/* v3 — screenshot-led Galaxy A55 (360px) corrections.
-   Scope: public homepage only; retain all original markup and links. */
+/* v4 — airy, video-friendly homepage hero (mobile preview).
+   Preserve original markup, media integration, cards, navigation and links. */
 @media (max-width: 600px) {
   .bcb26-hero {
-    padding: 88px 5% 20px;
     min-height: 100svh;
+    padding: 90px 5% 22px;
   }
+  .bcb26-hero-bg { background-position: 62% center; }
+  .bcb26-hero-bg-media { object-position: 62% center; }
   .bcb26-hero-bg::after {
     background: linear-gradient(180deg,
-      rgba(250,247,241,.81) 0%,
-      rgba(250,247,241,.72) 31%,
-      rgba(250,247,241,.52) 60%,
-      rgba(250,247,241,.24) 100%);
+      rgba(250,247,241,.72) 0%,
+      rgba(250,247,241,.62) 23%,
+      rgba(250,247,241,.38) 47%,
+      rgba(250,247,241,.12) 75%,
+      rgba(250,247,241,.05) 100%);
   }
-  .bcb26-hero-light { opacity: .23; }
-  .bcb26-hero-container { gap: 15px; }
-  .bcb26-eyebrow { margin-bottom: 12px; letter-spacing: 1.65px; }
+  .bcb26-hero-light { opacity: .12; }
+  .bcb26-hero-container { gap: 25px; align-content: start; }
+  .bcb26-hero-content { max-width: 100%; }
+  .bcb26-eyebrow { margin-bottom: 14px; letter-spacing: 1.65px; }
   .bcb26-hero h1 {
-    font-size: clamp(31px, 9vw, 40px);
-    line-height: .98;
-    letter-spacing: -.055em;
     max-width: none;
+    font-size: clamp(31px, 9vw, 40px);
+    line-height: 1;
+    letter-spacing: -.05em;
+    text-wrap: balance;
   }
   .bcb26-hero-description {
-    margin-top: 13px;
+    max-width: 42ch;
+    margin-top: 17px;
     font-size: 12.5px;
-    line-height: 1.48;
-    max-width: 44ch;
+    line-height: 1.55;
   }
   .bcb26-hero-actions {
-    margin-top: 17px;
+    margin-top: 21px;
     display: grid;
     grid-template-columns: 1.1fr .9fr;
+    gap: 9px;
     align-items: stretch;
-    gap: 8px;
   }
   .bcb26-hero-actions a {
     min-width: 0;
-    min-height: 44px;
+    min-height: 46px;
     padding: 8px 7px;
     border-radius: 12px;
     font-size: 9px;
     letter-spacing: .1px;
-    text-align: center;
     gap: 5px;
+    text-align: center;
   }
   .bcb26-hero-stats {
-    margin-top: 15px;
+    margin-top: 19px;
     display: grid;
     grid-template-columns: repeat(3, minmax(0,1fr));
-    border-radius: 14px;
+    border-radius: 15px;
+    background: rgba(255,255,255,.52);
   }
-  .bcb26-stat { min-height: 58px; padding: 8px 6px; }
+  .bcb26-stat { min-height: 59px; padding: 8px 6px; }
   .bcb26-stat strong { font-size: 17px; }
-  .bcb26-stat span { font-size: 8px; line-height: 1.15; }
+  .bcb26-stat span { font-size: 8px; line-height: 1.2; }
   .bcb26-stat + .bcb26-stat::before {
     left: 0; top: 18%; width: 1px; height: 64%;
   }
@@ -174,8 +180,8 @@
     margin-top: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: 8px;
-    padding: 0 0 8px;
+    gap: 9px;
+    padding: 0 0 12px;
   }
   .bcb26-floating-card,
   .bcb26-card-construct,
@@ -185,21 +191,28 @@
     position: relative;
     inset: auto;
     width: 100%;
-    min-height: 62px;
+    min-height: 64px;
     padding: 8px;
     gap: 6px;
     grid-template-columns: 28px minmax(0,1fr);
-    border-radius: 13px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.66);
+    border-color: rgba(255,255,255,.75);
+    backdrop-filter: blur(10px) saturate(115%);
   }
   .bcb26-floating-icon { width: 28px; height: 28px; font-size: 12px; }
   .bcb26-floating-card strong { font-size: 11px; }
   .bcb26-floating-card small { display: none; }
-  .bcb26-hero-trust { margin-top: 10px; }
-  .bcb26-hero-trust > div { min-height: 57px; padding: 8px; }
+  .bcb26-hero-trust {
+    margin-top: 15px;
+    background: rgba(255,255,255,.52);
+    backdrop-filter: blur(10px);
+  }
+  .bcb26-hero-trust > div { min-height: 58px; padding: 8px; }
   .bcb26-hero-trust strong { font-size: 10px; }
   .bcb26-hero-trust span { font-size: 9px; }
-  .bcb26-hero .bcb26-social-dock { flex-wrap: wrap; gap: 7px; margin-top: 9px; }
-  .bcb26-hero .bcb26-social-link { width: 32px; height: 32px; }
+  .bcb26-hero .bcb26-social-dock { flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+  .bcb26-hero .bcb26-social-link { width: 34px; height: 34px; }
   .bcb-family-manager {
     left: 9px; bottom: max(9px, env(safe-area-inset-bottom));
     min-height: 44px; width: 44px; max-width: 44px;
@@ -210,7 +223,7 @@
 }
 @media (max-width: 380px) {
   .bcb26-hero-stats { grid-template-columns: repeat(3,minmax(0,1fr)); }
-  .bcb26-stat { min-height: 58px; }
+  .bcb26-stat { min-height: 59px; }
   .bcb26-floating-area { grid-template-columns: repeat(2,minmax(0,1fr)); }
-  .bcb26-floating-card { min-height: 62px; }
+  .bcb26-floating-card { min-height: 64px; }
 }
